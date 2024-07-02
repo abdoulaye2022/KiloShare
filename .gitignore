@@ -1,0 +1,5 @@
+# Composer
+/api/v1/vendor/
+
+# Local Configuration
+/api/v1/.env
