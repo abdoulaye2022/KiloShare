@@ -2,7 +2,10 @@
 // Définition des routes avec des paramètres dans l'en-tête
 $routes = [
     '/api/v1/info' => 'controllers/InfoController.php',
-    '/api/v1/login' => 'controllers/auth/login.php'
+    '/api/v1/login' => 'controllers/auth/login.php',
+    '/api/v1/signin' => 'controllers/auth/signin.php',
+
+    '/api/v1/users' => 'controllers/user/getAll.php',
 ];
 
 // Récupération de l'URI de la requête

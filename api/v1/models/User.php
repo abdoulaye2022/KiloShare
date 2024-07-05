@@ -1,25 +1,35 @@
 <?php
 class User {
-    private $conn;
-
-    public $UserID;
-    public $FirstName;
-    public $LastName;
-    public $Phone;
-    public $Email;
-    public $Password;
-    public $CreatedAt;
-    public $UpdatedAt;
+    private $_cn;
 
     public function __construct($db) {
-        $this->conn = $db;
+        $this->_cn = $db;
     }
 
-    // Exemple de méthode pour obtenir tous les utilisateurs
-    public function login($email) {
-        $stmt = $this->_cn->prepare("SELECT * FROM users WHERE Email = :email");
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    public function getOne($id) {
+        $stmt = $this->_cn->prepare("SELECT * FROM users WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt;
+    }
+
+    public function getAll() {
+        $stmt = $this->_cn->prepare("SELECT * FROM users WHERE active = :active");
+        $active = 1;
+        $stmt->bindParam(':active', $active, PDO::PARAM_INT);
+        $stmt->execute();
+        return $stmt;
+    }
+
+    public function create() {
+
+    }
+
+    public function update() {
+
+    }
+
+    public function delete() {
+
     }
 }

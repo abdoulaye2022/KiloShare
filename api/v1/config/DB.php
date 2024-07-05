@@ -1,9 +1,9 @@
 <?php
-class Database {
+class DB {
     private $host = "localhost";
-    private $db_name = "nom_de_la_base";
-    private $username = "utilisateur";
-    private $password = "mot_de_passe";
+    private $db_name = "KiloShare";
+    private $username = "root";
+    private $password = "";
     public $conn;
 
     public function getConnection() {
