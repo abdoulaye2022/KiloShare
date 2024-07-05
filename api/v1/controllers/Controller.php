@@ -1,13 +1,43 @@
 <?php
-require_once "../config/DB.php";
-require_once "../utils/Helper.php";
+session_start();
 
+require_once ('vendor/autoload.php');
+
+header("Access-Control-Allow-Origin: *");
+header("Content-Type: application/json; charset=UTF-8");
+header("Access-Control-Allow-Methods: POST,GET,PUT,DELETE");
+header("Access-Control-Max-Age: 3600");
+header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+
+$dotenv = Dotenv\Dotenv::createImmutable($_SERVER['HTTP_HOST'] == '10.0.2.2' ? $_SERVER['DOCUMENT_ROOT'] . '/KiloShare/api/v1/' : $_SERVER['DOCUMENT_ROOT'] . "/api/v1/");
+$dotenv->load();
+
+$key = $_ENV['JWT_SECRET'];
+
+$payload = [
+    'iss' => $_SERVER['SERVER_NAME'], // Émetteur du jeton
+    'aud' => 'collabox', // Audience du jeton
+    'iat' => time(), // Heure à laquelle le jeton a été émis
+    'nbf' => time(), // Heure avant laquelle le jeton ne doit pas être accepté
+    'exp' => time() + 3600, // Expiration du jeton dans 1 heure
+    'id' => 12345, // Identifiant utilisateur ou toute autre donnée nécessaire
+    'rand' => uniqid(), // Ajout d'un identifiant unique pour rendre le jeton unique chaque fois
+];
+
+require_once "config/DB.php";
+require_once "utils/Helper.php";
+
+require_once "models/Auth.php";
 require_once "models/User.php";
 
 $db = new DB($_ENV['DB_HOST'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME']);
 $cn = $db->getConnection();
 
+$success = null;
+$error = null;
+
 $helper = new Helper();
-$user = new User($cn);
+$authModel = new Auth($cn);
+$userModel = new User($cn);
 
 ?>
