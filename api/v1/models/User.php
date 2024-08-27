@@ -22,7 +22,7 @@ class User {
     }
 
     public function create() {
-
+        
     }
 
     public function update() {

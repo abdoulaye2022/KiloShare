@@ -45,6 +45,7 @@ if (isset($data['email'], $data['password'])) {
                         "success" => true,
                         "status" => 200,
                         "message" => "Authentication successful",
+                        "user" => $user,
                         "access_token" => $jwt
                     );
 
