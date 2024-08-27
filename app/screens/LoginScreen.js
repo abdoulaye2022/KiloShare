@@ -1,32 +1,44 @@
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, TouchableOpacity } from "react-native";
 import { Text, Input, Button, Dialog } from "@rneui/themed";
 import { useEffect, useState } from "react";
 import axios from "../axios";
+import { useDispatch, useSelector } from "react-redux";
+import { userActions } from "../redux/actions/users.actions";
 
-const Login = () => {
+const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [visible, setVisible] = useState(false);
   const [error, setError] = useState("");
 
+  const dispatch = useDispatch();
+
   useEffect(() => {
-    console.log("OK");
+    // console.log("OK");
   }, []);
+
+  const redirectToHome = () => {
+    return navigation.navigate("Home");
+  };
 
   const handleSubmit = async () => {
     if (email != "" && password != "") {
       if (validateEmail(email)) {
-        axios
-          .post(`/login`, {
-            email: email,
-            password: password,
-          })
-          .then((res) => {
-            console.log(JSON.stringify(res.data, null, 2));
-          })
-          .catch((error) => {
-            console.error("Error request:", error);
-          });
+        dispatch(userActions.login(email, password, redirectToHome));
+        // axios
+        //   .post(`/login`, {
+        //     email: email,
+        //     password: password,
+        //   })
+        //   .then((res) => {
+        //     console.log(JSON.stringify(res.data, null, 2));
+        //     if (res.data.success) {
+        //       navigation.navigate("Home");
+        //     }
+        //   })
+        //   .catch((error) => {
+        //     console.error("Error request:", error);
+        //   });
       } else {
         setVisible(true);
         setError("Adresse e-mail invalide");
@@ -51,10 +63,14 @@ const Login = () => {
         <Dialog.Title title="Error" />
         <Text>{error}</Text>
       </Dialog>
-      <Input placeholder="E-mail" onChangeText={(value) => setEmail(value)} />
       <Input
-        placeholder="Password"
+        placeholder="Adresse e-mail"
+        onChangeText={(value) => setEmail(value)}
+      />
+      <Input
+        placeholder="Mot de passe"
         onChangeText={(value) => setPassword(value)}
+        secureTextEntry={true}
       />
       <Button
         title="Se connecter"
@@ -69,9 +85,14 @@ const Login = () => {
         }}
         onPress={() => handleSubmit()}
       />
-      <Text h6 style={styles.texte}>
-        Pas encore de compte ? S'inscrire
-      </Text>
+      <View style={styles.centrer}>
+        <Text h6 style={styles.texte}>
+          Pas encore de compte ?
+        </Text>
+        <TouchableOpacity onPress={() => navigation.navigate("Signin")}>
+          <Text style={{ color: "#8E44AD" }}>S'inscrire</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
 };
@@ -86,6 +107,15 @@ const styles = StyleSheet.create({
   texte: {
     color: "#34495E",
   },
+  boutonInscrir: {
+    height: 10,
+  },
+  centrer: {
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
 });
 
-export default Login;
+export default LoginScreen;

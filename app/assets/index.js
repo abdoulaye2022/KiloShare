@@ -1,0 +1,1 @@
+export const ICON = require('./kiloshare.png'); 

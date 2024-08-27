@@ -5,7 +5,10 @@ $routes = [
     '/api/v1/login' => 'controllers/auth/login.php',
     '/api/v1/signin' => 'controllers/auth/signin.php',
 
-    '/api/v1/users' => 'controllers/user/getAll.php',
+    '/api/v1/users/getAll' => 'controllers/user/getAll.php',
+    '/api/v1/users/create' => 'controllers/user/create.php',
+    '/api/v1/users/update' => 'controllers/user/update.php',
+    '/api/v1/users/delete' => 'controllers/user/delete.php',
 ];
 
 // Récupération de l'URI de la requête

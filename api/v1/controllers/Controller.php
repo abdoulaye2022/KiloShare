@@ -9,6 +9,8 @@ header("Access-Control-Allow-Methods: POST,GET,PUT,DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
+// localhos
+// 10.0.2.2
 $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['HTTP_HOST'] == '10.0.2.2' ? $_SERVER['DOCUMENT_ROOT'] . '/KiloShare/api/v1/' : $_SERVER['DOCUMENT_ROOT'] . "/api/v1/");
 $dotenv->load();
 
@@ -32,6 +34,7 @@ require_once "models/User.php";
 
 $db = new DB($_ENV['DB_HOST'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME']);
 $cn = $db->getConnection();
+
 
 $success = null;
 $error = null;

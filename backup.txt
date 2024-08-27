@@ -1,0 +1,71 @@
+import 'react-native-gesture-handler';
+
+import { StyleSheet } from "react-native";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import HomeScreen from "./screens/HomeScreen";
+import LoginScreen from "./screens/LoginScreen";
+import SigninScreen from "./screens/SigninScreen";
+import Entypo from "@expo/vector-icons/Entypo";
+import { Provider } from "react-redux";
+import { PersistGate } from "redux-persist/integration/react";
+import { store, persistor } from "./stores";
+
+const Stack = createNativeStackNavigator();
+
+export default function App() {
+  return (
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen
+              name="Home"
+              component={HomeScreen}
+              options={{
+                title: "KiloShare",
+                headerStyle: {
+                  backgroundColor: "#8E44AD",
+                  textAlign: "center",
+                },
+                headerTintColor: "#fff",
+                headerTitleStyle: {
+                  fontWeight: "bold",
+                  color: "#FFFFFF",
+                },
+                headerBackVisible: false,
+                headerRight: () => (
+                  <Entypo
+                    name="info-with-circle"
+                    size={24}
+                    color="white"
+                    onPress={() => alert("This is a button!")}
+                  />
+                ),
+              }}
+            />
+            <Stack.Screen
+              name="Login"
+              component={LoginScreen}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="Signin"
+              component={SigninScreen}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PersistGate>
+    </Provider>
+  );
+}
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+});

@@ -3,3 +3,8 @@ Couleur secondaire : #3498DB (Bleu)
 Couleur d'accentuation : #E67E22 (Orange)
 Couleur de fond : #FFFFFF (Blanc)
 Couleur de texte : #34495E (Gris foncé)
+
+localhost/KiloShare/api/v1/login
+
+
+compiling js failed:237590:5:invalid expression buffer size 10801012 starts with
