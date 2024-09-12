@@ -9,18 +9,18 @@ header("Access-Control-Allow-Methods: POST,GET,PUT,DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-$dotenv = Dotenv\Dotenv::createImmutable($_SERVER['HTTP_HOST'] == '10.0.2.2' ? $_SERVER['DOCUMENT_ROOT'] . '/KiloShare/api/v1/' : $_SERVER['DOCUMENT_ROOT'] . "/api/v1/");
+$dotenv = Dotenv\Dotenv::createImmutable($_SERVER['HTTP_HOST'] == 'localhost' ? $_SERVER['DOCUMENT_ROOT'] . '/KiloShare/api/v1/' : $_SERVER['DOCUMENT_ROOT'] . "/api/v1/");
 $dotenv->load();
 
 $key = $_ENV['JWT_SECRET'];
 
 $payload = [
-    'iss' => $_SERVER['SERVER_NAME'], // Émetteur du jeton
+    'iss' => $_SERVER['SERVER_NAME'], // ï¿½metteur du jeton
     'aud' => 'collabox', // Audience du jeton
-    'iat' => time(), // Heure à laquelle le jeton a été émis
-    'nbf' => time(), // Heure avant laquelle le jeton ne doit pas être accepté
+    'iat' => time(), // Heure ï¿½ laquelle le jeton a ï¿½tï¿½ ï¿½mis
+    'nbf' => time(), // Heure avant laquelle le jeton ne doit pas ï¿½tre acceptï¿½
     'exp' => time() + 3600, // Expiration du jeton dans 1 heure
-    'id' => 12345, // Identifiant utilisateur ou toute autre donnée nécessaire
+    'id' => 12345, // Identifiant utilisateur ou toute autre donnï¿½e nï¿½cessaire
     'rand' => uniqid(), // Ajout d'un identifiant unique pour rendre le jeton unique chaque fois
 ];
 
