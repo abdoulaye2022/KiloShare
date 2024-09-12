@@ -1,25 +1,27 @@
 <?php
-// Définition des routes avec des paramètres dans l'en-tête
+// Dï¿½finition des routes avec des paramï¿½tres dans l'en-tï¿½te
 $routes = [
     '/api/v1/info' => 'controllers/InfoController.php',
     '/api/v1/login' => 'controllers/auth/login.php',
     '/api/v1/signin' => 'controllers/auth/signin.php',
-
+    '/api/v1/users/create' => 'controllers/user/createUser.php',
+    '/api/v1/users/update' => 'controllers/user/updateUser.php',
     '/api/v1/users' => 'controllers/user/getAll.php',
+    '/api/v1/users/delete' => 'controllers/user/deleteUser.php',
 ];
 
-// Récupération de l'URI de la requête
+// Rï¿½cupï¿½ration de l'URI de la requï¿½te
 $uri = $_SERVER['REQUEST_URI'];
 
 // Recherche de la route correspondante
 foreach ($routes as $route => $controller) {
-    // Remplacement des paramètres dans l'URI par des expressions régulières
+    // Remplacement des paramï¿½tres dans l'URI par des expressions rï¿½guliï¿½res
     $route = "/KiloShare".$route;
     $pattern = str_replace('/', '\/', $route);
     $pattern = preg_replace('/\{([^\}]+)\}/', '(?P<$1>[^\/]+)', $pattern);
     $pattern = '/^' . $pattern . '$/';
 
-    // Recherche de la correspondance entre l'URI de la requête et le modèle de route
+    // Recherche de la correspondance entre l'URI de la requï¿½te et le modï¿½le de route
     if (preg_match($pattern, $uri, $matches)) {
         $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
         $controller = str_replace('{', '', $controller);
@@ -30,6 +32,6 @@ foreach ($routes as $route => $controller) {
     }
 }
 
-// Route non trouvée, affichage d'une erreur 404
+// Route non trouvï¿½e, affichage d'une erreur 404
 header("HTTP/1.0 404 Not Found");
 echo "404 Not Found";

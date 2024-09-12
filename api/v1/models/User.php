@@ -21,15 +21,48 @@ class User {
         return $stmt;
     }
 
-    public function create() {
-
+    public function create($firstname, $lastname, $phone, $email, $password) {
+        $stmt = $this->_cn->prepare("INSERT INTO users (firstname, lastname, phone, email, password) VALUES (:firstname, :lastname, :phone, :email, :password)");
+        $stmt->bindParam(':firstname', $firstname);
+        $stmt->bindParam(':lastname', $lastname);
+        $stmt->bindParam(':phone', $phone);
+        $stmt->bindParam(':email', $email);
+        $stmt->bindParam(':password', password_hash($password, PASSWORD_BCRYPT));
+        if ($stmt->execute()) {
+            return $this->_cn->lastInsertId();
+        }
+        return false;
     }
 
-    public function update() {
+    public function update($id, $newData) {
+        $query = "UPDATE users SET ";
+        $fields = [];
+        foreach ($newData as $key => $value) {
+            $fields[] = "$key = :$key";
+        }
+        $query .= implode(", ", $fields);
+        $query .= " WHERE id = :id";
 
+        $stmt = $this->_cn->prepare($query);
+
+        foreach ($newData as $key => $value) {
+            $stmt->bindValue(":$key", $value);
+        }
+        $stmt->bindValue(":id", $id);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
-    public function delete() {
-
+    public function delete($id) {
+        $stmt = $this->_cn->prepare("DELETE FROM users WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
