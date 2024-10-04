@@ -13,6 +13,7 @@ $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['HTTP_HOST'] == 'localhost' ? 
 $dotenv->load();
 
 $key = $_ENV['JWT_SECRET'];
+error_log("La clé secrète est : " . $key);
 
 $payload = [
     'iss' => $_SERVER['SERVER_NAME'], // �metteur du jeton
