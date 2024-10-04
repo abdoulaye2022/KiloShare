@@ -1,7 +1,7 @@
 <?php
-require_once '../../config/database.php';
-require_once '../../models/User.php';
-require_once '../../vendor/autoload.php';
+require_once 'config/DB.php';
+require_once 'models/User.php';
+require_once 'vendor/autoload.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -38,7 +38,7 @@ try {
 
     // Appeler la méthode delete de User
     if ($userModel->delete($id)) {
-        echo json_encode(["message" => "Utilisateur supprimé avec succès."]);
+        echo json_encode(["message" => "Utilisateur supprime avec succes."]);
     } else {
         echo json_encode(["message" => "Échec de la suppression de l'utilisateur."]);
     }

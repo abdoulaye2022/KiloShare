@@ -1,7 +1,7 @@
 <?php
-require_once '../../config/database.php';
-require_once '../../models/User.php';
-require_once '../../vendor/autoload.php';
+require_once 'config/DB.php';
+require_once 'models/User.php';
+require_once 'vendor/autoload.php';
 
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
@@ -24,8 +24,15 @@ if ($_SERVER['REQUEST_METHOD'] != 'PUT') {
 }
 
 // Extraire le JWT de l'en-tête Authorization
-$authHeader = apache_request_headers()['Authorization'];
-list(, $jwt) = explode(' ', $authHeader);
+$authHeader = apache_request_headers()['Authorization'] ?? null;
+
+if (!$authHeader || !preg_match('/Bearer\s(\S+)/', $authHeader, $matches)) {
+    http_response_code(400);
+    echo json_encode(["message" => "Le token JWT est manquant ou mal formé."]);
+    exit;
+}
+
+$jwt = $matches[1];
 
 try {
     // Vérifier la signature du JWT
@@ -34,19 +41,25 @@ try {
     // Récupérer les données de la requête
     $data = json_decode(file_get_contents("php://input"), true);
 
+    if (!isset($data['id']) || !isset($data['newData']) || !is_array($data['newData'])) {
+        http_response_code(400);
+        echo json_encode(["message" => "Les paramètres 'id' ou 'newData' sont manquants ou invalides."]);
+        exit;
+    }
+
     $id = $data['id'];
     $newData = $data['newData'];
 
     // Appeler la méthode update de User
     if ($userModel->update($id, $newData)) {
-        echo json_encode(["message" => "Utilisateur mis à jour avec succès."]);
+        echo json_encode(["message" => "Utilisateur mis a jour avec succes."]);
     } else {
-        echo json_encode(["message" => "Échec de la mise à jour de l'utilisateur."]);
+        echo json_encode(["message" => "Échec de la mise a jour de l'utilisateur."]);
     }
 } catch (Exception $e) {
     // Le JWT est invalide
     http_response_code(401);
-    echo json_encode(["message" => "Le token est invalide"]);
+    echo json_encode(["message" => "Le token est invalide", "error" => $e->getMessage()]);
     exit;
 }
 ?>

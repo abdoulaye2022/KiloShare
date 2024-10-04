@@ -32,7 +32,7 @@ class Auth {
     }
 
     public function updateUser($id, $newData) {
-        if ($this->conn == null) {
+        if ($this->_cn == null) {
             echo "Erreur de connexion à la base de données.";
             return false;
         }
