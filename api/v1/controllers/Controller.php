@@ -15,14 +15,15 @@ $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['HTTP_HOST'] == '10.0.2.2' ? $
 $dotenv->load();
 
 $key = $_ENV['JWT_SECRET'];
+error_log("La clÃ© secrÃ¨te est : " . $key);
 
 $payload = [
-    'iss' => $_SERVER['SERVER_NAME'], // Émetteur du jeton
+    'iss' => $_SERVER['SERVER_NAME'], // ï¿½metteur du jeton
     'aud' => 'collabox', // Audience du jeton
-    'iat' => time(), // Heure à laquelle le jeton a été émis
-    'nbf' => time(), // Heure avant laquelle le jeton ne doit pas être accepté
+    'iat' => time(), // Heure ï¿½ laquelle le jeton a ï¿½tï¿½ ï¿½mis
+    'nbf' => time(), // Heure avant laquelle le jeton ne doit pas ï¿½tre acceptï¿½
     'exp' => time() + 3600, // Expiration du jeton dans 1 heure
-    'id' => 12345, // Identifiant utilisateur ou toute autre donnée nécessaire
+    'id' => 12345, // Identifiant utilisateur ou toute autre donnï¿½e nï¿½cessaire
     'rand' => uniqid(), // Ajout d'un identifiant unique pour rendre le jeton unique chaque fois
 ];
 
