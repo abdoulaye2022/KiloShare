@@ -7,9 +7,9 @@ class Auth {
     }
 
     // Exemple de m�thode pour obtenir tous les utilisateurs
-    public function login($email) {
-        $stmt = $this->_cn->prepare("SELECT id, firstname, lastname, phone, email FROM users WHERE email = :email");
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    public function login($phone) {
+        $stmt = $this->_cn->prepare("SELECT id, firstname, lastname, phone, email, password FROM users WHERE phone = :phone");
+        $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt;
     }
@@ -73,9 +73,9 @@ class Auth {
         }
     }
     
-    public function emailExist ($email) {
-        $stmt = $this->_cn->prepare("SELECT * FROM users WHERE email = :email");
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+    public function phoneExist ($phone) {
+        $stmt = $this->_cn->prepare("SELECT * FROM users WHERE phone = :phone");
+        $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt;
     }

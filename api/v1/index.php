@@ -1,9 +1,12 @@
 <?php
 // D�finition des routes avec des param�tres dans l'en-t�te
 $routes = [
+    // Auth
     '/api/v1/info' => 'controllers/InfoController.php',
     '/api/v1/login' => 'controllers/auth/login.php',
     '/api/v1/signin' => 'controllers/auth/signin.php',
+
+    // User
     '/api/v1/users/getAll' => 'controllers/user/getAll.php',
     '/api/v1/users/create' => 'controllers/user/create.php',
     '/api/v1/users/update' => 'controllers/user/update.php',
