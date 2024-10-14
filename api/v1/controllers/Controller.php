@@ -9,9 +9,9 @@ header("Access-Control-Allow-Methods: POST,GET,PUT,DELETE");
 header("Access-Control-Max-Age: 3600");
 header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
 
-// localhos
+// localhost
 // 10.0.2.2
-$dotenv = Dotenv\Dotenv::createImmutable($_SERVER['HTTP_HOST'] == '10.0.2.2' ? $_SERVER['DOCUMENT_ROOT'] . '/KiloShare/api/v1/' : $_SERVER['DOCUMENT_ROOT'] . "/api/v1/");
+$dotenv = Dotenv\Dotenv::createImmutable($_SERVER['HTTP_HOST'] == 'localhost' ? $_SERVER['DOCUMENT_ROOT'] . '/KiloShare/api/v1/' : $_SERVER['DOCUMENT_ROOT'] . "/api/v1/");
 $dotenv->load();
 
 $key = $_ENV['JWT_SECRET'];
@@ -29,6 +29,8 @@ $payload = [
 
 require_once "config/DB.php";
 require_once "utils/Helper.php";
+require_once "utils/ErrorHandler.php";
+require_once "utils/constants.php";
 
 require_once "models/Auth.php";
 require_once "models/User.php";
@@ -41,6 +43,7 @@ $success = null;
 $error = null;
 
 $helper = new Helper();
+$errorHandler = new ErrorHandler($error_message);
 $authModel = new Auth($cn);
 $userModel = new User($cn);
 
