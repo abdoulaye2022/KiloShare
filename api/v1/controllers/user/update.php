@@ -1,10 +1,7 @@
 <?php
 require_once("controllers/Controller.php");
 
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-
-if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+if ($_SERVER['REQUEST_METHOD'] != 'PUT') {
     header('HTTP/1.1 405 Method Not Allowed');
     header('Allow: POST');
     
@@ -19,39 +16,17 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     exit;
 }
 
+include("utils/check_token.php");
+
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
-if(!isset($data['firstname']) || !isset($data['lastname']) || !isset($data['phone']) || !isset($data['password'])) {
+if(!isset($params['id']) || !isset($data['firstname']) || !isset($data['lastname']) ||
+empty($params['id']) || empty($data['firstname']) || empty($data['lastname'])) {
 	$error = [
         "success" => false,
         "status" => 400,
         "message" => $errorHandler::getMessage('required_fields')
-    ];
-    http_response_code(400);
-    header('Content-Type: application/json');
-    echo json_encode($error);
-    exit();
-}
-
-if(empty($data['firstname']) || empty($data['lastname']) || empty($data['phone']) || empty($data['password'])) {
-	$error = [
-        "success" => false,
-        "status" => 400,
-        "message" => $errorHandler::getMessage('required_fields')
-    ];
-    http_response_code(400);
-    header('Content-Type: application/json');
-    echo json_encode($error);
-    exit();
-}
-
-// Validation numero de telephone
-if(!$helper->validatePhoneNumber($data['phone'])) {
-    $error = [
-        "success" => false,
-        "status" => 400,
-        "message" => $errorHandler::getMessage('invalid_phone')
     ];
     http_response_code(400);
     header('Content-Type: application/json');
@@ -71,26 +46,12 @@ if(isset($data['email']) && !empty($data['email']) && !$helper->isValidEmail($da
     exit();
 }
 
-$phoneCheck = $authModel->phoneExist($data['phone']);
-if($phoneCheck->rowCount() > 0) {
-	$error = [
-        "success" => false,
-        "status" => 400,
-        "message" => $errorHandler::getMessage('phone_exist')
-    ];
-    http_response_code(400);
-    header('Content-Type: application/json');
-    echo json_encode($error);
-    exit();
-}
-
 $firstname = $helper->validateString($data['firstname']);
 $lastname = $helper->validateString($data['lastname']);
-$phone = $helper->validateString($data['phone']);
 $email = $helper->validateString($data['email']);
-$password = password_hash($helper->validateString($data['password']), PASSWORD_DEFAULT);
+$id = $helper->validateInteger($params['id']);
 
-$user_id = $authModel->signin($firstname, $lastname, $phone, $email, $password);
+$user_id = $userModel->update($id, $firstname, $lastname, $email);
 if($user_id == false) {
 	$error = [
         "success" => false,
@@ -103,7 +64,7 @@ if($user_id == false) {
     exit();
 }
 
-$userFetch = $userModel->getOne($user_id);
+$userFetch = $userModel->getOne($id);
 if($userFetch == false) {
 	$error = [
         "success" => false,
@@ -118,18 +79,11 @@ if($userFetch == false) {
 
 $user = $userFetch->fetch(PDO::FETCH_ASSOC);
 
-$payload = array(
-	"id" => $user['id']
-);
-
-$jwt = JWT::encode($payload, $key, 'HS256');
-
 $result = array(
     "success" => true,
     "status" => 200,
     "message" => "Request successful.",
     "data" => $user,
-    "access_token" => $jwt
 );
 
 http_response_code(200);

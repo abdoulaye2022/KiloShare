@@ -1,9 +1,6 @@
 <?php
 require_once("controllers/Controller.php");
 
-use Firebase\JWT\JWT;
-use Firebase\JWT\Key;
-
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     header('HTTP/1.1 405 Method Not Allowed');
     header('Allow: POST');
@@ -19,22 +16,13 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     exit;
 }
 
+include("utils/check_token.php");
+
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
-if(!isset($data['firstname']) || !isset($data['lastname']) || !isset($data['phone']) || !isset($data['password'])) {
-	$error = [
-        "success" => false,
-        "status" => 400,
-        "message" => $errorHandler::getMessage('required_fields')
-    ];
-    http_response_code(400);
-    header('Content-Type: application/json');
-    echo json_encode($error);
-    exit();
-}
-
-if(empty($data['firstname']) || empty($data['lastname']) || empty($data['phone']) || empty($data['password'])) {
+if(!isset($data['firstname']) || !isset($data['lastname']) || !isset($data['phone']) || !isset($data['password']) ||
+empty($data['firstname']) || empty($data['lastname']) || empty($data['phone']) || empty($data['password'])) {
 	$error = [
         "success" => false,
         "status" => 400,
@@ -90,7 +78,7 @@ $phone = $helper->validateString($data['phone']);
 $email = $helper->validateString($data['email']);
 $password = password_hash($helper->validateString($data['password']), PASSWORD_DEFAULT);
 
-$user_id = $authModel->signin($firstname, $lastname, $phone, $email, $password);
+$user_id = $userModel->create($firstname, $lastname, $phone, $email, $password);
 if($user_id == false) {
 	$error = [
         "success" => false,
@@ -118,18 +106,11 @@ if($userFetch == false) {
 
 $user = $userFetch->fetch(PDO::FETCH_ASSOC);
 
-$payload = array(
-	"id" => $user['id']
-);
-
-$jwt = JWT::encode($payload, $key, 'HS256');
-
 $result = array(
     "success" => true,
     "status" => 200,
     "message" => "Request successful.",
     "data" => $user,
-    "access_token" => $jwt
 );
 
 http_response_code(200);

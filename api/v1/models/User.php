@@ -26,54 +26,47 @@ class User
     }
 
     public function create($firstname, $lastname, $phone, $email, $password)
-{
-    // Préparer la requête en incluant le champ 'active'
-    $stmt = $this->_cn->prepare("INSERT INTO users (firstname, lastname, phone, email, password, active) VALUES (:firstname, :lastname, :phone, :email, :password, :active)");
-
-    // Lier les paramètres
-    $stmt->bindParam(':firstname', $firstname);
-    $stmt->bindParam(':lastname', $lastname);
-    $stmt->bindParam(':phone', $phone);
-    $stmt->bindParam(':email', $email);
-
-    // Hacher le mot de passe
-    $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
-    $stmt->bindParam(':password', $hashedPassword);
-
-    // Un user est actif dès sa création
-    $active = 1;
-    $stmt->bindParam(':active', $active, PDO::PARAM_INT);
-
-    // Exécuter la requête
-    if ($stmt->execute()) {
-        return $this->_cn->lastInsertId();
-    }
-    return false;
-}
-
-
-
-    public function update($id, $newData)
     {
-        $query = "UPDATE users SET ";
-        $fields = [];
-        foreach ($newData as $key => $value) {
-            $fields[] = "$key = :$key";
-        }
-        $query .= implode(", ", $fields);
-        $query .= " WHERE id = :id";
+        // Préparer la requête en incluant le champ 'active'
+        $stmt = $this->_cn->prepare("INSERT INTO users (firstname, lastname, phone, email, password, active, createdat) VALUES (:firstname, :lastname, :phone, :email, :password, :active, NOW())");
 
-        $stmt = $this->_cn->prepare($query);
+        // Lier les paramètres
+        $stmt->bindParam(':firstname', $firstname, PDO::PARAM_STR);
+        $stmt->bindParam(':lastname', $lastname, PDO::PARAM_STR);
+        $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
 
-        foreach ($newData as $key => $value) {
-            $stmt->bindValue(":$key", $value);
+        // Hacher le mot de passe
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
+        $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+
+        // Un user est actif dès sa création
+        $active = 1;
+        $stmt->bindParam(':active', $active, PDO::PARAM_INT);
+
+        // Exécuter la requête
+        if ($stmt->execute()) {
+            return $this->_cn->lastInsertId();
         }
-        $stmt->bindValue(":id", $id);
+        return false;
+    }
+
+    public function update($id, $firstname, $lastname, $email)
+    {
+        // Préparer la requête en incluant le champ 'active'
+        $stmt = $this->_cn->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, email = :email, updatedat = NOW() WHERE id = :id ");
+
+        // Lier les paramètres
+        $stmt->bindParam(':firstname', $firstname, PDO::PARAM_STR);
+        $stmt->bindParam(':lastname', $lastname, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        // Exécuter la requête
         if ($stmt->execute()) {
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
     public function delete($id)

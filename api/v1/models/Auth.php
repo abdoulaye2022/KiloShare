@@ -26,9 +26,10 @@ class Auth {
         $active = 1;
         $stmt->bindParam(':active', $active, PDO::PARAM_INT);
 
-        $stmt->execute();
-
-        return $stmt;
+        if ($stmt->execute()) {
+            return $this->_cn->lastInsertId();
+        }
+        return false;
     }
 
     public function updateUser($id, $newData) {

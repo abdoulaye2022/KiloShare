@@ -16,10 +16,14 @@ class DB {
     public function getConnection() {
         $this->conn = null;
         try {
-            $this->conn = new PDO("mysql:host=" . $this->host . ";dbname=" . $this->db_name, $this->username, $this->password);
+            $this->conn = new PDO("mysql:host=" . $this->host . ";port=3306;dbname=" . $this->db_name, $this->username, $this->password,  [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_TIMEOUT => 5 // Timeout après 5 secondes
+            ]);
             // $this->conn->exec("set names utf8");
         } catch(PDOException $exception) {
             echo "Erreur de connexion : " . $exception->getMessage();
+            die();
         }
         return $this->conn;
     }
