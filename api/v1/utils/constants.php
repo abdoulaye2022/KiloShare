@@ -20,6 +20,10 @@ $error_message = [
     'request_timeout'     => 'The request took too long to complete. Please try again.',
     'max_attempts_exceeded' => 'You have exceeded the maximum number of login attempts. Please try again later.',
     'server_internal_error' => 'An internal server error occurred. Please try again later.',
+    'token_expired' => 'Your session has expired. Please log in again to continue.',
+    'authorization_header_missing' => 'Authorization header not received. Please provide a valid token.',
+    'token_invalid'       => 'Invalid token. Please provide a valid authentication token.',
+    'page_not_found'      => 'The requested page was not found. Please check the URL and try again.',
 ];
 
 $countries =array(

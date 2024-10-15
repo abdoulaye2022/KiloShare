@@ -9,8 +9,8 @@ $routes = [
     // User
     '/api/v1/users/getAll' => 'controllers/user/getAll.php',
     '/api/v1/users/create' => 'controllers/user/create.php',
-    '/api/v1/users/update' => 'controllers/user/update.php',
-    '/api/v1/users/delete' => 'controllers/user/delete.php',
+    '/api/v1/users/update/{id}' => 'controllers/user/update.php',
+    '/api/v1/users/delete/{id}' => 'controllers/user/delete.php',
 ];
 
 // R�cup�ration de l'URI de la requ�te
@@ -35,6 +35,12 @@ foreach ($routes as $route => $controller) {
     }
 }
 
-// Route non trouv�e, affichage d'une erreur 404
-header("HTTP/1.0 404 Not Found");
-echo "404 Not Found";
+$error = [
+    "success" => false,
+    "status" => 404,
+    "message" => 'The requested page was not found. Please check the URL and try again.'
+];
+http_response_code(404);
+header('Content-Type: application/json');
+echo json_encode($error);
+exit();

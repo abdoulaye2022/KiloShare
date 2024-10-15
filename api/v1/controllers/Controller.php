@@ -19,7 +19,7 @@ error_log("La clé secrète est : " . $key);
 
 $payload = [
     'iss' => $_SERVER['SERVER_NAME'], // �metteur du jeton
-    'aud' => 'collabox', // Audience du jeton
+    'aud' => 'kiloshare', // Audience du jeton
     'iat' => time(), // Heure � laquelle le jeton a �t� �mis
     'nbf' => time(), // Heure avant laquelle le jeton ne doit pas �tre accept�
     'exp' => time() + 3600, // Expiration du jeton dans 1 heure
@@ -34,6 +34,7 @@ require_once "utils/constants.php";
 
 require_once "models/Auth.php";
 require_once "models/User.php";
+
 
 $db = new DB($_ENV['DB_HOST'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME']);
 $cn = $db->getConnection();
