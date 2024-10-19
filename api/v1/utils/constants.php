@@ -24,6 +24,16 @@ $error_message = [
     'authorization_header_missing' => 'Authorization header not received. Please provide a valid token.',
     'token_invalid'       => 'Invalid token. Please provide a valid authentication token.',
     'page_not_found'      => 'The requested page was not found. Please check the URL and try again.',
+	'invalid_date' => 'The date provided is not valid. Please use the correct format.',
+	'title_too_long' => 'The title exceeds 50 characters. Please shorten the title.',
+	'description_too_long' => 'The description is too long. It must not exceed the character limit.',
+	'invalid_user_id' => 'The user ID is invalid. Please provide a valid user number.',
+	'invalid_status_code' => 'The status code provided is invalid. Please use a valid status number.',
+	'invalid_price' => 'The price is invalid. Please enter a valid amount.',
+	'invalid_space_available' => 'The space available is invalid. Please enter a valid space available.',
+	'date_departure_error' => 'The departure date must be earlier than the arrival date and the collection date.',
+	'date_collection_error' => 'The collection date must be later than the arrival date.',
+	'invalid_announcement_number' => 'The announcement number is invalid.'
 ];
 
 $countries =array(

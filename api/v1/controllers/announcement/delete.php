@@ -3,7 +3,7 @@ require_once("controllers/Controller.php");
 
 if ($_SERVER['REQUEST_METHOD'] != 'DELETE') {
     header('HTTP/1.1 405 Method Not Allowed');
-    header('Allow: POST');
+    header('Allow: DELETE');
     
     $error = [
         "success" => false,
@@ -18,8 +18,11 @@ if ($_SERVER['REQUEST_METHOD'] != 'DELETE') {
 
 include("utils/check_token.php");
 
+$input = file_get_contents('php://input');
+$data = json_decode($input, true);
+
 if(!isset($params['id']) || empty($params['id'])) {
-	$error = [
+    $error = [
         "success" => false,
         "status" => 400,
         "message" => $errorHandler::getMessage('required_fields')
@@ -34,7 +37,7 @@ if(!$helper->isValidInteger($params['id'])) {
     $error = [
         "success" => false,
         "status" => 400,
-        "message" => $errorHandler::getMessage('invalid_user_id')
+        "message" => $errorHandler::getMessage('invalid_announcement_number')
     ];
     http_response_code(400);
     header('Content-Type: application/json');
@@ -44,8 +47,7 @@ if(!$helper->isValidInteger($params['id'])) {
 
 $id = $helper->validateString($params['id']);
 
-$deleted = $userModel->delete($id);
-
+$deleted = $announcementModel->delete($id);
 if ($deleted == false) {
     $error = [
         "success" => false,
@@ -68,4 +70,6 @@ http_response_code(200);
 header('Content-Type: application/json');
 echo json_encode($result);
 exit();
+?>
+
 ?>
