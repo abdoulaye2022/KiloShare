@@ -17,6 +17,13 @@ $routes = [
     '/api/v1/announcements/create' => 'controllers/announcement/create.php',
     '/api/v1/announcements/update/{id}' => 'controllers/announcement/update.php',
     '/api/v1/announcements/delete/{id}' => 'controllers/announcement/delete.php',
+
+    // Profiles
+    '/api/v1/profiles/getAll' => 'controllers/profile/getAll.php',
+    '/api/v1/profiles/create' => 'controllers/profile/create.php',
+    '/api/v1/profiles/update/{id}' => 'controllers/profile/update.php',
+    '/api/v1/profiles/delete/{id}' => 'controllers/profile/delete.php',
+
 ];
 
 // R�cup�ration de l'URI de la requ�te
