@@ -9,9 +9,15 @@ class Helper
 	    return filter_var($email, FILTER_VALIDATE_EMAIL) !== false;
 	}
 
-	public function validateString ($string) {
-		return htmlspecialchars(htmlentities(trim($string)));
+	public function validateString($string) {
+		// Nettoyer la chaîne en enlevant les espaces superflus
+		$string = trim($string);
+		// Convertir les entités HTML en caractères normaux
+		$string = html_entity_decode($string);
+		// Échapper les caractères spéciaux pour une utilisation sécurisée en HTML
+		return htmlspecialchars($string);
 	}
+	
 
 	public function greethings () {
 		$heure = date("G");
@@ -34,8 +40,8 @@ class Helper
         }
 	}
 
-	public function validateInteger ($integer) {
-		return intval($integer);
+	public function isValidInteger($value) {
+		return filter_var($value, FILTER_VALIDATE_INT) !== false;
 	}
 
 	public function validerDate($date, $format = 'Y-m-d') {
@@ -62,7 +68,7 @@ class Helper
 	    return true;
 	}
 
-	public function isValidPrice($price) {
+	public function isValidDouble($price) {
 	    $pattern = '/^\d+(\.\d{1,2})?$/';
 
 	    return preg_match($pattern, $price);
@@ -89,19 +95,45 @@ class Helper
 	}
 
 	public function validatePhoneNumber($phoneNumber) {
-		// Supprimer les espaces, les tirets et les parenthèses
 		$phoneNumber = preg_replace('/[\s\-\(\)]+/', '', $phoneNumber);
 	
-		// Expression régulière pour valider un numéro de téléphone
-		// Cette regex permet les numéros avec ou sans code de pays
 		$pattern = '/^\+?[0-9]{5,15}$/';
 	
-		// Vérifier si le numéro correspond au format
 		if (preg_match($pattern, $phoneNumber)) {
-			return true; // Le numéro est valide
+			return true;
 		} else {
-			return false; // Le numéro est invalide
+			return false;
 		}
 	}
+
+	public function validateDateFormat($date) {
+		// Vérifier le format avec une expression régulière : YYYY-MM-DD
+		$pattern = '/^\d{4}-\d{2}-\d{2}$/';
+		
+		if (preg_match($pattern, $date)) {
+			// Décomposer la date pour vérifier si c'est une date valide
+			list($year, $month, $day) = explode('-', $date);
+			
+			// Vérifier si c'est une date valide (sans considérer 0000 comme une année valide)
+			if (checkdate((int)$month, (int)$day, (int)$year) || $date === '0000-00-00') {
+				return true; // Format et validité OK
+			} else {
+				return false; // Date invalide
+			}
+		}
+		
+		return false; // Format incorrect
+	}
+
+	public function isStringValidLength($string, $max) {
+		// Vérifie si la chaîne est de 50 caractères ou moins
+		return strlen($string) <= $max;
+	}
+
+	// public function isValidPrice($price) {
+	// 	// Vérifie si le prix est un nombre et a exactement deux décimales
+	// 	return preg_match('/^\d+(\.\d{2}|,\d{2})$/', $price) === 1;
+	// }
+	
 }
 ?>

@@ -34,7 +34,7 @@ require_once "utils/constants.php";
 
 require_once "models/Auth.php";
 require_once "models/User.php";
-
+require_once "models/Announcement.php";
 
 $db = new DB($_ENV['DB_HOST'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME']);
 $cn = $db->getConnection();
@@ -47,5 +47,5 @@ $helper = new Helper();
 $errorHandler = new ErrorHandler($error_message);
 $authModel = new Auth($cn);
 $userModel = new User($cn);
-
+$announcementModel = new Announcement($cn);
 ?>
