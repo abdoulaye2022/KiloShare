@@ -27,7 +27,7 @@ class User
 
     public function create($firstname, $lastname, $phone, $email, $password)
     {
-        $stmt = $this->_cn->prepare("INSERT INTO users (firstname, lastname, phone, email, password, active, createdat) VALUES (:firstname, :lastname, :phone, :email, :password, :active, NOW())");
+        $stmt = $this->_cn->prepare("INSERT INTO users (firstname, lastname, phone, email, password, active, created_at) VALUES (:firstname, :lastname, :phone, :email, :password, :active, NOW())");
 
         $stmt->bindParam(':firstname', $firstname, PDO::PARAM_STR);
         $stmt->bindParam(':lastname', $lastname, PDO::PARAM_STR);
@@ -48,7 +48,7 @@ class User
 
     public function update($id, $firstname, $lastname, $email)
     {
-        $stmt = $this->_cn->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, email = :email, updatedat = NOW() WHERE id = :id ");
+        $stmt = $this->_cn->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, email = :email, updated_at = NOW() WHERE id = :id ");
 
         $stmt->bindParam(':firstname', $firstname, PDO::PARAM_STR);
         $stmt->bindParam(':lastname', $lastname, PDO::PARAM_STR);

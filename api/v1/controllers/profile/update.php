@@ -3,7 +3,7 @@ require_once("controllers/Controller.php");
 
 if ($_SERVER['REQUEST_METHOD'] != 'PUT') {
     header('HTTP/1.1 405 Method Not Allowed');
-    header('Allow: POST');
+    header('Allow: PUT');
     
     $error = [
         "success" => false,
@@ -21,8 +21,7 @@ include("utils/check_token.php");
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
-if(!isset($params['id']) || !isset($data['firstname']) || !isset($data['lastname']) ||
-empty($params['id']) || empty($data['firstname']) || empty($data['lastname'])) {
+if(!isset($params['id']) || empty($params['id']) || !isset($data['name']) || empty($data['name'])) {
 	$error = [
         "success" => false,
         "status" => 400,
@@ -34,23 +33,11 @@ empty($params['id']) || empty($data['firstname']) || empty($data['lastname'])) {
     exit();
 }
 
-if(isset($data['email']) && !empty($data['email']) && !$helper->isValidEmail($data['email'])) {
-	$error = [
-        "success" => false,
-        "status" => 400,
-        "message" => $errorHandler::getMessage('invalid_email')
-    ];
-    http_response_code(400);
-    header('Content-Type: application/json');
-    echo json_encode($error);
-    exit();
-}
-
 if(!$helper->isValidInteger($params['id'])) {
     $error = [
         "success" => false,
         "status" => 400,
-        "message" => $errorHandler::getMessage('invalid_announcement_number')
+        "message" => $errorHandler::getMessage('invalid_profile_id')
     ];
     http_response_code(400);
     header('Content-Type: application/json');
@@ -58,13 +45,11 @@ if(!$helper->isValidInteger($params['id'])) {
     exit();
 }
 
-$firstname = $helper->validateString($data['firstname']);
-$lastname = $helper->validateString($data['lastname']);
-$email = $helper->validateString($data['email']);
+$name = $helper->validateString($data['name']);
 $id = $helper->validateString($params['id']);
 
-$user_id = $userModel->update($id, $firstname, $lastname, $email);
-if($user_id == false) {
+$updated = $profileModel->update($id, $name);
+if($updated == false) {
 	$error = [
         "success" => false,
         "status" => 400,
@@ -76,8 +61,8 @@ if($user_id == false) {
     exit();
 }
 
-$userFetch = $userModel->getOne($id);
-if($userFetch == false) {
+$profileFetch = $profileModel->getOne($id);
+if($profileFetch == false) {
 	$error = [
         "success" => false,
         "status" => 400,
@@ -89,13 +74,13 @@ if($userFetch == false) {
     exit();
 }
 
-$user = $userFetch->fetch(PDO::FETCH_ASSOC);
+$profile = $profileFetch->fetch(PDO::FETCH_ASSOC);
 
 $result = array(
     "success" => true,
     "status" => 200,
     "message" => "Request successful.",
-    "data" => $user,
+    "data" => $profile,
 );
 
 http_response_code(200);
