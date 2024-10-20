@@ -36,6 +36,8 @@ require_once "models/Auth.php";
 require_once "models/User.php";
 require_once "models/Announcement.php";
 require_once "models/Profile.php";
+require_once "models/Status.php";
+require_once "models/DocumentType.php";
 
 $db = new DB($_ENV['DB_HOST'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME']);
 $cn = $db->getConnection();
@@ -50,4 +52,6 @@ $authModel = new Auth($cn);
 $userModel = new User($cn);
 $announcementModel = new Announcement($cn);
 $profileModel = new Profile($cn);
+$statusModel = new Status($cn);
+$documentTypeModel = new DocumentType($cn);
 ?>

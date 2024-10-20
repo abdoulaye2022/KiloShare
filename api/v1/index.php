@@ -23,21 +23,33 @@ $routes = [
     '/api/v1/profiles/create' => 'controllers/profile/create.php',
     '/api/v1/profiles/update/{id}' => 'controllers/profile/update.php',
     '/api/v1/profiles/delete/{id}' => 'controllers/profile/delete.php',
+    
+    // Status
+    '/api/v1/status/getAll' => 'controllers/status/getAll.php',
+    '/api/v1/status/create' => 'controllers/status/create.php',
+    '/api/v1/status/update/{id}' => 'controllers/status/update.php',
+    '/api/v1/status/delete/{id}' => 'controllers/status/delete.php',
+
+    // Document_types
+    '/api/v1/document_types/getAll' => 'controllers/document_type/getAll.php',
+    '/api/v1/document_types/create' => 'controllers/document_type/create.php',
+    '/api/v1/document_types/update/{id}' => 'controllers/document_type/update.php',
+    '/api/v1/document_types/delete/{id}' => 'controllers/document_type/delete.php',
 
 ];
 
-// R�cup�ration de l'URI de la requ�te
+// Recuperation de l'URI de la requete
 $uri = $_SERVER['REQUEST_URI'];
 
 // Recherche de la route correspondante
 foreach ($routes as $route => $controller) {
-    // Remplacement des param�tres dans l'URI par des expressions r�guli�res
+    // Remplacement des parametres dans l'URI par des expressions regulieres
     $route = "/KiloShare".$route;
     $pattern = str_replace('/', '\/', $route);
     $pattern = preg_replace('/\{([^\}]+)\}/', '(?P<$1>[^\/]+)', $pattern);
     $pattern = '/^' . $pattern . '$/';
 
-    // Recherche de la correspondance entre l'URI de la requ�te et le mod�le de route
+    // Recherche de la correspondance entre l'URI de la requete et le modele de route
     if (preg_match($pattern, $uri, $matches)) {
         $params = array_filter($matches, 'is_string', ARRAY_FILTER_USE_KEY);
         $controller = str_replace('{', '', $controller);
