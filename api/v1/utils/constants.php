@@ -34,7 +34,8 @@ $error_message = [
 	'date_departure_error' => 'The departure date must be earlier than the arrival date and the collection date.',
 	'date_collection_error' => 'The collection date must be later than the arrival date.',
 	'invalid_announcement_number' => 'The announcement number is invalid.',
-	'invalid_profile_id' => 'The profile ID is invalid.'
+	'invalid_profile_id' => 'The profile ID is invalid.',
+	'invalid_status_id' => 'The status ID is invalid.',
 ];
 
 $countries =array(
