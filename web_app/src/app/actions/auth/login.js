@@ -19,7 +19,7 @@ export async function login(phone, password) {
     );
 
     cookies().set({
-        name: "jwt",
+        name: process.env.NEXT_PUBLIC_COOKIE_NAME,
         value: response.data.access_token,
         httpOnly: true, // Protège contre XSS
         secure: true, // Assure que le cookie est envoyé uniquement via HTTPS
