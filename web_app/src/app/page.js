@@ -42,6 +42,7 @@ export default function Home() {
                 router.push("/dashboard");
               }
             } catch (error) {
+              setLoading(false);
               setError(error.message);
             }
           }}

@@ -5,13 +5,12 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    background-color: #faf7f9;
+    background-color: white;
 }
 
 .form_container {
     padding: 50px;
     width: 350px;
-    background-color: rgb(241, 230, 230);
-    opacity: 0.5;
+    background-color: #001529;;
     text-align: center;
 }

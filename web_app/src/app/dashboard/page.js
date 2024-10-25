@@ -11,6 +11,7 @@ import {
   TeamOutlined,
   VideoCameraOutlined,
   UploadOutlined,
+  AppstoreOutlined,
 } from "@ant-design/icons";
 import { Button, Layout, Menu, theme } from "antd";
 import axios from "../utils/axiosConfig";
@@ -42,6 +43,20 @@ const items = [
   getItem("Files", "9", <FileOutlined />),
 ];
 
+const itemsHeader = [
+  {
+    label: 'Navigation One',
+    key: 'mail',
+    icon: <UserOutlined />,
+  },
+  {
+    label: 'Navigation Two',
+    key: 'app',
+    icon: <AppstoreOutlined />,
+    disabled: true,
+  }
+];
+
 const Dashboard = () => {
   const [collapsed, setCollapsed] = useState(false);
   const {
@@ -50,15 +65,15 @@ const Dashboard = () => {
 
   const getStatus = async () => {
     try {
-        let result = await getAll();
-        if (result.status == 200) {
+      let result = await getAll();
+      if (result.status == 200) {
         //   setLoading(false);
-            console.log(result);
-        }
-      } catch (error) {
-        console.log(error)
-        // setError(error.message);
+        console.log(result);
       }
+    } catch (error) {
+      console.log(error);
+      // setError(error.message);
+    }
   };
 
   useEffect(() => {
@@ -97,6 +112,7 @@ const Dashboard = () => {
           style={{
             padding: 0,
             background: colorBgContainer,
+            display: "flex"
           }}
         >
           <Button
@@ -107,6 +123,16 @@ const Dashboard = () => {
               fontSize: "16px",
               width: 64,
               height: 64,
+            }}
+          />
+          <Menu
+            theme="dark"
+            mode="horizontal"
+            defaultSelectedKeys={["2"]}
+            items={itemsHeader}
+            style={{
+              flex: 1,
+              minWidth: 0,
             }}
           />
         </Header>
