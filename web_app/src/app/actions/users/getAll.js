@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 const cookieStore = cookies();
 
 // Get Cookie
-const jwtToken = cookieStore.get("jwt")?.value;
+const jwtToken = cookieStore.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value;
 
 export async function getAll() {
   try {
