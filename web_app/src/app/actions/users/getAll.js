@@ -5,6 +5,8 @@ import { cookies } from "next/headers";
 
 const cookieStore = cookies();
 
+// console.log("date expiration : " + cookieStore.expires)
+
 // Get Cookie
 const jwtToken = cookieStore.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value;
 
