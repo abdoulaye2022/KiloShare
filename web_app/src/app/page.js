@@ -89,7 +89,7 @@ export default function Home() {
                 </Paragraph>
               ) : null}
 
-              <Input
+              <Input.Password
                 name="password"
                 placeholder="Password"
                 onChange={formik.handleChange}

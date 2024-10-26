@@ -5,17 +5,18 @@ import {
   MenuFoldOutlined,
   MenuUnfoldOutlined,
   UserOutlined,
-  DesktopOutlined,
-  FileOutlined,
-  PieChartOutlined,
   TeamOutlined,
-  VideoCameraOutlined,
-  UploadOutlined,
-  AppstoreOutlined,
+  FileOutlined,
+  SettingOutlined,
+  DashboardOutlined,
+  LogoutOutlined,
+  NotificationOutlined
 } from "@ant-design/icons";
-import { Button, Layout, Menu, theme } from "antd";
-import axios from "../utils/axiosConfig";
+import { Button, Layout, Menu, theme, Dropdown, Space, Avatar } from "antd";
 import { getAll } from "../actions/users/getAll";
+import { logout } from "../actions/auth/logout";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const { Header, Sider, Content } = Layout;
 
@@ -28,33 +29,59 @@ function getItem(label, key, icon, children) {
   };
 }
 
+const itemsSidebar = [
+  getItem("Dashboard", "1", <DashboardOutlined />),
+  getItem("Users", "sub1", <TeamOutlined />, [
+    getItem("User", "2"),
+    getItem("Profil", "3"),
+    getItem("To appouved", "4"),
+  ]),
+  getItem("Announcements", "sub2", <NotificationOutlined />, [
+    getItem("Announcement", "5"),
+    getItem("Status", "6"),
+    getItem("To appouved", "7"),
+  ]),
+  getItem("Files", "8", <FileOutlined />),
+];
+
 const items = [
-  getItem("Option 1", "1", <PieChartOutlined />),
-  getItem("Option 2", "2", <DesktopOutlined />),
-  getItem("User", "sub1", <UserOutlined />, [
-    getItem("Tom", "3"),
-    getItem("Bill", "4"),
-    getItem("Alex", "5"),
-  ]),
-  getItem("Team", "sub2", <TeamOutlined />, [
-    getItem("Team 1", "6"),
-    getItem("Team 2", "8"),
-  ]),
-  getItem("Files", "9", <FileOutlined />),
+  {
+    key: "1",
+    label: (
+      <>
+        <UserOutlined />
+        &nbsp;
+        <Link href="/profil">My profil</Link>
+      </>
+    ),
+  },
+  {
+    key: "2",
+    label: (
+      <>
+        <SettingOutlined />
+        &nbsp;
+        <Link href="/settings">Settings</Link>
+      </>
+    ),
+  },
+  {
+    key: "3",
+    danger: true,
+    label: (
+      <div>
+        <LogoutOutlined />
+        &nbsp; Log out
+      </div>
+    ),
+  },
 ];
 
 const itemsHeader = [
   {
-    label: 'Navigation One',
-    key: 'mail',
-    icon: <UserOutlined />,
+    label: "Test",
+    key: "1",
   },
-  {
-    label: 'Navigation Two',
-    key: 'app',
-    icon: <AppstoreOutlined />,
-    disabled: true,
-  }
 ];
 
 const Dashboard = () => {
@@ -62,6 +89,8 @@ const Dashboard = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
+
+  const router = useRouter();
 
   const getStatus = async () => {
     try {
@@ -82,37 +111,38 @@ const Dashboard = () => {
 
   return (
     <Layout style={{ height: "100vh" }}>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
-        <div className="demo-logo-vertical" />
+      <Sider
+        collapsible
+        collapsed={collapsed}
+        onCollapse={(value) => setCollapsed(value)}
+      >
+        <div
+          className="demo-logo-vertical"
+          style={{
+            height: 64,
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            backgroundColor: "white"
+          }}
+        >
+          <h3 style={{ color: "black", fontWeight: "bold" }}>KILOSHARE</h3>
+        </div>
         <Menu
           theme="dark"
-          mode="inline"
           defaultSelectedKeys={["1"]}
-          items={[
-            {
-              key: "1",
-              icon: <UserOutlined />,
-              label: "nav 1",
-            },
-            {
-              key: "2",
-              icon: <VideoCameraOutlined />,
-              label: "nav 2",
-            },
-            {
-              key: "3",
-              icon: <UploadOutlined />,
-              label: "nav 3",
-            },
-          ]}
+          mode="inline"
+          items={itemsSidebar}
         />
       </Sider>
       <Layout>
         <Header
           style={{
             padding: 0,
-            background: colorBgContainer,
-            display: "flex"
+            background: "#001529",
+            display: "flex",
+            justifyContent: "space-between",
+            paddingRight: 20,
           }}
         >
           <Button
@@ -128,13 +158,38 @@ const Dashboard = () => {
           <Menu
             theme="dark"
             mode="horizontal"
-            defaultSelectedKeys={["2"]}
+            defaultSelectedKeys={["1"]}
             items={itemsHeader}
             style={{
-              flex: 1,
               minWidth: 0,
+              flex: 1,
             }}
           />
+
+          <Dropdown
+            menu={{
+              items,
+              onClick: (value) => {
+                if (value.key == 3) {
+                  logout();
+                  router.replace("/");
+                }
+              },
+            }}
+            trigger={["click"]}
+            size="large"
+          >
+            <div
+              onClick={(e) => e.preventDefault()}
+              style={{ cursor: "pointer", display: "flex" }}
+            >
+              <h3 style={{ color: "white" }}>Abdoulaye Mohamed Ahmed</h3>
+              &nbsp;
+              <Space>
+                <Avatar icon={<UserOutlined />} />
+              </Space>
+            </div>
+          </Dropdown>
         </Header>
         <Content
           style={{

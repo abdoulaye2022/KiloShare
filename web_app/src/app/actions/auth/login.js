@@ -18,7 +18,7 @@ export async function login(phone, password) {
       }
     );
 
-    console.log("Prod error : " . process.env.NEXT_PUBLIC_COOKIE_NAME);
+    // console.log("Prod error : " . process.env.NEXT_PUBLIC_COOKIE_NAME);
 
     cookies().set({
         name: process.env.NEXT_PUBLIC_COOKIE_NAME,
@@ -31,7 +31,7 @@ export async function login(phone, password) {
         expires: new Date(Date.now() + 60 * 60 * 24 * 365 * 1000), // Expire dans 1 an
     });
 
-    console.log("Prod result : " . response.data);
+    // console.log("Prod result : " . response.data);
 
     return response.data;
   } catch (error) {
