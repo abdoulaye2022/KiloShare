@@ -1,12 +1,15 @@
 "use client";
 
-import { Input, Space, Typography, Button, Divider, Spin } from "antd";
+import { Input, Space, Typography, Button, Divider, Spin, Select } from "antd";
 import styles from "./page.module.css";
 import { Formik } from "formik";
 import * as Yup from "yup";
 import { login } from "./actions/auth/login";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { setLanguage } from "./actions/others/setLanguage";
+import { getLanguage } from "./actions/others/getLanguage";
 
 const { Title, Paragraph } = Typography;
 
@@ -14,9 +17,37 @@ export default function Home() {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const router = useRouter();
+  const t = useTranslations("LoginPage");
+  const [defLanguage, setDefLanguage] = useState("fr");
+
+  useEffect(() => {
+    // const language = (
+    //   navigator.language || navigator.languages[0]
+    // ).split("-")[0];
+
+    return () => {
+      setDefLanguage("en");
+    }
+  });
 
   return (
     <div className={styles.page}>
+      <div style={{ marginBottom: 40 }}>
+        <Select
+          defaultValue={defLanguage}
+          onChange={(value) => {
+            const language = (
+              navigator.language || navigator.languages[0]
+            ).split("-")[0];
+            setLanguage(value != language ? value : language);
+          }}
+          options={[
+            { value: "en", label: "en" },
+            { value: "fr", label: "fr" },
+          ]}
+          style={{ width: 60 }}
+        />
+      </div>
       <div className={styles.form_container}>
         <Formik
           initialValues={{ phone: "", password: "" }}
@@ -66,7 +97,7 @@ export default function Home() {
                 }}
               >
                 <Title level={5} style={{ color: "#4096ff" }}>
-                  Login Portal
+                  {t("title")}
                 </Title>
               </Divider>
               <Spin spinning={loading} />
@@ -110,7 +141,7 @@ export default function Home() {
                 }}
                 onClick={formik.handleSubmit}
               >
-                LOGIN
+                {t("login")}
               </Button>
             </Space>
           )}
