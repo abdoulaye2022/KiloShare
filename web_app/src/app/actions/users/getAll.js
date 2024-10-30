@@ -21,6 +21,7 @@ export async function getAll() {
     return response.data;
   } catch (error) {
     if (error.response) {
+      cookies().delete("jwt");
       throw new Error(error.response.data.message);
     } else if (error.request) {
       throw new Error("No response from the server.");
