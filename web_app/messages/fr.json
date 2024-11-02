@@ -1,7 +1,8 @@
 {
     "LoginPage": {
       "title": "Portail de connexion",
-      "login": "Connexion" 
+      "login": "Connexion",
+      "cancel": "Annuler"
     }
   }
   

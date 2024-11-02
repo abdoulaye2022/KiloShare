@@ -1,23 +1,37 @@
 "use client";
 
-import { Input, Space, Typography, Button, Divider, Spin, Select } from "antd";
+import { Input, Form, Typography, Button, Select, Divider, Spin } from "antd";
 import styles from "./page.module.css";
-import { Formik } from "formik";
-import * as Yup from "yup";
-import { login } from "../../actions/auth/login";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { setLanguage } from "../../actions/others/setLanguage";
+import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
+import { userActions } from "@/app/lib/redux/actions/users.actions";
 
 const { Title, Paragraph } = Typography;
 
 export default function Home() {
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const t = useTranslations("LoginPage");
   const [defLanguage, setDefLanguage] = useState("fr");
+  const [form] = Form.useForm();
+
+  const dispatch = useAppDispatch();
+  const loading = useAppSelector((state) => state.user.loading);
+  const error = useAppSelector((state) => state.user.error);
+
+  const cb = () => {
+    router.push("/dashboard");
+  };
+
+  const onFinish = (values) => {
+    dispatch(userActions.login(values.phone, values.password, cb));
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    console.log("Failed:", errorInfo);
+  };
 
   useEffect(() => {
     // const language = (
@@ -26,7 +40,7 @@ export default function Home() {
 
     return () => {
       setDefLanguage("en");
-    }
+    };
   });
 
   return (
@@ -48,103 +62,88 @@ export default function Home() {
         />
       </div>
       <div className={styles.form_container}>
-        <Formik
-          initialValues={{ phone: "", password: "" }}
-          validationSchema={Yup.object({
-            phone: Yup.string()
-              .min(5, "Must be 5 characters long")
-              .max(15, "Must be 15 characters or less")
-              .matches(/^\+?\d[\d\s-]{5,15}$/, {
-                excludeEmptyString: true,
-                message: "Invalid phone number format",
-              })
-              .required("Required"),
-            password: Yup.string()
-              .min(3, "Must be 6 characters long")
-              .required("Required"),
-          })}
-          onSubmit={async (values, { setSubmitting }) => {
-            setLoading(true);
-            try {
-              let result = await login(values.phone, values.password);
-              if (result.status == 200) {
-                setLoading(false);
-                router.push("/dashboard");
-              }
-            } catch (error) {
-              setLoading(false);
-              setError(error.message);
-            }
+        <Title
+          level={3}
+          style={{ color: "#4096ff", fontWeight: "bold", textAlign: "center" }}
+        >
+          KiloShare
+        </Title>
+        <Divider
+          style={{
+            borderColor: "#4096ff",
+            margin: 0,
+            // marginBottom: 0,
           }}
         >
-          {(formik) => (
-            <Space
-              direction="vertical"
-              size="middle"
-              style={{
-                display: "flex",
-              }}
-            >
-              <Title level={3} style={{ color: "#4096ff", fontWeight: "bold" }}>
-                KiloShare
-              </Title>
-              <Divider
-                style={{
-                  borderColor: "#4096ff",
-                  marginTop: 0,
-                  marginBottom: 0,
-                }}
-              >
-                <Title level={5} style={{ color: "#4096ff" }}>
-                  {t("title")}
-                </Title>
-              </Divider>
-              <Spin spinning={loading} />
-              {error ? (
-                <Paragraph style={{ color: "red", margin: 0 }}>
-                  {error}
-                </Paragraph>
-              ) : null}
-              <Input
-                name="phone"
-                placeholder="Phone"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.phone}
-              />
+          <Title level={5} style={{ color: "#4096ff" }}>
+            {t("title")}
+          </Title>
+        </Divider>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: 6,
+            marginBottom: 10,
+          }}
+        >
+          <Spin spinning={loading} />
+        </div>
 
-              {formik.errors.phone ? (
-                <Paragraph style={{ color: "red", margin: 0 }}>
-                  {formik.errors.phone}
-                </Paragraph>
-              ) : null}
+        {error ? (
+          <Paragraph style={{ color: "red", marginBottom: 10 }}>
+            {error}
+          </Paragraph>
+        ) : null}
+        <Form
+          name="basic"
+          initialValues={{
+            remember: true,
+          }}
+          onFinish={onFinish}
+          onFinishFailed={onFinishFailed}
+          autoComplete="off"
+          layout="vertical"
+          form={form}
+        >
+          <Form.Item
+            style={{ width: "100%" }}
+            name="phone"
+            validateTrigger="onBlur"
+            rules={[
+              {
+                required: true,
+                message: "Please enter your phone number",
+              },
+              {
+                pattern: /^\+?[0-9]{5,15}$/, // Change to match your specific pattern, e.g., 10 digits
+                message: "Please enter a valid 10-digit phone number",
+              },
+            ]}
+          >
+            <Input placeholder="Phone" />
+          </Form.Item>
 
-              <Input.Password
-                name="password"
-                placeholder="Password"
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-                value={formik.values.password}
-              />
-              {formik.errors.password ? (
-                <Paragraph style={{ color: "red", margin: 0 }}>
-                  {formik.errors.password}
-                </Paragraph>
-              ) : null}
+          <Form.Item
+            style={{ width: "100%" }}
+            name="password"
+            validateTrigger="onBlur"
+            rules={[
+              {
+                required: true,
+                message: "Please input your password!",
+              },
+            ]}
+          >
+            <Input.Password placeholder="Password" />
+          </Form.Item>
 
-              <Button
-                type="primary"
-                style={{
-                  width: "100%",
-                  backgroundColor: "#4096ff",
-                }}
-                onClick={formik.handleSubmit}
-              >
-                {t("login")}
-              </Button>
-            </Space>
-          )}
-        </Formik>
+          <Form.Item>
+            <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
+              {t("login")}
+            </Button>
+          </Form.Item>
+        </Form>
       </div>
     </div>
   );

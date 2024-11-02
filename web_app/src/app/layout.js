@@ -4,6 +4,7 @@ import "./globals.css";
 import { AntdRegistry } from "@ant-design/nextjs-registry";
 import { NextIntlClientProvider } from "next-intl";
 import { getLocale, getMessages } from "next-intl/server";
+import StoreProvider from "./StoreProvider";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,9 +32,11 @@ export default async function RootLayout({ children }) {
   return (
     <html lang={locale}>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <NextIntlClientProvider messages={messages}>
-          <AntdRegistry>{children}</AntdRegistry>
-        </NextIntlClientProvider>
+        
+          <NextIntlClientProvider messages={messages}>
+            <AntdRegistry><StoreProvider>{children} </StoreProvider></AntdRegistry>
+          </NextIntlClientProvider>
+       
       </body>
     </html>
   );

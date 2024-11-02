@@ -18,16 +18,14 @@ class User
 
     public function getAll()
     {
-        $stmt = $this->_cn->prepare("SELECT * FROM users WHERE active = :active AND is_deleted = 0");
-        $active = 1;
-        $stmt->bindParam(':active', $active, PDO::PARAM_INT);
+        $stmt = $this->_cn->prepare("SELECT * FROM users WHERE is_deleted = 0");
         $stmt->execute();
         return $stmt;
     }
 
-    public function create($firstname, $lastname, $phone, $email, $password)
+    public function create($firstname, $lastname, $phone, $email, $password, $profile_id)
     {
-        $stmt = $this->_cn->prepare("INSERT INTO users (firstname, lastname, phone, email, password, active, created_at) VALUES (:firstname, :lastname, :phone, :email, :password, :active, NOW())");
+        $stmt = $this->_cn->prepare("INSERT INTO users (firstname, lastname, phone, email, password, profile_id, active, created_at) VALUES (:firstname, :lastname, :phone, :email, :password, :profile_id, :active, NOW())");
 
         $stmt->bindParam(':firstname', $firstname, PDO::PARAM_STR);
         $stmt->bindParam(':lastname', $lastname, PDO::PARAM_STR);
@@ -36,6 +34,8 @@ class User
 
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT);
         $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+
+        $stmt->bindParam(':profile_id', $profile_id, PDO::PARAM_INT);
 
         $active = 1;
         $stmt->bindParam(':active', $active, PDO::PARAM_INT);
