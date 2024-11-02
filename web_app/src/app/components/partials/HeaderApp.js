@@ -7,6 +7,7 @@ import { Layout, Menu, Dropdown, Space, Avatar } from "antd";
 import { logout } from "../../actions/auth/logout";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useAppSelector } from "@/app/lib/redux/hooks";
 
 const { Header } = Layout;
 
@@ -52,6 +53,8 @@ const itemsHeader = [
 
 function HeaderApp() {
   const router = useRouter();
+  const user = useAppSelector((state) => state.user.item);
+
   return (
     <>
       <Header
@@ -63,16 +66,6 @@ function HeaderApp() {
           paddingRight: 20,
         }}
       >
-        {/* <Button
-          type="text"
-          icon={collapsed ? <MenuUnfoldOutlined /> : <MenuFoldOutlined />}
-          onClick={() => setCollapsed(!collapsed)}
-          style={{
-            fontSize: "16px",
-            width: 64,
-            height: 64,
-          }}
-        /> */}
         <Menu
           theme="dark"
           mode="horizontal"
@@ -103,7 +96,7 @@ function HeaderApp() {
             onClick={(e) => e.preventDefault()}
             style={{ cursor: "pointer", display: "flex" }}
           >
-            <h3 style={{ color: "white" }}>Abdoulaye Mohamed Ahmed</h3>
+            <h3 style={{ color: "white" }}>{`${user.firstname} ${user.lastname}`}</h3>
             &nbsp;
             <Space>
               <Avatar icon={<UserOutlined />} />

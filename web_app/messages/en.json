@@ -1,6 +1,7 @@
 {
   "LoginPage": {
     "title": "Login Portal",
-    "login": "Login"
+    "login": "Login",
+    "cancel": "Cancel"
   }
 }

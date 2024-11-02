@@ -3,12 +3,14 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-export async function getAllUsers() {
+export async function getAllProfile() {
   try {
     const cookieStore = cookies();
 
-    const jwtToken = cookieStore.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value;
-    const response = await axios.get("/api/v1/users/getAll", {
+    const jwtToken = cookieStore.get(
+      process.env.NEXT_PUBLIC_COOKIE_NAME
+    )?.value;
+    const response = await axios.get("/api/v1/profiles/getAll", {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },

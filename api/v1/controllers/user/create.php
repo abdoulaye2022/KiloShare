@@ -72,13 +72,26 @@ if($phoneCheck->rowCount() > 0) {
     exit();
 }
 
+if(isset($data['profile_id']) && !empty($data['profile_id']) && !$helper->isValidInteger($data['profile_id'])) {
+	$error = [
+        "success" => false,
+        "status" => 400,
+        "message" => $errorHandler::getMessage('invalid_profile_id')
+    ];
+    http_response_code(400);
+    header('Content-Type: application/json');
+    echo json_encode($error);
+    exit();
+}
+
 $firstname = $helper->validateString($data['firstname']);
 $lastname = $helper->validateString($data['lastname']);
 $phone = $helper->validateString($data['phone']);
 $email = $helper->validateString($data['email']);
+$profile_id = $helper->validateInteger($data['profile_id']);
 $password = password_hash($helper->validateString($data['password']), PASSWORD_DEFAULT);
 
-$user_id = $userModel->create($firstname, $lastname, $phone, $email, $password);
+$user_id = $userModel->create($firstname, $lastname, $phone, $email, $password, $profile_id);
 if($user_id == false) {
 	$error = [
         "success" => false,

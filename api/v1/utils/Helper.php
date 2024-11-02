@@ -17,6 +17,10 @@ class Helper
 		// Échapper les caractères spéciaux pour une utilisation sécurisée en HTML
 		return htmlspecialchars($string);
 	}
+
+	public function validateInteger($string) {
+		return intval($string);
+	}
 	
 
 	public function greethings () {
