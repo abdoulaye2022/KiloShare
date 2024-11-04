@@ -7,7 +7,7 @@ const cookieStore = cookies();
 
 const jwtToken = cookieStore.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value;
 
-export async function createUser(firstname, lastname, phone, email, profile_id, password) {
+export async function next_add_user(firstname, lastname, phone, email, profile_id, password) {
   try {
     const response = await axios.post("/api/v1/users/create", {
         firstname: firstname,

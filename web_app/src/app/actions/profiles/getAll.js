@@ -3,7 +3,7 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-export async function getAllProfile() {
+export async function next_getAll_profiles() {
   try {
     const cookieStore = cookies();
 

@@ -3,5 +3,8 @@
     "title": "Login Portal",
     "login": "Login",
     "cancel": "Cancel"
+  },
+  "UserFormModal": {
+    "title": "New user"
   }
 }

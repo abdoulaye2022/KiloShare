@@ -21,8 +21,8 @@ include("utils/check_token.php");
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
-if(!isset($params['id']) || !isset($data['firstname']) || !isset($data['lastname']) ||
-empty($params['id']) || empty($data['firstname']) || empty($data['lastname'])) {
+if(!isset($params['id']) || !isset($data['firstname']) || !isset($data['lastname']) || !isset($data['profile_id']) ||
+empty($params['id']) || empty($data['firstname']) || empty($data['lastname'] || empty($data['profile_id']))) {
 	$error = [
         "success" => false,
         "status" => 400,
@@ -50,7 +50,19 @@ if(!$helper->isValidInteger($params['id'])) {
     $error = [
         "success" => false,
         "status" => 400,
-        "message" => $errorHandler::getMessage('invalid_announcement_number')
+        "message" => $errorHandler::getMessage('invalid_user_id')
+    ];
+    http_response_code(400);
+    header('Content-Type: application/json');
+    echo json_encode($error);
+    exit();
+}
+
+if(!$helper->isValidInteger($data['profile_id'])) {
+    $error = [
+        "success" => false,
+        "status" => 400,
+        "message" => $errorHandler::getMessage('invalid_profile_id')
     ];
     http_response_code(400);
     header('Content-Type: application/json');
@@ -61,9 +73,10 @@ if(!$helper->isValidInteger($params['id'])) {
 $firstname = $helper->validateString($data['firstname']);
 $lastname = $helper->validateString($data['lastname']);
 $email = $helper->validateString($data['email']);
-$id = $helper->validateString($params['id']);
+$id = $helper->validateInteger($params['id']);
+$profile_id = $helper->validateInteger($data['profile_id']);
 
-$user_id = $userModel->update($id, $firstname, $lastname, $email);
+$user_id = $userModel->update($id, $firstname, $lastname, $email, $profile_id);
 if($user_id == false) {
 	$error = [
         "success" => false,

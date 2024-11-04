@@ -3,6 +3,9 @@
       "title": "Portail de connexion",
       "login": "Connexion",
       "cancel": "Annuler"
+    },
+    "UserFormModal": {
+      "title": "Nouveau utilisateur"
     }
   }
   

@@ -7,7 +7,8 @@ import { Layout, Menu, Dropdown, Space, Avatar } from "antd";
 import { logout } from "../../actions/auth/logout";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useAppSelector } from "@/app/lib/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
+import { userActions } from "@/app/lib/redux/actions/users.actions";
 
 const { Header } = Layout;
 
@@ -53,7 +54,12 @@ const itemsHeader = [
 
 function HeaderApp() {
   const router = useRouter();
-  const user = useAppSelector((state) => state.user.item);
+  const user = useAppSelector((state) => state.user.user);
+  const dispatch = useAppDispatch();
+
+  const cb = () => {
+    router.replace("/login");
+  };
 
   return (
     <>
@@ -82,10 +88,9 @@ function HeaderApp() {
             items,
             onClick: (value) => {
               if (value.key == 3) {
-                logout();
                 setTimeout(() => {
-                  router.replace("/login");
-                }, 2000);
+                  dispatch(userActions.logout(cb));
+                }, 200);
               }
             },
           }}
@@ -96,7 +101,9 @@ function HeaderApp() {
             onClick={(e) => e.preventDefault()}
             style={{ cursor: "pointer", display: "flex" }}
           >
-            <h3 style={{ color: "white" }}>{`${user.firstname} ${user.lastname}`}</h3>
+            <h3
+              style={{ color: "white" }}
+            >{`${user.firstname} ${user.lastname}`}</h3>
             &nbsp;
             <Space>
               <Avatar icon={<UserOutlined />} />
