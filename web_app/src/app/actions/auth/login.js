@@ -3,7 +3,7 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-export async function login(phone, password) {
+export async function next_login(phone, password) {
   try {
     const response = await axios.post(
       "/api/v1/login",

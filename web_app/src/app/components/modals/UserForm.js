@@ -3,7 +3,6 @@ import {
   Modal,
   Input,
   Space,
-  Checkbox,
   Form,
   Typography,
   Button,
@@ -13,61 +12,63 @@ import {
 } from "antd";
 import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
-import { createUser } from "@/app/actions/users/create";
+import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
+import { userActions } from "@/app/lib/redux/actions/users.actions";
+import { modalActions } from "@/app/lib/redux/actions/modals.actions";
 
 const { Title, Paragraph } = Typography;
 
-function UserForm({ isModalOpen, handleCancel, profiles, success }) {
-  const [error, setError] = useState(null);
-  const t = useTranslations("LoginPage");
-  const [loading, setLoading] = useState(false);
+function UserForm({ success }) {
+  const t = useTranslations("UserFormModal");
   const [form] = Form.useForm();
-
-  const create = async (
-    firstname,
-    lastname,
-    phone,
-    email,
-    profile_id,
-    password
-  ) => {
-    try {
-      let result = await createUser(
-        firstname,
-        lastname,
-        phone,
-        email,
-        profile_id,
-        password
-      );
-      if (result.status == 200) {
-        setLoading(false);
-        success();
-        handleCancel();
-      }
-    } catch (error) {
-      setError(error.message);
-    }
-  };
+  const dispatch = useAppDispatch();
+  const profiles = useAppSelector((state) => state.profile.items);
+  const error = useAppSelector((state) => state.user.error);
+  const isOpenUserForm = useAppSelector((state) => state.modal.isOpenUserForm);
+  const loadingUsers = useAppSelector((state) => state.user.loading);
+  const item = useAppSelector((state) => state.user.item);
 
   useEffect(() => {
     // console.log(profiles);
   }, []);
 
   const onFinish = (values) => {
-    setLoading(true);
-    create(
-      values.firstname,
-      values.lastname,
-      values.phone,
-      values.email,
-      values.profile_id,
-      values.password
-    );
+    if (Object.keys(item).length === 0) {
+      dispatch(
+        userActions.add(
+          values.firstname,
+          values.lastname,
+          values.phone,
+          values.email,
+          values.profile_id,
+          values.password
+        )
+      );
+      dispatch(modalActions.closeUserForm());
+      success();
+    } else {
+      dispatch(
+        userActions.update(
+          item.id,
+          values.firstname,
+          values.lastname,
+          values.email,
+          values.profile_id
+        )
+      );
+      dispatch(modalActions.closeUserForm());
+      success();
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
     console.log("Failed:", errorInfo);
+  };
+
+  const handleCancel = () => {
+    form.resetFields();
+    dispatch(modalActions.closeUserForm());
+    dispatch(userActions.resetItem());
   };
 
   return (
@@ -76,29 +77,35 @@ function UserForm({ isModalOpen, handleCancel, profiles, success }) {
         title={
           <>
             <Title level={4} style={{ color: "black", fontWeight: "bold" }}>
-              New user
+              {Object.keys(item).length === 0 ? t("title") : "Update user"}
             </Title>
             <Divider />
           </>
         }
-        open={isModalOpen}
-        onCancel={() => {
-          form.resetFields();
-          handleCancel();
-        }}
+        open={isOpenUserForm}
+        onCancel={handleCancel}
         footer={null}
+        afterOpenChange={(open) => {
+          if (open && item) {
+            form.setFieldsValue({
+              firstname: item ? item.firstname : "",
+              lastname: item ? item.lastname : "",
+              phone: item ? item.phone : "",
+              email: item ? item.email : "",
+              profile_id: item ? item.profile_id : "",
+            });
+          }
+        }}
       >
         {error ? <Paragraph style={{ color: "red" }}>{error}</Paragraph> : null}
         <div
           style={{ display: "flex", justifyContent: "center", width: "100%" }}
         >
-          <Spin spinning={loading} />
+          <Spin spinning={loadingUsers} />
         </div>
         <Form
           name="basic"
-          initialValues={{
-            remember: true,
-          }}
+          // initialValues={}
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           autoComplete="off"
@@ -148,7 +155,7 @@ function UserForm({ isModalOpen, handleCancel, profiles, success }) {
               },
             ]}
           >
-            <Input />
+            <Input disabled={Object.keys(item).length > 0 ? true : false} />
           </Form.Item>
 
           <Form.Item
@@ -176,33 +183,35 @@ function UserForm({ isModalOpen, handleCancel, profiles, success }) {
               },
             ]}
           >
-            <Select options={profiles} />
+            <Select
+              options={[
+                ...profiles.map((p) => ({
+                  value: p.id,
+                  label: <span>{p.name}</span>,
+                })),
+              ]}
+            />
           </Form.Item>
 
-          <Form.Item
-            label="Password"
-            name="password"
-            validateTrigger="onBlur"
-            rules={[
-              {
-                required: true,
-                message: "Please input your password!",
-              },
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
+          {Object.keys(item).length === 0 ? (
+            <Form.Item
+              label="Password"
+              name="password"
+              validateTrigger="onBlur"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your password!",
+                },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+          ) : null}
 
           <Form.Item>
             <Space>
-              <Button
-                onClick={() => {
-                  form.resetFields();
-                  handleCancel();
-                }}
-              >
-                Cancel
-              </Button>
+              <Button onClick={handleCancel}>Cancel</Button>
 
               <Button type="primary" htmlType="submit">
                 Save

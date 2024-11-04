@@ -2,7 +2,7 @@
 
 import { cookies } from "next/headers";
 
-export const logout = () => {
+export const next_logout = () => {
 
   // Supprimer les cookies associés à l'authentification
   cookies().delete("jwt"); // Nom du cookie du jeton JWT ou autre cookie d'authentification

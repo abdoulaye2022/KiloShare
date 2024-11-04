@@ -2,24 +2,27 @@ import { combineReducers } from "redux";
 import storage from "redux-persist/lib/storage";
 import { userReducer } from "./users.reducers";
 import { persistReducer } from "redux-persist";
+import { profileReducer } from "./profiles.reducers";
+import { modalReducer } from "./modals.reducers";
 
-// configure which keuy we want to persist
-const PersistConfig = {
+const persistConfig = {
   key: "root",
   storage,
+  whitelist: ["user", "profile", "modal"], // Optionnel : liste de reducers à persister
 };
 
 const appReducers = combineReducers({
-  user: persistReducer(PersistConfig, userReducer),
+  user: userReducer,
+  profile: profileReducer,
+  modal: modalReducer,
 });
 
-const rootReducers = (state, action) => {
-  if (action.type === "LOGOUT_USER") {
-    storage.removeItem("persist:root");
-
-    return appReducers(undefined, action);
+const rootReducer = (state, action) => {
+  if (action.type === "LOGOUT_USER_SUCCESS") {
+    storage.removeItem("persist:root"); // Supprime le stockage persistant
+    state = undefined; // Réinitialise l'état de Redux
   }
   return appReducers(state, action);
 };
 
-export default rootReducers;
+export default persistReducer(persistConfig, rootReducer);

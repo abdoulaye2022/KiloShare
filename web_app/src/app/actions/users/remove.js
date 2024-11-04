@@ -3,12 +3,13 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-export async function next_getAll_users() {
-  try {
-    const cookieStore = cookies();
+const cookieStore = cookies();
 
-    const jwtToken = cookieStore.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value;
-    const response = await axios.get("/api/v1/users/getAll", {
+const jwtToken = cookieStore.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value;
+
+export async function next_remove_user(id) {
+  try {
+    const response = await axios.delete(`/api/v1/users/delete/${id}`, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },

@@ -1,28 +1,39 @@
 "use client";
 
-import { getAllUsers } from "../../actions/users/getAll";
 import {
   DeleteOutlined,
   DownloadOutlined,
   EditOutlined,
   EyeOutlined,
+  LockOutlined,
   PlusOutlined,
+  UnlockOutlined,
 } from "@ant-design/icons";
-import { Table, Typography, Button, Divider, Tag, message, Spin } from "antd";
+import {
+  Table,
+  Typography,
+  Button,
+  Divider,
+  Tag,
+  message,
+  Spin,
+  Popconfirm,
+} from "antd";
 import { useEffect, useState } from "react";
 import UserForm from "@/app/components/modals/UserForm";
-import { getAllProfile } from "../../actions/profiles/getAll";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import { userActions } from "@/app/lib/redux/actions/users.actions";
+import { profileActions } from "@/app/lib/redux/actions/profiles.actions";
+import { modalActions } from "@/app/lib/redux/actions/modals.actions";
 
 const { Title, Paragraph } = Typography;
 
 function Users() {
-  const [users, setUsers] = useState([]);
-  const [profiles, setProfiles] = useState([]);
   const dispatch = useAppDispatch();
   const usersStore = useAppSelector((state) => state.user.items);
   const loadingUsers = useAppSelector((state) => state.user.loading);
+  const loadingProfile = useAppSelector((state) => state.profile.loading);
+  const user = useAppSelector((state) => state.user.user);
 
   const [messageApi, contextHolder] = message.useMessage();
   const success = () => {
@@ -32,29 +43,13 @@ function Users() {
     });
   };
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const showModal = () => {
-    setIsModalOpen(true);
-  };
-  const handleCancel = () => {
-    setIsModalOpen(false);
+    dispatch(modalActions.openUserForm());
   };
 
-  const getProfile = async () => {
-    try {
-      let result = await getAllProfile();
-      if (result.status == 200) {
-        setProfiles([
-          ...result.data.map((p) => ({
-            value: p.id,
-            label: <span>{p.name}</span>,
-          })),
-        ]);
-      }
-    } catch (error) {
-      console.log(error);
-      // setError(error.message);
-    }
+  const confirm = (id) => {
+    dispatch(userActions.remove(id));
+    message.success("User deleted successfully.");
   };
 
   const columns = [
@@ -89,7 +84,7 @@ function Users() {
       key: "status",
       render: (text, record) => (
         <span>
-          {record.active == 1 ? (
+          {record.status == 1 ? (
             <Tag color="green">ACTIF</Tag>
           ) : (
             <Tag color="red">INACTIF</Tag>
@@ -105,13 +100,29 @@ function Users() {
         <>
           <Button icon={<EyeOutlined />} />{" "}
           <Button
-            onClick={() => console.log(record)}
+            onClick={() => {
+              dispatch(userActions.setItem(record.id));
+              dispatch(modalActions.openUserForm());
+            }}
             style={{ backgroundColor: "green", color: "white" }}
             icon={<EditOutlined />}
           />{" "}
+          <Popconfirm
+            title="Delete the user"
+            description="Are you sure to delete this user?"
+            onConfirm={() => confirm(record.id)}
+            okText="Yes"
+            cancelText="No"
+          >
+            <Button
+              disabled={user.id === record.id ? true : false}
+              style={{ backgroundColor: "red", color: "white" }}
+              icon={<DeleteOutlined />}
+            />
+          </Popconfirm>{" "}
           <Button
-            style={{ backgroundColor: "red", color: "white" }}
-            icon={<DeleteOutlined />}
+            style={{ backgroundColor: "orange" }}
+            icon={<LockOutlined />} // <LockOutlined />
           />{" "}
         </>
       ),
@@ -119,8 +130,7 @@ function Users() {
   ];
 
   useEffect(() => {
-    // getUsers();
-    // getProfile();
+    dispatch(profileActions.getAll());
     dispatch(userActions.getAll());
   }, []);
   return (
@@ -133,16 +143,18 @@ function Users() {
       </Button>
       <Spin spinning={loadingUsers}>
         <Table
+          style={{ marginTop: 10 }}
           size="small"
           dataSource={[
             ...usersStore.map((p, index) => ({
               key: index + 1,
+              id: p.id,
               firstname: p.firstname,
               lastname: p.lastname,
               phone: p.phone,
               email: p.email,
-              profile: p.profile_id,
-              active: p.active,
+              profile: p.profile_name,
+              status: p.status,
             })),
           ]}
           columns={columns}
@@ -151,12 +163,7 @@ function Users() {
           }}
         />
       </Spin>
-      <UserForm
-        isModalOpen={isModalOpen}
-        handleCancel={handleCancel}
-        profiles={profiles}
-        success={success}
-      />
+      {!loadingProfile ? <UserForm success={success} /> : null}
     </>
   );
 }

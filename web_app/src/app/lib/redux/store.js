@@ -1,13 +1,24 @@
-import { configureStore, Tuple } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import logger from "redux-logger";
-import storage from "redux-persist/lib/storage";
-import rootReducers from "./reducers/root.reducers";
-import { thunk } from "redux-thunk";
+import persistedReducer from "./reducers/root.reducers";
+import { persistStore } from "redux-persist";
 
-export const makeStore = () => {
-  return configureStore({
-    reducer: rootReducers,
-    //  middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat([logger,thunk]),
-    middleware: () => new Tuple(thunk, logger),
-  });
-};
+const store = configureStore({
+  reducer: persistedReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({
+      serializableCheck: {
+        ignoredActions: [
+          "persist/PERSIST",
+          "persist/REHYDRATE",
+          "persist/PAUSE",
+          "persist/PURGE",
+          "persist/REGISTER",
+        ],
+      },
+    }).concat(logger),
+});
+
+const persistor = persistStore(store);
+
+export { store, persistor };
