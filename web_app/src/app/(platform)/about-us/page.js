@@ -29,7 +29,6 @@ import {
   BarsOutlined,
   PlusCircleOutlined,
 } from "@ant-design/icons";
-import HeaderAppPlatform from "./components/partials/HeaderAppPlatform";
 
 const { Header, Content, Footer } = Layout;
 const { Title, Text } = Typography;
