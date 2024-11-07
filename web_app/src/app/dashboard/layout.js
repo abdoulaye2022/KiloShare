@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   FileOutlined,
   TeamOutlined,
@@ -11,6 +11,8 @@ import {
 import { Breadcrumb, Layout, Menu, theme } from "antd";
 import HeaderApp from "../components/partials/HeaderApp";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "../lib/redux/hooks";
+import { menuActions } from "../lib/redux/actions/menus.actions";
 const { Content, Footer, Sider } = Layout;
 function getItem(label, key, icon, children) {
   return {
@@ -23,8 +25,8 @@ function getItem(label, key, icon, children) {
 const itemsSidebar = [
   getItem("Dashboard", "1", <DashboardOutlined />),
   getItem("Users", "sub1", <TeamOutlined />, [
-    getItem("User", "2"),
-    getItem("Profil", "3"),
+    getItem("Users", "2"),
+    getItem("Profiles", "3"),
     getItem("To appouved", "4"),
   ]),
   getItem("Announcements", "sub2", <NotificationOutlined />, [
@@ -40,32 +42,54 @@ const DashboardLayout = ({ children }) => {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
   const router = useRouter();
-  const [breadcrumb, setBreadcrumb] = useState([
-    {
-      title: "Dashboard",
-    },
-  ]);
+  // const [breadcrumb, setBreadcrumb] = useState([
+  //   {
+  //     title: "Dashboard",
+  //   },
+  // ]);
   const [selectedItem, setSelectedItem] = useState("1");
+  const dispatch = useAppDispatch();
+  const key = useAppSelector((state) => state.menu.key);
+  const breadcrumb = useAppSelector((state) => state.menu.breadcrumb);
 
   const handleSideBarMenu = (key) => {
     switch (key) {
       case "1":
-        setBreadcrumb([{ title: "Dashboard" }]);
-        setSelectedItem("1");
-        router.push("/dashboard");
+        dispatch(
+          menuActions.selectedSideBarMenu(
+            { key: key, breadcrumb: [{ title: "Dashboard" }] },
+            () => router.push("/dashboard")
+          )
+        );
         break;
       case "2":
-        setBreadcrumb([
-          {
-            title: "Dashboard",
-          },
-          { title: "Users" },
-        ]);
-        setSelectedItem("2")
-        router.push("/dashboard/users");
+        dispatch(
+          menuActions.selectedSideBarMenu(
+            {
+              key: key,
+              breadcrumb: [{ title: "Dashboard" }, { title: "Users" }],
+            },
+            () => router.push("/dashboard/users")
+          )
+        );
+        break;
+      case "3":
+        dispatch(
+          menuActions.selectedSideBarMenu(
+            {
+              key: key,
+              breadcrumb: [{ title: "Dashboard" }, { title: "Profiles" }],
+            },
+            () => router.push("/dashboard/profiles")
+          )
+        );
         break;
     }
   };
+
+  useEffect(() => {
+    // console.log(breadcrumb);
+  }, []);
 
   return (
     <Layout
@@ -93,7 +117,7 @@ const DashboardLayout = ({ children }) => {
         <br />
         <Menu
           theme="dark"
-          defaultSelectedKeys={[selectedItem]}
+          defaultSelectedKeys={[key]}
           mode="inline"
           items={itemsSidebar}
           onClick={(value) => handleSideBarMenu(value.key)}

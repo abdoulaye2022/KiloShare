@@ -11,6 +11,8 @@ $routes = [
     '/api/v1/users/create' => 'controllers/user/create.php',
     '/api/v1/users/update/{id}' => 'controllers/user/update.php',
     '/api/v1/users/delete/{id}' => 'controllers/user/delete.php',
+    '/api/v1/users/suspend/{id}' => 'controllers/user/suspend.php',
+    '/api/v1/users/unsuspend/{id}' => 'controllers/user/unsuspend.php',
 
     // Announcements
     '/api/v1/announcements/getAll' => 'controllers/announcement/getAll.php',
