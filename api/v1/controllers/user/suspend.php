@@ -44,7 +44,7 @@ if(!$helper->isValidInteger($params['id'])) {
 
 $id = $helper->validateInteger($params['id']);
 
-$deleted = $userModel->delete($id);
+$deleted = $userModel->suspendUserAccount($id);
 
 if ($deleted == false) {
     $error = [

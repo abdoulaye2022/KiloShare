@@ -80,6 +80,18 @@ if ($users && $users->rowCount() == 0) {
 
 $user = $users->fetch(PDO::FETCH_ASSOC);
 
+if($user['status'] == 0) {
+    $error = [
+        "success" => false,
+        "status" => 400,
+        "message" => $errorHandler::getMessage('suspended_account')
+    ];
+    http_response_code(400);
+    header('Content-Type: application/json');
+    echo json_encode($error);
+    exit();
+}
+
 if (!password_verify($password, $user['password'])) {
     $error = [
         "success" => false,

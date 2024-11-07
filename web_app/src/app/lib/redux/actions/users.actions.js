@@ -4,6 +4,8 @@ import {
   failureLogin,
   failureLogOut,
   failureRemove,
+  failureSuspend,
+  failureUnsuspend,
   failureUpdate,
   requestAdd,
   requestGetAll,
@@ -12,12 +14,16 @@ import {
   requestRemove,
   requestResetItem,
   requestSetIten,
+  requestSuspend,
+  requestUnsuspend,
   requestUpdate,
   successAdd,
   successGetAll,
   successLogin,
   successLogOut,
   successRemove,
+  successSuspend,
+  successUnsuspend,
   successUpdate,
 } from "../reducers/users.reducers";
 import { userServices } from "../services/users.services";
@@ -32,6 +38,8 @@ export const userActions = {
   resetItem,
   update,
   remove,
+  suspend,
+  unsuspend,
 };
 
 function login(phone, password, cb) {
@@ -121,6 +129,34 @@ function remove(id) {
       })
       .catch((err) => {
         dispatch(failureRemove(err.message));
+      });
+  };
+}
+
+function suspend(id) {
+  return function (dispatch) {
+    dispatch(requestSuspend());
+    userServices
+      .api_suspend(id)
+      .then((res) => {
+        dispatch(successSuspend(id));
+      })
+      .catch((err) => {
+        dispatch(failureSuspend(err.message));
+      });
+  };
+}
+
+function unsuspend(id) {
+  return function (dispatch) {
+    dispatch(requestUnsuspend());
+    userServices
+      .api_unsuspend(id)
+      .then((res) => {
+        dispatch(successUnsuspend(id));
+      })
+      .catch((err) => {
+        dispatch(failureUnsuspend(err.message));
       });
   };
 }

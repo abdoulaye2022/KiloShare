@@ -146,6 +146,54 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    // Suspend user
+    requestSuspend(state, action) {
+      action.type = userConstants.SUSPEND_USER_REQUEST;
+      state.loading = true;
+      state.error = "";
+    },
+    successSuspend(state, action) {
+      action.type = userConstants.SUSPEND_USER_SUCCESS;
+      state.loading = false;
+      state.items = [
+        ...state.items.map((p) => {
+          if (p.id === action.payload) {
+            p.status = 0;
+          }
+          return p;
+        }),
+      ];
+      state.error = "";
+    },
+    failureSuspend(state, action) {
+      action.type = userConstants.SUSPEND_USER_FAILURE;
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // Unsuspend user
+    requestUnsuspend(state, action) {
+      action.type = userConstants.UNSUSPEND_USER_REQUEST;
+      state.loading = true;
+      state.error = "";
+    },
+    successUnsuspend(state, action) {
+      action.type = userConstants.UNSUSPEND_USER_SUCCESS;
+      state.loading = false;
+      state.items = [
+        ...state.items.map((p) => {
+          if (p.id === action.payload) {
+            p.status = 1;
+          }
+          return p;
+        }),
+      ];
+      state.error = "";
+    },
+    failureUnsuspend(state, action) {
+      action.type = userConstants.UNSUSPEND_USER_FAILURE;
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -171,6 +219,12 @@ export const {
   requestRemove,
   successRemove,
   failureRemove,
+  requestSuspend,
+  successSuspend,
+  failureSuspend,
+  requestUnsuspend,
+  successUnsuspend,
+  failureUnsuspend,
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

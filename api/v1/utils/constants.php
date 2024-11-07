@@ -36,6 +36,8 @@ $error_message = [
 	'invalid_announcement_number' => 'The announcement number is invalid.',
 	'invalid_profile_id' => 'The profile ID is invalid.',
 	'invalid_status_id' => 'The status ID is invalid.',
+	'suspended_account' => 'The account is suspended. Please contact support for assistance.',
+
 ];
 
 $countries =array(

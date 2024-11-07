@@ -26,9 +26,7 @@ import { userActions } from "@/app/lib/redux/actions/users.actions";
 import { profileActions } from "@/app/lib/redux/actions/profiles.actions";
 import { modalActions } from "@/app/lib/redux/actions/modals.actions";
 
-const { Title, Paragraph } = Typography;
-
-function Users() {
+function Profiles() {
   const dispatch = useAppDispatch();
   const usersStore = useAppSelector((state) => state.user.items);
   const loadingUsers = useAppSelector((state) => state.user.loading);
@@ -161,10 +159,6 @@ function Users() {
     },
   ];
 
-  useEffect(() => {
-    dispatch(profileActions.getAll());
-    dispatch(userActions.getAll());
-  }, []);
   return (
     <>
       {contextHolder}
@@ -200,4 +194,4 @@ function Users() {
   );
 }
 
-export default Users;
+export default Profiles;

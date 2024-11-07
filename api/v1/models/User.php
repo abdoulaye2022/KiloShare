@@ -80,4 +80,28 @@ class User
             return false;
         }
     }
+
+    public function suspendUserAccount ($id) {
+        $stmt = $this->_cn->prepare("UPDATE users SET status = :status WHERE id = :id");
+        $status = 0;
+        $stmt->bindParam(':status', $status, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function unsuspendUserAccount ($id) {
+        $stmt = $this->_cn->prepare("UPDATE users SET status = :status WHERE id = :id");
+        $status = 1;
+        $stmt->bindParam(':status', $status, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
