@@ -39,48 +39,52 @@ const items = [
     key: "1",
     icon: <PlusCircleOutlined />,
     label: "Post a Listing",
-  },
-  {
-    key: "sub1",
-    label: "",
-    icon: (
-      <Avatar
-        style={{ backgroundColor: "white" }}
-        size="large"
-        icon={<UserOutlined style={{ color: "black" }} />}
-      />
-    ),
-    children: [
-      {
-        key: "2",
-        label: "Log In",
-      },
-      {
-        key: "3",
-        label: "Sign In",
-      },
-      {
-        key: "4",
-        label: "My Listings",
-      },
-      {
-        type: "divider",
-      },
-      {
-        key: "5",
-        label: "About us",
-      },
-      {
-        key: "6",
-        label: "Help Center",
-      },
-      {
-        key: "7",
-        label: "Settings",
-      },
-    ],
-  },
+  }
 ];
+
+
+const items1 = [
+    {
+      key: "sub1",
+      label: "",
+      icon: (
+        <Avatar
+          style={{ backgroundColor: "white" }}
+          size="large"
+          icon={<UserOutlined style={{ color: "black" }} />}
+        />
+      ),
+      children: [
+        {
+          key: "2",
+          label: "Log In",
+        },
+        {
+          key: "3",
+          label: "Sign In",
+        },
+        {
+          key: "4",
+          label: "My Listings",
+        },
+        {
+          type: "divider",
+        },
+        {
+          key: "5",
+          label: "About us",
+        },
+        {
+          key: "6",
+          label: "Help Center",
+        },
+        {
+          key: "7",
+          label: "Settings",
+        },
+      ],
+    },
+  ];
 
 function HeaderAppPlatform({ setOpen }) {
   const handleHeaderMenu = (key) => {
@@ -99,8 +103,16 @@ function HeaderAppPlatform({ setOpen }) {
         <Menu
           theme="dark"
           mode="horizontal"
-          defaultSelectedKeys={["2"]}
+          defaultSelectedKeys={["1"]}
           items={items}
+          style={{ display: "flex", justifyContent: "center" }}
+          onClick={(value) => handleHeaderMenu(value.key)}
+        />
+        <Menu
+          theme="dark"
+          mode="horizontal"
+        //   defaultSelectedKeys={["2"]}
+          items={items1}
           style={{ display: "flex", justifyContent: "center" }}
           onClick={(value) => handleHeaderMenu(value.key)}
         />
