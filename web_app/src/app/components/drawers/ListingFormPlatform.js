@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { PlusOutlined } from "@ant-design/icons";
+import React, { useEffect, useState } from "react";
+import { UploadOutlined } from "@ant-design/icons";
 import {
   Button,
   Checkbox,
@@ -13,12 +13,40 @@ import {
   Select,
   Space,
   Typography,
+  message,
+  Upload,
 } from "antd";
 const { Option } = Select;
+import { getNames } from "country-list";
 
 const { Text } = Typography;
 
 function ListingFormPlatform({ onClose, setOpen, open }) {
+  const [countries, setCountries] = useState([]);
+
+  useEffect(() => {
+    const countryNames = getNames();
+    setCountries(countryNames);
+  }, []);
+
+  const props = {
+    name: "file",
+    action: "https://660d2bd96ddfa2943b33731c.mockapi.io/api/upload",
+    headers: {
+      authorization: "authorization-text",
+    },
+    onChange(info) {
+      if (info.file.status !== "uploading") {
+        console.log(info.file, info.fileList);
+      }
+      if (info.file.status === "done") {
+        message.success(`${info.file.name} file uploaded successfully`);
+      } else if (info.file.status === "error") {
+        message.error(`${info.file.name} file upload failed.`);
+      }
+    },
+  };
+
   return (
     <>
       <Drawer
@@ -69,7 +97,7 @@ function ListingFormPlatform({ onClose, setOpen, open }) {
             <Col span={8}>
               <Form.Item
                 name="space_available "
-                label={(<Text ellipsis>Space available (KG)</Text>)}
+                label={<Text ellipsis>Space available (KG)</Text>}
                 rules={[
                   {
                     required: true,
@@ -80,9 +108,7 @@ function ListingFormPlatform({ onClose, setOpen, open }) {
                 <InputNumber min={1} max={10} style={{ width: "100%" }} />
               </Form.Item>
             </Col>
-            <Col
-              span={8}
-            >
+            <Col span={8}>
               <Form.Item
                 name="price_kilo"
                 label="Price"
@@ -93,22 +119,23 @@ function ListingFormPlatform({ onClose, setOpen, open }) {
                   },
                 ]}
               >
-                <Input placeholder="Please enter user name" />
+                <InputNumber style={{ width: "100%" }} />
               </Form.Item>
             </Col>
-            <Col
-              span={8}
-            >
-              <Form.Item name={(<Text ellipsis>Price pe kilo</Text>)} label="Price per kilo ">
-                <Checkbox />
+            <Col span={8}>
+              <Form.Item
+                name={<Text ellipsis>Price pe kilo</Text>}
+                label="Price per kilo "
+              >
+                <Checkbox checked={true} />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="owner"
-                label="Owner"
+                name="departure_country"
+                label="Departure country"
                 rules={[
                   {
                     required: true,
@@ -116,84 +143,131 @@ function ListingFormPlatform({ onClose, setOpen, open }) {
                   },
                 ]}
               >
-                <Select placeholder="Please select an owner">
-                  <Option value="xiao">Xiaoxiao Fu</Option>
-                  <Option value="mao">Maomao Zhou</Option>
-                </Select>
+                <Select
+                  optionFilterProp="label"
+                  onChange={() => console.log("ok")}
+                  onSearch={() => console.log("search")}
+                  showSearch
+                  filterOption={(input, option) =>
+                    option.label.toLowerCase().includes(input.toLowerCase())
+                  }
+                  options={countries.map((country) => ({
+                    value: country,
+                    label: country,
+                  }))}
+                />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name="type"
-                label="Type"
+                name="arrival_country"
+                label="Arrival country"
                 rules={[
                   {
                     required: true,
-                    message: "Please choose the type",
+                    message: "Please select an owner",
                   },
                 ]}
               >
-                <Select placeholder="Please choose the type">
-                  <Option value="private">Private</Option>
-                  <Option value="public">Public</Option>
-                </Select>
+                <Select
+                  optionFilterProp="label"
+                  onChange={() => console.log("ok")}
+                  onSearch={() => console.log("search")}
+                  showSearch
+                  filterOption={(input, option) =>
+                    option.label.toLowerCase().includes(input.toLowerCase())
+                  }
+                  options={countries.map((country) => ({
+                    value: country,
+                    label: country,
+                  }))}
+                />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Form.Item
+                name="departure_city"
+                label="Departure city"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select an owner",
+                  },
+                ]}
+              >
+                <Input />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                name="arrival_city "
+                label="Arrival city"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please select an owner",
+                  },
+                ]}
+              >
+                <Input />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item
-                name="approver"
-                label="Approver"
+                name="departure_date"
+                label="Departure date"
                 rules={[
                   {
                     required: true,
-                    message: "Please choose the approver",
+                    message: "Please select an owner",
                   },
                 ]}
               >
-                <Select placeholder="Please choose the approver">
-                  <Option value="jack">Jack Ma</Option>
-                  <Option value="tom">Tom Liu</Option>
-                </Select>
+                <DatePicker onChange={() => {}} style={{ width: "100%" }} />
               </Form.Item>
             </Col>
             <Col span={12}>
               <Form.Item
-                name="dateTime"
-                label="DateTime"
+                name="arrival_date"
+                label="Arrival date"
                 rules={[
                   {
                     required: true,
-                    message: "Please choose the dateTime",
+                    message: "Please select an owner",
                   },
                 ]}
               >
-                <DatePicker.RangePicker
-                  style={{
-                    width: "100%",
-                  }}
-                  getPopupContainer={(trigger) => trigger.parentElement}
-                />
+                <DatePicker onChange={() => {}} style={{ width: "100%" }} />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={16}>
-            <Col span={24}>
+            <Col span={12}>
               <Form.Item
-                name="description"
-                label="Description"
+                name="collection_date"
+                label="Collection date"
                 rules={[
                   {
                     required: true,
-                    message: "please enter url description",
+                    message: "Please select an owner",
                   },
                 ]}
               >
-                <Input.TextArea
-                  rows={4}
-                  placeholder="please enter url description"
-                />
+                <DatePicker onChange={() => {}} style={{ width: "100%" }} />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item
+                label="Photo"
+              >
+                {/* <DatePicker onChange={() => {}} style={{ width: "100%" }} /> */}
+                <Upload {...props} style={{ width: "100%" }}>
+                  <Button icon={<UploadOutlined />}>Click to Upload</Button>
+                </Upload>
               </Form.Item>
             </Col>
           </Row>
