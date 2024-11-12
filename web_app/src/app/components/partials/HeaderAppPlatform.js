@@ -96,7 +96,7 @@ function HeaderAppPlatform({ setOpen }) {
   return (
     <>
       <Header style={{ display: "flex", justifyContent: "space-between" }}>
-        <div className="demo-logo">
+        <div className="demo-logo" style={{ width: 100 }}>
           <h3 style={{ color: "white", fontWeight: "bold" }}>KILO-SHARE</h3>
         </div>
         <div
