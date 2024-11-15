@@ -38,6 +38,11 @@ $routes = [
     '/api/v1/document_types/update/{id}' => 'controllers/document_type/update.php',
     '/api/v1/document_types/delete/{id}' => 'controllers/document_type/delete.php',
 
+    //Category
+    '/api/v1/categories/getAll' => 'controllers/Category/getAll.php',
+    '/api/v1/categories/create' => 'controllers/Category/create.php',
+    '/api/v1/categories/update/{id}' => 'controllers/category/update.php',
+    '/api/v1/categories/delete/{id}' => 'controllers/category/delete.php',
 ];
 
 // Recuperation de l'URI de la requete
