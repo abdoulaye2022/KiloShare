@@ -38,6 +38,9 @@ $routes = [
     '/api/v1/document_types/update/{id}' => 'controllers/document_type/update.php',
     '/api/v1/document_types/delete/{id}' => 'controllers/document_type/delete.php',
 
+    // Document_types
+    '/api/v1/categories/getAll' => 'controllers/category/getAll.php',
+
 ];
 
 // Recuperation de l'URI de la requete
@@ -71,3 +74,4 @@ http_response_code(404);
 header('Content-Type: application/json');
 echo json_encode($error);
 exit();
+?>

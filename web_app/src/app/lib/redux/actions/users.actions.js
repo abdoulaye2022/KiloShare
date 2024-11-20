@@ -49,6 +49,7 @@ function login(phone, password, cb) {
       .api_login(phone, password)
       .then((res) => {
         dispatch(successLogin(res.data));
+        dispatch(modalActions.closeLoginForm());
         cb();
       })
       .catch((err) => {

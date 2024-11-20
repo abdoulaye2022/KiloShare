@@ -9,7 +9,7 @@ import {
   HomeOutlined,
 } from "@ant-design/icons";
 import { Breadcrumb, Layout, Menu, theme } from "antd";
-import HeaderApp from "../components/partials/HeaderApp";
+import HeaderApp from "../components/Dashboard/partials/HeaderApp";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "../lib/redux/hooks";
 import { menuActions } from "../lib/redux/actions/menus.actions";

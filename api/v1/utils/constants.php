@@ -37,7 +37,7 @@ $error_message = [
 	'invalid_profile_id' => 'The profile ID is invalid.',
 	'invalid_status_id' => 'The status ID is invalid.',
 	'suspended_account' => 'The account is suspended. Please contact support for assistance.',
-
+	'invalid_category_id' => 'The category ID is invalid.',
 ];
 
 $countries =array(

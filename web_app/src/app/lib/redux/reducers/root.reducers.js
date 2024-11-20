@@ -5,18 +5,22 @@ import { persistReducer } from "redux-persist";
 import { profileReducer } from "./profiles.reducers";
 import { modalReducer } from "./modals.reducers";
 import { menusReducer } from "./menus.reducers";
+import { categoryReducer } from "./categories.reducers";
+import { adReducer } from "./ads.reducers";
 
 const persistConfig = {
   key: "root",
   storage,
-  whitelist: ["user", "profile", "modal", "menu"],
+  whitelist: ["user", "profile", "modal", "menu", "category"],
 };
 
 const appReducers = combineReducers({
   user: userReducer,
   profile: profileReducer,
   modal: modalReducer,
-  menu: menusReducer
+  menu: menusReducer,
+  category: categoryReducer,
+  ad: adReducer
 });
 
 const rootReducer = (state, action) => {
