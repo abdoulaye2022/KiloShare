@@ -90,16 +90,29 @@ function AdsForm() {
   };
 
   return (
-    <Card className="form-card" style={{ maxWidth: 1200, margin: '0 auto', borderRadius: 12, boxShadow: '0 4px 12px rgba(0,0,0,0.1)' }}>
-      <Title level={2} style={{ textAlign: 'center', marginBottom: 30, color: '#1890ff' }}>Create New Ad</Title>
+    <Card
+      className="form-card"
+      style={{
+        maxWidth: 1200,
+        margin: "0 auto",
+        borderRadius: 12,
+        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+      }}
+    >
+      <Title
+        level={2}
+        style={{ textAlign: "center", marginBottom: 30, color: "#1890ff" }}
+      >
+        Create New Ad
+      </Title>
       <Spin spinning={loadingCategory || loadingAd}>
         <Form
           layout="vertical"
           onFinish={onFinish}
           onFinishFailed={onFinishFailed}
           initialValues={{
-            title: '',
-            description: '',
+            title: "",
+            description: "",
           }}
           form={form}
           className="custom-form"
@@ -139,7 +152,12 @@ function AdsForm() {
                   },
                 ]}
               >
-                <InputNumber size="large" min={1} style={{ width: "100%" }} placeholder="Enter available space" />
+                <InputNumber
+                  size="large"
+                  min={1}
+                  style={{ width: "100%" }}
+                  placeholder="Enter available space"
+                />
               </Form.Item>
             </Col>
 
@@ -149,7 +167,11 @@ function AdsForm() {
                 label={<Text strong>Price</Text>}
                 rules={[{ required: true, message: "Please enter the price." }]}
               >
-                <InputNumber size="large" style={{ width: "100%" }} placeholder="Enter price per kg" />
+                <InputNumber
+                  size="large"
+                  style={{ width: "100%" }}
+                  placeholder="Enter price per kg"
+                />
               </Form.Item>
             </Col>
 
@@ -258,10 +280,16 @@ function AdsForm() {
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       const departureDate = getFieldValue("departure_date");
-                      if (!value || !departureDate || value.isAfter(departureDate)) {
+                      if (
+                        !value ||
+                        !departureDate ||
+                        value.isAfter(departureDate)
+                      ) {
                         return Promise.resolve();
                       }
-                      return Promise.reject(new Error("Arrival date must be after departure date"));
+                      return Promise.reject(
+                        new Error("Arrival date must be after departure date")
+                      );
                     },
                   }),
                 ]}
@@ -283,15 +311,28 @@ function AdsForm() {
                 name="collection_date"
                 label={<Text strong>Collection Date</Text>}
                 rules={[
-                  { required: true, message: "Please select a collection date" },
+                  {
+                    required: true,
+                    message: "Please select a collection date",
+                  },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       const departureDate = getFieldValue("departure_date");
                       const arrivalDate = getFieldValue("arrival_date");
-                      if (!value || !departureDate || value.isAfter(departureDate) || !arrivalDate || value.isAfter(arrivalDate)) {
+                      if (
+                        !value ||
+                        !departureDate ||
+                        value.isAfter(departureDate) ||
+                        !arrivalDate ||
+                        value.isAfter(arrivalDate)
+                      ) {
                         return Promise.resolve();
                       }
-                      return Promise.reject(new Error("Collection date must be after departure and arrival date"));
+                      return Promise.reject(
+                        new Error(
+                          "Collection date must be after departure and arrival date"
+                        )
+                      );
                     },
                   }),
                 ]}
@@ -323,16 +364,20 @@ function AdsForm() {
                   showSearch
                   size="large"
                   placeholder="Select category"
-                  options={categories.map((p) => ({
-                    value: p.id,
-                    label: p.name,
-                  }))}
+                  options={
+                    categories
+                      ? categories.map((p) => ({
+                          value: p.id,
+                          label: p.name,
+                        }))
+                      : null
+                  }
                 />
               </Form.Item>
             </Col>
 
             <Col xs={24} md={12}>
-              <Form.Item 
+              <Form.Item
                 label={<Text strong>Photo</Text>}
                 required
                 tooltip="Upload a photo of your item"
@@ -366,9 +411,9 @@ function AdsForm() {
                 >
                   Reset
                 </Button>
-                <Button 
-                  size="large" 
-                  type="primary" 
+                <Button
+                  size="large"
+                  type="primary"
                   htmlType="submit"
                   icon={<CheckOutlined />}
                 >

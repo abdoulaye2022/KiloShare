@@ -102,7 +102,7 @@ if(!$helper->isValidInteger($params['id'])) {
     $error = [
         "success" => false,
         "status" => 400,
-        "message" => $errorHandler::getMessage('invalid_announcement_number')
+        "message" => $errorHandler::getMessage('invalid_ad_number')
     ];
     http_response_code(400);
     header('Content-Type: application/json');
@@ -176,7 +176,7 @@ $collection_date = $helper->validateString($data['collection_date']);
 $user_id = $helper->validateString($data['user_id']);
 $status_id = $helper->validateString($data['status_id']);
 
-$updated = $announcementModel->update($id, $title, $description, $space_available, $price_kilo, $price_per_kilo, $departure_city, 
+$updated = $adModel->update($id, $title, $description, $space_available, $price_kilo, $price_per_kilo, $departure_city, 
                               $arrival_city, $departure_date, $arrival_date, $collection_date, $status_id);
 if($updated == false) {
 	$error = [
@@ -190,8 +190,8 @@ if($updated == false) {
     exit();
 }
 
-$announcementFetch = $announcementModel->getOne($id);
-if($announcementFetch == false) {
+$adFetch = $adModel->getOne($id);
+if($adFetch == false) {
 	$error = [
         "success" => false,
         "status" => 400,
@@ -203,13 +203,13 @@ if($announcementFetch == false) {
     exit();
 }
 
-$announcement = $announcementFetch->fetch(PDO::FETCH_ASSOC);
+$ad = $adFetch->fetch(PDO::FETCH_ASSOC);
 
 $result = array(
     "success" => true,
     "status" => 200,
     "message" => "Request successful.",
-    "data" => $announcement,
+    "data" => $ad,
 );
 
 http_response_code(200);

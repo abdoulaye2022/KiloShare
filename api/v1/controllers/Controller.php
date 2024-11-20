@@ -40,7 +40,7 @@ require_once "utils/constants.php";
 
 require_once "models/Auth.php";
 require_once "models/User.php";
-require_once "models/Announcement.php";
+require_once "models/Ad.php";
 require_once "models/Profile.php";
 require_once "models/Status.php";
 require_once "models/DocumentType.php";
@@ -58,7 +58,7 @@ $helper = new Helper();
 $errorHandler = new ErrorHandler($error_message);
 $authModel = new Auth($cn);
 $userModel = new User($cn);
-$announcementModel = new Announcement($cn);
+$adModel = new Ad($cn);
 $profileModel = new Profile($cn);
 $statusModel = new Status($cn);
 $documentTypeModel = new DocumentType($cn);

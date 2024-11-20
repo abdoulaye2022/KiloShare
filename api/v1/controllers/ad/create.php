@@ -18,7 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 
 include("utils/check_token.php");
 
-var_dump($_POST); die;
+// var_dump($_POST); die;
 
 
 if(!isset($_POST['title']) || !isset($_POST['description']) || !isset($_POST['space_available']) || !isset($_POST['price_kilo']) || !isset($_POST['departure_city']) ||
@@ -208,9 +208,9 @@ $user_id = $helper->isValidInteger($_POST['user_id']);
 $status_id = 1;
 $category_id = $helper->isValidInteger($_POST['category_id']);
 
-$announcement_id = $announcementModel->create($title, $description, $space_available, $price_kilo, $departure_country, $arrival_country, $departure_city, $arrival_city, 
+$ad_id = $adModel->create($title, $description, $space_available, $price_kilo, $departure_country, $arrival_country, $departure_city, $arrival_city, 
                             $departure_date, $arrival_date, $collection_date, $user_id, $status_id, $category_id, $fileName, $id);
-if($announcement_id == false) {
+if($ad_id == false) {
 	$error = [
         "success" => false,
         "status" => 400,
@@ -222,8 +222,8 @@ if($announcement_id == false) {
     exit();
 }
 
-$announcementFetch = $announcementModel->getOne($announcement_id);
-if($announcementFetch == false) {
+$adFetch = $adModel->getOne($ad_id);
+if($adFetch == false) {
 	$error = [
         "success" => false,
         "status" => 400,
@@ -235,13 +235,13 @@ if($announcementFetch == false) {
     exit();
 }
 
-$announcement = $announcementFetch->fetch(PDO::FETCH_ASSOC);
+$ad = $adFetch->fetch(PDO::FETCH_ASSOC);
 
 $result = array(
     "success" => true,
     "status" => 200,
     "message" => "Request successful.",
-    "data" => $announcement,
+    "data" => $ad,
 );
 
 http_response_code(200);

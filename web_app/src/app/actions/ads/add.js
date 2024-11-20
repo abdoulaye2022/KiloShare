@@ -9,7 +9,7 @@ const jwtToken = cookieStore.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value;
 
 export async function next_add_ad(data) {
   try {
-    const response = await axios.post("/api/v1/announcements/create", data, {
+    const response = await axios.post("/api/v1/ads/create", data, {
       headers: {
         "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${jwtToken}`,

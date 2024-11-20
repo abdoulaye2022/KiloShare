@@ -14,11 +14,11 @@ $routes = [
     '/api/v1/users/suspend/{id}' => 'controllers/user/suspend.php',
     '/api/v1/users/unsuspend/{id}' => 'controllers/user/unsuspend.php',
 
-    // Announcements
-    '/api/v1/announcements/getAll' => 'controllers/announcement/getAll.php',
-    '/api/v1/announcements/create' => 'controllers/announcement/create.php',
-    '/api/v1/announcements/update/{id}' => 'controllers/announcement/update.php',
-    '/api/v1/announcements/delete/{id}' => 'controllers/announcement/delete.php',
+    // Ads
+    '/api/v1/ads/getAll' => 'controllers/ad/getAll.php',
+    '/api/v1/ads/create' => 'controllers/ad/create.php',
+    '/api/v1/ads/update/{id}' => 'controllers/ad/update.php',
+    '/api/v1/ads/delete/{id}' => 'controllers/ad/delete.php',
 
     // Profiles
     '/api/v1/profiles/getAll' => 'controllers/profile/getAll.php',
