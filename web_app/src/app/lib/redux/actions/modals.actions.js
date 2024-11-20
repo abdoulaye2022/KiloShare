@@ -1,21 +1,17 @@
 import {
-  requestOpenUserForm,
-  requestCloseUserForm,
+  openUserForm,
+  closeUserForm,
+  openLoginForm,
+  closeLoginForm,
+  openAdApprovalNotice,
+  closeAdApprovalNotice,
 } from "../reducers/modals.reducers";
 
 export const modalActions = {
   openUserForm,
   closeUserForm,
+  openLoginForm,
+  closeLoginForm,
+  openAdApprovalNotice,
+  closeAdApprovalNotice
 };
-
-function openUserForm() {
-  return function (dispatch) {
-    dispatch(requestOpenUserForm());
-  };
-}
-
-function closeUserForm() {
-  return function (dispatch) {
-    dispatch(requestCloseUserForm());
-  };
-}
