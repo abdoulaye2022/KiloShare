@@ -16,15 +16,15 @@ if ($_SERVER['REQUEST_METHOD'] != 'GET') {
     exit;
 }
 
-include("utils/check_token.php");
+// include("utils/check_token.php");
 
-$announcements = $announcementModel->getAll();
+$ads = $adModel->getAll();
 
 $result = array(
     "success" => true,
     "status" => 200,
     "message" => "Request successful.",
-    "data" => $announcements->fetchAll(PDO::FETCH_ASSOC),
+    "data" => $ads->fetchAll(PDO::FETCH_ASSOC),
 );
 
 http_response_code(200);

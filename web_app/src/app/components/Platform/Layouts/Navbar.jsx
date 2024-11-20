@@ -9,6 +9,8 @@ import {
   InfoCircleOutlined,
   SettingOutlined,
   UnorderedListOutlined,
+  LoginOutlined,
+  UserAddOutlined,
 } from "@ant-design/icons";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -47,26 +49,38 @@ function Navbar() {
   const items1 = [
     {
       key: "1",
-      label: "Log In",
+      label: (
+        <>
+          <LoginOutlined /> Log In
+        </>
+      )
     },
     {
       key: "2",
-      label: "Sign In",
-    },
-    {
-      key: "3",
-      label: "My Listings",
+      label: (
+        <>
+          <UserAddOutlined /> Sign In
+        </>
+      )
     },
     {
       type: "divider",
     },
     {
       key: "4",
-      label: "About us",
+      label: (
+        <>
+          <InfoCircleOutlined /> About us
+        </>
+      ),
     },
     {
       key: "5",
-      label: "Settings",
+      label: (
+        <>
+          <SettingOutlined /> Settings
+        </>
+      ),
     },
   ];
 
@@ -107,24 +121,6 @@ function Navbar() {
       ),
     },
   ];
-
-  // const items1 = [
-  //   {
-  //     label: <a href="https://www.antgroup.com">1st menu item</a>,
-  //     key: "0",
-  //   },
-  //   {
-  //     label: <a href="https://www.aliyun.com">2nd menu item</a>,
-  //     key: "1",
-  //   },
-  //   {
-  //     type: "divider",
-  //   },
-  //   {
-  //     label: "3rd menu item",
-  //     key: "3",
-  //   },
-  // ];
 
   const handleHeaderDropdown = (key) => {
     switch (key) {
@@ -183,9 +179,13 @@ function Navbar() {
               icon={<PlusCircleOutlined />}
               type="primary"
               style={{ marginRight: 20 }}
-              onClick={() => router.push("/post-ad")}
+              onClick={() => {
+                authenticated
+                  ? router.push("/post-ad")
+                  : dispatch(modalActions.openLoginForm());
+              }}
             >
-              Post a Listing
+              Create an Ad
             </Button>
           </>
         ) : null}

@@ -53,7 +53,10 @@ const Login = () => {
         title={null}
         open={open}
         // onOk={() => dispatch(modalActions.openLoginForm())}
-        onCancel={() => dispatch(modalActions.closeLoginForm())}
+        onCancel={() => {
+          dispatch(modalActions.closeLoginForm());
+          form.resetFields();
+        }}
         footer={null}
         closable={false}
         centered={true}
@@ -100,8 +103,8 @@ const Login = () => {
             <Form
               name="basic"
               initialValues={{
-                phone: '',
-                password: ''
+                phone: "",
+                password: "",
               }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}

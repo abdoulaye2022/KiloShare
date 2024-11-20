@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { categoryConstants } from "../constants/categories.constants";
 
 const initialState = {
   loading: false,
@@ -13,26 +12,20 @@ export const categorySlice = createSlice({
   initialState,
   reducers: {
     // Get ALL
-    requestGetAll: (state = initialState, action) => {
-      action.type = categoryConstants.GETALL_CATEGORIES_REQUEST;
+    requestGetAll: (state) => {
       state.loading = true;
     },
-    successGetAll: (state = initialState, action) => {
-      action.type = categoryConstants.GETALL_CATEGORIES_SUCCESS;
+    successGetAll: (state, action) => {
       state.loading = false;
-      state.items = action.payload;
+        state.items = action.payload;
     },
-    failureGetAll: (state = initialState, action) => {
-      action.type = categoryConstants.GETALL_CATEGORIES_FAILURE;
+    failureGetAll: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
   },
 });
 
-export const {
-  requestGetAll,
-  successGetAll,
-  failureGetAll
-} = categorySlice.actions;
+export const { requestGetAll, successGetAll, failureGetAll } =
+  categorySlice.actions;
 export const categoryReducer = categorySlice.reducer;

@@ -1,5 +1,5 @@
 <?php
-class Announcement
+class Ad
 {
     private $_cn;
 
@@ -10,7 +10,7 @@ class Announcement
 
     public function getOne($id)
     {
-        $stmt = $this->_cn->prepare("SELECT * FROM announcements WHERE id = :id AND is_deleted = 0");
+        $stmt = $this->_cn->prepare("SELECT * FROM ads WHERE id = :id AND is_deleted = 0");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt;
@@ -18,14 +18,14 @@ class Announcement
 
     public function getAll()
     {
-        $stmt = $this->_cn->query("SELECT * FROM announcements WHERE is_deleted = 0");
+        $stmt = $this->_cn->query("SELECT * FROM ads WHERE is_deleted = 0");
         return $stmt;
     }
 
     public function create($title, $description, $space_available, $price_kilo, $departure_country, $arrival_country, $departure_city, $arrival_city, 
                     $departure_date, $arrival_date, $collection_date, $user_id, $status_id, $category_id, $photo, $created_by)
     {
-        $stmt = $this->_cn->prepare("INSERT INTO `announcements`(`title`, `description`, `space_available`, `price_kilo`, `departure_country`, `arrival_country`,
+        $stmt = $this->_cn->prepare("INSERT INTO `ads`(`title`, `description`, `space_available`, `price_kilo`, `departure_country`, `arrival_country`,
                                      `departure_city`, `arrival_city`, `departure_date`, `arrival_date`, `collection_date`, 
                                      `user_id`, `status_id`, `category_id`, `photo`, `created_by`, `created_at`) 
                                     VALUES (:title, :description, :space_available, :price_kilo, :departure_country, :arrival_country, :departure_city, :arrival_city, 
@@ -57,7 +57,7 @@ class Announcement
     public function update($id, $title, $description, $space_available, $price_kilo, $departure_city, 
                             $arrival_city, $departure_date, $arrival_date, $collection_date, $status_id, $category_id)
     {
-        $stmt = $this->_cn->prepare("UPDATE announcements SET title = :title, description = :description, space_available = :space_available, price_kilo = :price_kilo, 
+        $stmt = $this->_cn->prepare("UPDATE ads SET title = :title, description = :description, space_available = :space_available, price_kilo = :price_kilo, 
                                      departure_city = :departure_city, arrival_city = :arrival_city, departure_date = :departure_date, 
                                     arrival_date = :arrival_date, collection_date = :collection_date, status_id = :status_id, category_id = :category_id, updated_at = NOW() WHERE id = :id");
 
@@ -83,7 +83,7 @@ class Announcement
 
     public function delete($id)
     {
-        $stmt = $this->_cn->prepare("UPDATE announcements SET is_deleted = :is_deleted WHERE id = :id");
+        $stmt = $this->_cn->prepare("UPDATE ads SET is_deleted = :is_deleted WHERE id = :id");
         $is_deleted = 1;
         $stmt->bindParam(':is_deleted', $is_deleted, PDO::PARAM_INT);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);

@@ -15,6 +15,8 @@ function getAll() {
     categoryServices
       .api_getAll()
       .then((res) => {
+        console.log("Abdoulaye")
+        console.log(res.data);
         dispatch(successGetAll(res.data));
       })
       .catch((err) => {

@@ -10,13 +10,11 @@ export async function next_getAll_ads() {
     const jwtToken = cookieStore.get(
       process.env.NEXT_PUBLIC_COOKIE_NAME
     )?.value;
-    const response = await axios.get("/api/v1/announcements/getAll", {
+    const response = await axios.get("/api/v1/ads/getAll", {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
     });
-
-    console.log("Je suis dans le bon getAll action next");
 
     return response.data;
   } catch (error) {
