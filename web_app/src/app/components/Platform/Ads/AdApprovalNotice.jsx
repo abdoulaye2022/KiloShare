@@ -18,7 +18,7 @@ const AdApprovalNotice = () => {
   return (
     <Modal
       open={isAdApprovalNotice}
-      title="Annonce soumise"
+      title="Ad Submitted"
       onCancel={() => dispatch(modalActions.closeAdApprovalNotice())}
       footer={[
         <Button
@@ -36,10 +36,10 @@ const AdApprovalNotice = () => {
     >
       <div style={{ textAlign: "center" }}>
         <CheckCircleOutlined style={{ fontSize: 40, color: "#52c41a" }} />
-        <h3 style={{ marginTop: 20 }}>Votre annonce a été soumise !</h3>
+        <h3 style={{ marginTop: 20 }}>Your ad has been submitted!</h3>
         <p>
-          Elle sera publiée sur le site après approbation par l'équipe. Nous
-          vous tiendrons informé de l'état de votre annonce.
+          It will be published on the site after approval by the team. We will
+          keep you informed about the status of your ad.
         </p>
       </div>
     </Modal>

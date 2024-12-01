@@ -3,14 +3,12 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-export async function getAll_profiles() {
+export async function isValidJwt_user() {
   try {
     const cookieStore = cookies();
 
-    const jwtToken = cookieStore.get(
-      process.env.NEXT_PUBLIC_COOKIE_NAME
-    )?.value;
-    const response = await axios.get("/api/v1/profiles/getAll", {
+    const jwtToken = cookieStore.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value;
+    const response = await axios.get("/api/v1/isValidJwt", {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
@@ -19,7 +17,7 @@ export async function getAll_profiles() {
     if (response) {
       return response.data;
     } else {
-      throw new Error("No data received");
+      throw new Error("JWT expired");
     }
   } catch (error) {
     if (error.response) {

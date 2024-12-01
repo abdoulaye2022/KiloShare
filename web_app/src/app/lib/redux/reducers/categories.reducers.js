@@ -4,7 +4,7 @@ const initialState = {
   loading: false,
   item: {},
   items: [],
-  error: "",
+  error: null,
 };
 
 export const categorySlice = createSlice({

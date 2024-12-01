@@ -3,7 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   isOpenUserForm: false,
   isOpenLoginForm: false,
-  isAdApprovalNotice: false
+  isAdApprovalNotice: false,
+  isOpenSigninForm: false,
 };
 
 export const modalSlice = createSlice({
@@ -22,7 +23,6 @@ export const modalSlice = createSlice({
     openLoginForm: (state) => {
       state.isOpenLoginForm = true;
     },
-    // Fermer le formulaire de connexion
     closeLoginForm: (state) => {
       state.isOpenLoginForm = false;
     },
@@ -31,6 +31,12 @@ export const modalSlice = createSlice({
     },
     closeAdApprovalNotice: (state) => {
       state.isAdApprovalNotice = false;
+    },
+    openSigninForm: (state) => {
+      state.isOpenSigninForm = true;
+    },
+    closeSigninForm: (state) => {
+      state.isOpenSigninForm = false;
     }
   },
 });
@@ -43,6 +49,8 @@ export const {
   closeLoginForm,
   openAdApprovalNotice,
   closeAdApprovalNotice,
+  openSigninForm,
+  closeSigninForm
 } = modalSlice.actions;
 
 // Export du réducteur

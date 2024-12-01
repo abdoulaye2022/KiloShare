@@ -1,5 +1,6 @@
 "use client";
 
+import AuthCheck from "@/app/components/Common/AuthCheck";
 import AdApprovalNotice from "@/app/components/Platform/Ads/AdApprovalNotice";
 import AdsForm from "@/app/components/Platform/Ads/AdsForm";
 import { categoryActions } from "@/app/lib/redux/actions/categories.actions";

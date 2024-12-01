@@ -9,8 +9,8 @@ import { userActions } from "@/app/lib/redux/actions/users.actions";
 
 const { Title, Paragraph } = Typography;
 
-const Login = () => {
-  const open = useAppSelector((state) => state.modal.isOpenLoginForm);
+const Signin = () => {
+  const open = useAppSelector((state) => state.modal.isOpenSigninForm);
   const dispatch = useAppDispatch();
 
   const router = useRouter();
@@ -21,8 +21,19 @@ const Login = () => {
   const loading = useAppSelector((state) => state.user.loading);
   const error = useAppSelector((state) => state.user.error);
 
+  const cbUser = () => {
+    router.push("/");
+  };
+
   const onFinish = (values) => {
-    dispatch(userActions.login(values.email, values.password));
+    dispatch(
+      userActions.signin(
+        values.firstname,
+        values.lastname,
+        values.email,
+        values.password
+      )
+    );
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -41,7 +52,7 @@ const Login = () => {
         title={null}
         open={open}
         onCancel={() => {
-          dispatch(modalActions.closeLoginForm());
+          dispatch(modalActions.closeSigninForm());
           form.resetFields();
         }}
         footer={null}
@@ -88,8 +99,10 @@ const Login = () => {
               </Paragraph>
             ) : null}
             <Form
-              name="login"
+              name="signin"
               initialValues={{
+                firstname: "",
+                lastname: "",
                 email: "",
                 password: "",
               }}
@@ -101,16 +114,38 @@ const Login = () => {
             >
               <Form.Item
                 style={{ width: "100%" }}
+                name="firstname"
+                validateTrigger="onBlur"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter your firstname",
+                  },
+                ]}
+              >
+                <Input placeholder="Firstname" size="large" />
+              </Form.Item>
+              <Form.Item
+                style={{ width: "100%" }}
+                name="lastname"
+                validateTrigger="onBlur"
+                rules={[
+                  {
+                    required: true,
+                    message: "Please enter your lastname",
+                  },
+                ]}
+              >
+                <Input placeholder="Lastname" size="large" />
+              </Form.Item>
+              <Form.Item
+                style={{ width: "100%" }}
                 name="email"
                 validateTrigger="onBlur"
                 rules={[
                   {
                     required: true,
                     message: "Please enter your email",
-                  },
-                  {
-                    type: "email",
-                    message: "The input is not a valid email",
                   },
                 ]}
               >
@@ -144,15 +179,19 @@ const Login = () => {
 
               <Form.Item>
                 <p>
-                  Don't have an account?{" "}
+                  Already have an account?{" "}
                   <span
-                    style={{ color: "#4096ff", fontWeight: "bold", cursor: 'pointer' }}
+                    style={{
+                      color: "#4096ff",
+                      fontWeight: "bold",
+                      cursor: "pointer",
+                    }}
                     onClick={() => {
-                      dispatch(modalActions.closeLoginForm());
-                      dispatch(modalActions.openSigninForm());
+                      dispatch(modalActions.closeSigninForm());
+                      dispatch(modalActions.openLoginForm());
                     }}
                   >
-                    Sign up
+                    Log in
                   </span>
                 </p>
               </Form.Item>
@@ -163,4 +202,4 @@ const Login = () => {
     </>
   );
 };
-export default Login;
+export default Signin;

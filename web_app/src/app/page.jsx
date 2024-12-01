@@ -8,6 +8,7 @@ import Login from "./components/Platform/Layouts/Login";
 import { useAppDispatch, useAppSelector } from "./lib/redux/hooks";
 import { adActions } from "./lib/redux/actions/ads.actions";
 import AdsList from "./components/Platform/Home/AdsList ";
+import Signin from "./components/Platform/Layouts/Signin";
 
 const { Content } = Layout;
 
@@ -59,6 +60,7 @@ function Home() {
 
       {/* Login modal or form */}
       <Login />
+      <Signin />
     </Layout>
   );
 }

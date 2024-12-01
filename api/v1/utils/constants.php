@@ -6,7 +6,7 @@ $error_message = [
     'password_short'      => 'The password must be at least 8 characters long.',
     'password_mismatch'   => 'The passwords do not match.',
     'username_taken'      => 'The username is already taken.',
-    'phone_exist'         => 'The phone number is already taken.',
+    'email_exist'         => 'The email is already taken.',
     'invalid_phone'       => 'The phone number is not valid.',
     'invalid_credentials' => 'Invalid credentials. Please check your phone or password.',
     'age_too_low'         => 'You must be at least 18 years old.',
@@ -38,6 +38,8 @@ $error_message = [
 	'invalid_status_id' => 'The status ID is invalid.',
 	'suspended_account' => 'The account is suspended. Please contact support for assistance.',
 	'invalid_category_id' => 'The category ID is invalid.',
+	'failed_file_upload' => 'Error during file upload. Error code',
+	'error_saving_file' => 'Error while saving the file.'
 ];
 
 $countries =array(

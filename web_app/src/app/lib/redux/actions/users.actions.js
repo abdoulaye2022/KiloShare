@@ -1,37 +1,54 @@
+import { getAll_users } from "@/app/actions/users/getAll";
 import {
   failureAdd,
   failureGetAll,
+  failureIsValidJwt,
   failureLogin,
   failureLogOut,
   failureRemove,
+  failureSignin,
   failureSuspend,
   failureUnsuspend,
   failureUpdate,
   requestAdd,
   requestGetAll,
+  requestIsValidJwt,
   requestLogin,
   requestLogOut,
   requestRemove,
   requestResetItem,
   requestSetIten,
+  requestSignin,
   requestSuspend,
   requestUnsuspend,
   requestUpdate,
   successAdd,
   successGetAll,
+  successIsValidJwt,
   successLogin,
   successLogOut,
   successRemove,
+  successSignin,
   successSuspend,
   successUnsuspend,
   successUpdate,
 } from "../reducers/users.reducers";
-import { userServices } from "../services/users.services";
 import { modalActions } from "./modals.actions";
+import { add_user } from "@/app/actions/users/add";
+import { update_user } from "@/app/actions/users/update";
+import { remove_user } from "@/app/actions/users/remove";
+import { suspend_user } from "@/app/actions/users/suspend";
+import { unsuspend_user } from "@/app/actions/users/unsuspend";
+import { isValidJwt_user } from "@/app/actions/auth/isValidJwt";
+import { logout_user } from "@/app/actions/auth/logout";
+import { login_user } from "@/app/actions/auth/login";
+import { signin_user } from "@/app/actions/auth/signin";
+import { adActions } from "./ads.actions";
 
 export const userActions = {
   login,
   logout,
+  signin,
   getAll,
   add,
   setItem,
@@ -40,17 +57,17 @@ export const userActions = {
   remove,
   suspend,
   unsuspend,
+  isValidJwt,
 };
 
-function login(phone, password, cb) {
+function login(email, password) {
   return function (dispatch) {
     dispatch(requestLogin());
-    userServices
-      .api_login(phone, password)
+    login_user(email, password)
       .then((res) => {
         dispatch(successLogin(res.data));
         dispatch(modalActions.closeLoginForm());
-        cb();
+        dispatch(adActions.getAll());
       })
       .catch((err) => {
         dispatch(failureLogin(err.message));
@@ -58,11 +75,24 @@ function login(phone, password, cb) {
   };
 }
 
+function signin(firstname, lastname, email, password) {
+  return function (dispatch) {
+    dispatch(requestSignin());
+    signin_user(firstname, lastname, email, password)
+      .then((res) => {
+        dispatch(successSignin(res.data));
+        dispatch(modalActions.closeSigninForm());
+      })
+      .catch((err) => {
+        dispatch(failureSignin(err.message));
+      });
+  };
+}
+
 function logout(cb) {
   return function (dispatch) {
     dispatch(requestLogOut());
-    userServices
-      .api_logout()
+    logout_user()
       .then((res) => {
         dispatch(successLogOut(res.data));
         cb();
@@ -76,8 +106,7 @@ function logout(cb) {
 function getAll() {
   return function (dispatch) {
     dispatch(requestGetAll());
-    userServices
-      .api_getAll()
+    getAll_users()
       .then((res) => {
         dispatch(successGetAll(res.data));
       })
@@ -92,8 +121,7 @@ function add(firstname, lastname, phone, email, profile_id, password) {
     dispatch(
       requestAdd(firstname, lastname, phone, email, profile_id, password)
     );
-    userServices
-      .api_add(firstname, lastname, phone, email, profile_id, password)
+    add_user(firstname, lastname, phone, email, profile_id, password)
       .then((res) => {
         dispatch(successAdd(res.data));
         dispatch(modalActions.closeUserForm());
@@ -107,8 +135,7 @@ function add(firstname, lastname, phone, email, profile_id, password) {
 function update(id, firstname, lastname, email, profile_id) {
   return function (dispatch) {
     dispatch(requestUpdate());
-    userServices
-      .api_update(id, firstname, lastname, email, profile_id)
+    update_user(id, firstname, lastname, email, profile_id)
       .then((res) => {
         dispatch(successUpdate(res.data));
         dispatch(modalActions.closeUserForm());
@@ -122,8 +149,7 @@ function update(id, firstname, lastname, email, profile_id) {
 function remove(id) {
   return function (dispatch) {
     dispatch(requestRemove());
-    userServices
-      .api_remove(id)
+    remove_user(id)
       .then((res) => {
         dispatch(successRemove(id));
         dispatch(modalActions.closeUserForm());
@@ -137,8 +163,7 @@ function remove(id) {
 function suspend(id) {
   return function (dispatch) {
     dispatch(requestSuspend());
-    userServices
-      .api_suspend(id)
+    suspend_user(id)
       .then((res) => {
         dispatch(successSuspend(id));
       })
@@ -151,8 +176,7 @@ function suspend(id) {
 function unsuspend(id) {
   return function (dispatch) {
     dispatch(requestUnsuspend());
-    userServices
-      .api_unsuspend(id)
+    unsuspend_user(id)
       .then((res) => {
         dispatch(successUnsuspend(id));
       })
@@ -171,5 +195,19 @@ function setItem(id) {
 function resetItem(id) {
   return function (dispatch) {
     dispatch(requestResetItem(id));
+  };
+}
+
+function isValidJwt(cb) {
+  return function (dispatch) {
+    dispatch(requestIsValidJwt());
+    isValidJwt_user()
+      .then((res) => {
+        dispatch(successIsValidJwt());
+      })
+      .catch((err) => {
+        dispatch(logout(cb));
+        dispatch(failureIsValidJwt(err.message));
+      });
   };
 }

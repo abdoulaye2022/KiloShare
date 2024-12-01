@@ -21,16 +21,15 @@ $dotenv = Dotenv\Dotenv::createImmutable($_SERVER['HTTP_HOST'] == 'localhost' ? 
 $dotenv->load();
 
 $key = $_ENV['JWT_SECRET'];
-error_log("La clé secrète est : " . $key);
 
 $payload = [
-    'iss' => $_SERVER['SERVER_NAME'], // �metteur du jeton
-    'aud' => 'kiloshare', // Audience du jeton
-    'iat' => time(), // Heure � laquelle le jeton a �t� �mis
-    'nbf' => time(), // Heure avant laquelle le jeton ne doit pas �tre accept�
-    'exp' => time() + 3600, // Expiration du jeton dans 1 heure
-    'id' => 12345, // Identifiant utilisateur ou toute autre donn�e n�cessaire
-    'rand' => uniqid(), // Ajout d'un identifiant unique pour rendre le jeton unique chaque fois
+    'iss' => $_SERVER['SERVER_NAME'],
+    'aud' => 'kiloshare',
+    'iat' => time(),
+    'nbf' => time(),
+    'exp' => time() + 3600,
+    'id' => 12345,
+    'rand' => uniqid(),
 ];
 
 require_once "config/DB.php";
