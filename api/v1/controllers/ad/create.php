@@ -18,8 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 
 include("utils/check_token.php");
 
-// var_dump($_POST); die;
-
 
 if(!isset($_POST['title']) || !isset($_POST['description']) || !isset($_POST['space_available']) || !isset($_POST['price_kilo']) || !isset($_POST['departure_city']) ||
     !isset($_POST['departure_country']) || !isset($_POST['arrival_country']) || !isset($_POST['arrival_city']) || !isset($_POST['departure_date']) || !isset($_POST['arrival_date']) 
@@ -150,6 +148,7 @@ if($dateArrival > $dateCollections) {
     exit();
 }
 
+$fileName = "";
 if (isset($_FILES['photo'])) {
         
     // Récupère les informations du fichier
@@ -183,12 +182,28 @@ if (isset($_FILES['photo'])) {
 
         // Déplace le fichier du répertoire temporaire vers le répertoire d'upload
         if (move_uploaded_file($tmpFilePath, $destination)) {
-            echo "Fichier téléchargé avec succès : " . $fileName;
+            
         } else {
-            echo "Erreur lors de l'enregistrement du fichier.";
+            $error = [
+                "success" => false,
+                "status" => 400,
+                "message" => $errorHandler::getMessage('error_saving_file')
+            ];
+            http_response_code(400);
+            header('Content-Type: application/json');
+            echo json_encode($error);
+            exit();
         }
     } else {
-        echo "Erreur lors du téléchargement du fichier. Code d'erreur : " . $file['error'];
+        $error = [
+            "success" => false,
+            "status" => 400,
+            "message" => $errorHandler::getMessage('failed_file_upload') . ' ' . $file['error']
+        ];
+        http_response_code(400);
+        header('Content-Type: application/json');
+        echo json_encode($error);
+        exit();
     }
 } 
 
@@ -209,7 +224,7 @@ $status_id = 1;
 $category_id = $helper->isValidInteger($_POST['category_id']);
 
 $ad_id = $adModel->create($title, $description, $space_available, $price_kilo, $departure_country, $arrival_country, $departure_city, $arrival_city, 
-                            $departure_date, $arrival_date, $collection_date, $user_id, $status_id, $category_id, $fileName, $id);
+                            $departure_date, $arrival_date, $collection_date, $user_id, $status_id, $category_id, $fileName, $auth_id);
 if($ad_id == false) {
 	$error = [
         "success" => false,

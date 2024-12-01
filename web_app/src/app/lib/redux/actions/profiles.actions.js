@@ -1,3 +1,4 @@
+import { getAll_profiles } from "@/app/actions/profiles/getAll";
 import {
   failureAdd,
   failureGetAll,
@@ -6,7 +7,6 @@ import {
   successAdd,
   successGetAll,
 } from "../reducers/profiles.reducers";
-import { profileServices } from "../services/profiles.services";
 
 export const profileActions = {
   getAll,
@@ -16,8 +16,7 @@ export const profileActions = {
 function getAll() {
   return function (dispatch) {
     dispatch(requestGetAll());
-    profileServices
-      .api_getAll()
+    getAll_profiles()
       .then((res) => {
         dispatch(successGetAll(res.data));
       })

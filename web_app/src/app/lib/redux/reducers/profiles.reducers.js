@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { profileConstants } from "../constants/profiles.constants";
 
 const initialState = {
   loading: false,
@@ -13,32 +12,26 @@ export const profileSlice = createSlice({
   initialState,
   reducers: {
     // Get ALL
-    requestGetAll: (state = initialState, action) => {
-      action.type = profileConstants.GETALL_PROFILES_REQUEST;
+    requestGetAll: (state) => {
       state.loading = true;
     },
-    successGetAll: (state = initialState, action) => {
-      action.type = profileConstants.GETALL_PROFILES_SUCCESS;
+    successGetAll: (state, action) => {
       state.loading = false;
       state.items = action.payload;
     },
-    failureGetAll: (state = initialState, action) => {
-      action.type = profileConstants.GETALL_PROFILES_FAILURE;
+    failureGetAll: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
     // ADD
-    requestAdd: (state = initialState, action) => {
-      action.type = profileConstants.ADD_PROFILES_REQUEST;
+    requestAdd: (state) => {
       state.loading = true;
     },
-    successAdd: (state = initialState, action) => {
-      action.type = profileConstants.ADD_PROFILES_SUCCESS;
+    successAdd: (state, action) => {
       state.loading = false;
       state.items = [...state.items, action.payload];
     },
-    failureAdd: (state = initialState, action) => {
-      action.type = profileConstants.ADD_PROFILES_FAILURE;
+    failureAdd: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },

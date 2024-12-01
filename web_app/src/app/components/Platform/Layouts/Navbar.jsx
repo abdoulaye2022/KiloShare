@@ -127,6 +127,9 @@ function Navbar() {
       case "1":
         dispatch(modalActions.openLoginForm());
         break;
+      case "2":
+        dispatch(modalActions.openSigninForm());
+        break;
       case "6":
         dispatch(userActions.logout(() => router.replace("/")));
         break;

@@ -22,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
-if(!isset($data['firstname']) || !isset($data['lastname']) || !isset($data['phone']) || !isset($data['password'])) {
+if(!isset($data['firstname']) || !isset($data['lastname']) || !isset($data['email']) || !isset($data['password'])) {
 	$error = [
         "success" => false,
         "status" => 400,
@@ -34,7 +34,7 @@ if(!isset($data['firstname']) || !isset($data['lastname']) || !isset($data['phon
     exit();
 }
 
-if(empty($data['firstname']) || empty($data['lastname']) || empty($data['phone']) || empty($data['password'])) {
+if(empty($data['firstname']) || empty($data['lastname']) || empty($data['email']) || empty($data['password'])) {
 	$error = [
         "success" => false,
         "status" => 400,
@@ -46,20 +46,7 @@ if(empty($data['firstname']) || empty($data['lastname']) || empty($data['phone']
     exit();
 }
 
-// Validation numero de telephone
-if(!$helper->validatePhoneNumber($data['phone'])) {
-    $error = [
-        "success" => false,
-        "status" => 400,
-        "message" => $errorHandler::getMessage('invalid_phone')
-    ];
-    http_response_code(400);
-    header('Content-Type: application/json');
-    echo json_encode($error);
-    exit();
-}
-
-if(isset($data['email']) && !empty($data['email']) && !$helper->isValidEmail($data['email'])) {
+if(!$helper->isValidEmail($data['email'])) {
 	$error = [
         "success" => false,
         "status" => 400,
@@ -71,12 +58,12 @@ if(isset($data['email']) && !empty($data['email']) && !$helper->isValidEmail($da
     exit();
 }
 
-$phoneCheck = $authModel->phoneExist($data['phone']);
-if($phoneCheck->rowCount() > 0) {
+$emailCheck = $authModel->emailExist($data['email']);
+if($emailCheck->rowCount() > 0) {
 	$error = [
         "success" => false,
         "status" => 400,
-        "message" => $errorHandler::getMessage('phone_exist')
+        "message" => $errorHandler::getMessage('email_exist')
     ];
     http_response_code(400);
     header('Content-Type: application/json');
@@ -86,11 +73,10 @@ if($phoneCheck->rowCount() > 0) {
 
 $firstname = $helper->validateString($data['firstname']);
 $lastname = $helper->validateString($data['lastname']);
-$phone = $helper->validateString($data['phone']);
 $email = $helper->validateString($data['email']);
 $password = password_hash($helper->validateString($data['password']), PASSWORD_DEFAULT);
 
-$user_id = $authModel->signin($firstname, $lastname, $phone, $email, $password);
+$user_id = $authModel->signin($firstname, $lastname, $email, $password);
 if($user_id == false) {
 	$error = [
         "success" => false,
@@ -118,11 +104,15 @@ if($userFetch == false) {
 
 $user = $userFetch->fetch(PDO::FETCH_ASSOC);
 
-$payload = array(
+$userinfo = array(
 	"id" => $user['id']
 );
 
+$payload [] = $userinfo;
+
 $jwt = JWT::encode($payload, $key, 'HS256');
+
+unset($user['password']);
 
 $result = array(
     "success" => true,

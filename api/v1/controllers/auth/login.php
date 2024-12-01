@@ -23,7 +23,7 @@ $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
 // verification de la reception des donnees
-if (!isset($data['phone']) || !isset($data['password'])) {
+if (!isset($data['email']) || !isset($data['password'])) {
     $error = [
         "success" => false,
         "status" => 400,
@@ -36,7 +36,7 @@ if (!isset($data['phone']) || !isset($data['password'])) {
 }
 
 // Verification si les donnees ne sont pas vide
-if (empty($data['phone']) || empty($data['password'])) {
+if (empty($data['email']) || empty($data['password'])) {
     $error = [
         "success" => false,
         "status" => 400,
@@ -48,12 +48,11 @@ if (empty($data['phone']) || empty($data['password'])) {
     exit();
 }
 
-// Validation numero de telephone
-if(!$helper->validatePhoneNumber($data['phone'])) {
-    $error = [
+if(!$helper->isValidEmail($data['email'])) {
+	$error = [
         "success" => false,
         "status" => 400,
-        "message" => $errorHandler::getMessage('invalid_phone')
+        "message" => $errorHandler::getMessage('invalid_email')
     ];
     http_response_code(400);
     header('Content-Type: application/json');
@@ -61,10 +60,10 @@ if(!$helper->validatePhoneNumber($data['phone'])) {
     exit();
 }
 
-$phone = $helper->validateString($data['phone']);
+$email = $helper->validateString($data['email']);
 $password = $helper->validateString($data['password']);
 
-$users = $authModel->login($phone);
+$users = $authModel->login($email);
 
 if ($users && $users->rowCount() == 0) {
     $error = [

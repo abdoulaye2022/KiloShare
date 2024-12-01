@@ -3,11 +3,13 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-export async function login_user(email, password) {
+export async function signin_user(firstname, lastname, email, password) {
   try {
     const response = await axios.post(
-      "/api/v1/login",
+      "/api/v1/signin",
       {
+        firstname: firstname,
+        lastname: lastname,
         email: email,
         password: password,
       },

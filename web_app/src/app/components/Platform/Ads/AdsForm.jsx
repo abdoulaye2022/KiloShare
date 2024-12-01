@@ -23,7 +23,6 @@ import {
 import { getNames } from "country-list";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import moment from "moment";
-import { Editor } from "@tinymce/tinymce-react";
 
 import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc";
@@ -39,6 +38,7 @@ function AdsForm() {
   const loadingCategory = useAppSelector((state) => state.category.loading);
   const loadingAd = useAppSelector((state) => state.ad.loading);
   const categories = useAppSelector((state) => state.category.items);
+  const user = useAppSelector(state => state.user.user);
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
 
@@ -78,9 +78,9 @@ function AdsForm() {
       "collection_date",
       convertToMySQLFormat(values.collection_date)
     );
-    form.append("user_id", 1);
+    form.append("user_id", user.id);
     form.append("category_id", values.category_id);
-    form.append("photo", fileList[0].originFileObj);
+    form.append("photo", fileList.length ? fileList[0].originFileObj : null);
 
     dispatch(adActions.add(form));
   };
@@ -90,6 +90,7 @@ function AdsForm() {
   };
 
   return (
+    <>
     <Card
       className="form-card"
       style={{
@@ -365,7 +366,7 @@ function AdsForm() {
                   size="large"
                   placeholder="Select category"
                   options={
-                    categories
+                    categories.length > 0
                       ? categories.map((p) => ({
                           value: p.id,
                           label: p.name,
@@ -379,7 +380,6 @@ function AdsForm() {
             <Col xs={24} md={12}>
               <Form.Item
                 label={<Text strong>Photo</Text>}
-                required
                 tooltip="Upload a photo of your item"
               >
                 <Upload
@@ -425,6 +425,7 @@ function AdsForm() {
         </Form>
       </Spin>
     </Card>
+    </>
   );
 }
 

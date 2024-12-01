@@ -53,7 +53,7 @@ try {
 
   $decoded = (array)$decoded;
 
-  $id = intval($decoded[0]->id);
+  $auth_id = intval($decoded[0]->id);
 
 } catch (Exception $e) {
     $error = [

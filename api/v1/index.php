@@ -5,6 +5,7 @@ $routes = [
     '/api/v1/info' => 'controllers/InfoController.php',
     '/api/v1/login' => 'controllers/auth/login.php',
     '/api/v1/signin' => 'controllers/auth/signin.php',
+    '/api/v1/isValidJwt' => 'controllers/auth/isValidJwt.php',
 
     // User
     '/api/v1/users/getAll' => 'controllers/user/getAll.php',

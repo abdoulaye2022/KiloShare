@@ -1,9 +1,9 @@
+import { getAll_categories } from "@/app/actions/categories/getApp";
 import {
   failureGetAll,
   requestGetAll,
   successGetAll,
 } from "../reducers/categories.reducers";
-import { categoryServices } from "../services/categories.services";
 
 export const categoryActions = {
   getAll,
@@ -12,11 +12,8 @@ export const categoryActions = {
 function getAll() {
   return function (dispatch) {
     dispatch(requestGetAll());
-    categoryServices
-      .api_getAll()
+    getAll_categories()
       .then((res) => {
-        console.log("Abdoulaye")
-        console.log(res.data);
         dispatch(successGetAll(res.data));
       })
       .catch((err) => {

@@ -10,7 +10,7 @@ class User
 
     public function getOne($id)
     {
-        $stmt = $this->_cn->prepare("SELECT u.id, u.firstname, u.lastname, u.phone, u.email, u.status, u.profile_id, p.name as profile_name 
+        $stmt = $this->_cn->prepare("SELECT u.id, u.firstname, u.lastname, u.phone, u.email, u.status, u.password, u.profile_id, p.name as profile_name 
                                     FROM users u
                                     INNER JOIN profiles p ON p.id = u.profile_id 
                                     WHERE u.id = :id AND u.is_deleted = 0");

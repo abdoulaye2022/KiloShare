@@ -58,8 +58,8 @@ function AdCard({ ad }) {
             }}
             src={
               photo
-                ? `http://m2acode.com/api/v1/public/uploads/images/${photo}`
-                : "https://images.unsplash.com/photo-1519397652863-aad621636ac7?q=80&w=800&auto=format&fit=crop"
+                ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/uploads/images/${photo}`
+                : `${process.env.NEXT_PUBLIC_BASE_URL}/public/img/valise.png`
             }
           />
           <Badge

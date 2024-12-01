@@ -10,7 +10,16 @@ class Ad
 
     public function getOne($id)
     {
-        $stmt = $this->_cn->prepare("SELECT * FROM ads WHERE id = :id AND is_deleted = 0");
+        $stmt = $this->_cn->prepare("SELECT a.id, a.title, a.description, a.space_available, a.price_kilo, a.departure_country,
+                                    a.arrival_country, a.departure_city, a.arrival_city, a.departure_date, a.arrival_date, a.collection_date,
+                                    a.user_id, CONCAT(u.firstname, ' ', u.lastname) AS author, u.phone, u.email, a.status_id, s.name AS status_name,
+                                    a.category_id, c.name AS category_name, a.photo, a.is_deleted, a.created_by, a.created_at, a.updated_by,
+                                    a.updated_at
+                                    FROM
+                                        ads a
+                                    INNER JOIN users u ON u.id = a.user_id 
+                                    INNER JOIN status s ON s.id = a.status_id
+                                    INNER JOIN categories c ON c.id = a.category_id WHERE a.id = :id AND a.is_deleted = 0");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt;
@@ -18,7 +27,16 @@ class Ad
 
     public function getAll()
     {
-        $stmt = $this->_cn->query("SELECT * FROM ads WHERE is_deleted = 0");
+        $stmt = $this->_cn->query("SELECT a.id, a.title, a.description, a.space_available, a.price_kilo, a.departure_country,
+                                    a.arrival_country, a.departure_city, a.arrival_city, a.departure_date, a.arrival_date, a.collection_date,
+                                    a.user_id, CONCAT(u.firstname, ' ', u.lastname) AS author, u.phone, u.email, a.status_id, s.name AS status_name,
+                                    a.category_id, c.name AS category_name, a.photo, a.is_deleted, a.created_by, a.created_at, a.updated_by,
+                                    a.updated_at
+                                    FROM
+                                        ads a
+                                    INNER JOIN users u ON u.id = a.user_id 
+                                    INNER JOIN status s ON s.id = a.status_id
+                                    INNER JOIN categories c ON c.id = a.category_id WHERE a.is_deleted = 0");
         return $stmt;
     }
 
