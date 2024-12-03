@@ -17,7 +17,7 @@ function PostAd() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(categoryActions.getAll());
+    
   }, []);
 
   return (

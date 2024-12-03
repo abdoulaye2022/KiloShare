@@ -6,6 +6,8 @@ import {
   requestGetAll,
   successAdd,
   successGetAll,
+  filteredAds,
+  resetFilter
 } from "../reducers/ads.reducers";
 import { modalActions } from "./modals.actions";
 import { add_ad } from "@/app/actions/ads/add";
@@ -13,6 +15,8 @@ import { add_ad } from "@/app/actions/ads/add";
 export const adActions = {
   add,
   getAll,
+  filteredAds,
+  resetFilter
 };
 
 function getAll() {

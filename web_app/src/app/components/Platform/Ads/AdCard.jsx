@@ -8,7 +8,7 @@ import {
   Row,
   Badge,
   Space,
-  Divider,
+  Tooltip
 } from "antd";
 import {
   CalendarOutlined,
@@ -38,6 +38,7 @@ function AdCard({ ad }) {
 
   return (
     <Card
+      size="small"
       hoverable
       className="overflow-hidden"
       cover={
@@ -59,22 +60,24 @@ function AdCard({ ad }) {
             src={
               photo
                 ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/uploads/images/${photo}`
-                : `${process.env.NEXT_PUBLIC_BASE_URL}/public/img/valise.png`
+                : `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/img/valise.png`
             }
           />
           <Badge
             count={`${space_available} kg available`}
             style={{
               position: "absolute",
-              right: 8,
-              top: 8,
+              right: 0,
+              top: 70,
+              bottom: 0,
               backgroundColor: "#1890ff",
               color: "#fff",
               fontSize: 18,
               height: 30,
               textAlign: "center",
               display: "flex",
-              alignItems: "center"
+              alignItems: "center",
+              borderRadius: 0,
             }}
           />
         </div>
@@ -92,7 +95,7 @@ function AdCard({ ad }) {
             {title}
           </Title>
           <Badge
-            count={`${price_kilo}€/kg`}
+            count={`$${price_kilo}`}
             style={{
               backgroundColor: "#52c41a",
               fontWeight: "bold",
@@ -101,38 +104,55 @@ function AdCard({ ad }) {
           />
         </div>
 
-        <Text
-          type="secondary"
-          ellipsis={{ rows: 2 }}
-          style={{ marginBottom: 16 }}
-        >
-          {description}
-        </Text>
+        <Tooltip title={description}>
+          <Text
+            type="secondary"
+            ellipsis={{ rows: 2 }}
+            style={{ marginBottom: 16 }}
+          >
+            {description}
+          </Text>
+        </Tooltip>
 
         <Space direction="vertical" size="small" style={{ width: "100%" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-            <Space
-              split={<Divider type="vertical" />}
-              style={{ width: "100%" }}
-            >
-              <div>
-                <EnvironmentOutlined style={{ color: "#1890ff" }} />&nbsp;
-                <Text strong>Departure</Text>
-                <br />
-                <Text type="secondary">
-                  {departure_city}, {departure_country}
-                </Text>
-              </div>
-              <div>
-                <EnvironmentOutlined style={{ color: "#1890ff" }} />&nbsp;
-                <Text strong>Arrival</Text>
-                <br />
-                <Text type="secondary">
-                  {arrival_city}, {arrival_country}
-                </Text>
-              </div>
-            </Space>
-          </div>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Space size="small">
+                <EnvironmentOutlined style={{ color: "#1890ff" }} />
+                <div>
+                  <Text strong>Departure</Text>
+                  <br />
+                  <Tooltip title={`${arrival_city}, ${arrival_country}`}>
+                    <Text
+                      style={{ width: 120 }}
+                      type="secondary"
+                      ellipsis={true}
+                    >
+                      {departure_city}, {departure_country}
+                    </Text>
+                  </Tooltip>
+                </div>
+              </Space>
+            </Col>
+            <Col span={12}>
+              <Space size="small">
+                <EnvironmentOutlined style={{ color: "#1890ff" }} />
+                <div>
+                  <Text strong>Arrival</Text>
+                  <br />
+                  <Tooltip title={`${arrival_city}, ${arrival_country}`}>
+                    <Text
+                      type="secondary"
+                      ellipsis={true}
+                      style={{ width: 120 }}
+                    >
+                      {arrival_city}, {arrival_country}
+                    </Text>
+                  </Tooltip>
+                </div>
+              </Space>
+            </Col>
+          </Row>
 
           <Row gutter={16}>
             <Col span={12}>

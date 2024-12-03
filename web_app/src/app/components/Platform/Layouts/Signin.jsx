@@ -53,6 +53,7 @@ const Signin = () => {
         open={open}
         onCancel={() => {
           dispatch(modalActions.closeSigninForm());
+          dispatch(userActions.resetError());
           form.resetFields();
         }}
         footer={null}
@@ -189,6 +190,8 @@ const Signin = () => {
                     onClick={() => {
                       dispatch(modalActions.closeSigninForm());
                       dispatch(modalActions.openLoginForm());
+                      dispatch(userActions.resetError());
+                      form.resetFields();
                     }}
                   >
                     Log in

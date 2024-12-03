@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] != 'GET') {
   exit;
 }
 
-include("utils/check_token.php");
+// include("utils/check_token.php");
 
 $category = $categoryModel->getAll();
 

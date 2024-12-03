@@ -22,6 +22,7 @@ import {
   requestSuspend,
   requestUnsuspend,
   requestUpdate,
+  resetError,
   successAdd,
   successGetAll,
   successIsValidJwt,
@@ -58,6 +59,7 @@ export const userActions = {
   suspend,
   unsuspend,
   isValidJwt,
+  resetError
 };
 
 function login(email, password) {

@@ -194,6 +194,9 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    resetError(state) {
+      state.error = ""
+    }
   },
 });
 
@@ -230,7 +233,8 @@ export const {
   failureIsValidJwt,
   requestSignin,
   successSignin,
-  failureSignin
+  failureSignin,
+  resetError,
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

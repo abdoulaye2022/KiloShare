@@ -41,7 +41,7 @@ export async function signin_user(firstname, lastname, email, password) {
       switch (error.response.status) {
         case 400:
           throw new Error(
-            "Bad Request: The server could not understand the request."
+            "This email address is already in use. Please use a different email."
           );
         case 401:
           throw new Error(

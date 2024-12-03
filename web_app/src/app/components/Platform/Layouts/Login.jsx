@@ -16,7 +16,7 @@ const Login = () => {
   const router = useRouter();
   const t = useTranslations("LoginPage");
   const [defLanguage, setDefLanguage] = useState("fr");
-  const [form] = Form.useForm();
+  const [form_login] = Form.useForm();
 
   const loading = useAppSelector((state) => state.user.loading);
   const error = useAppSelector((state) => state.user.error);
@@ -42,7 +42,8 @@ const Login = () => {
         open={open}
         onCancel={() => {
           dispatch(modalActions.closeLoginForm());
-          form.resetFields();
+          dispatch(userActions.resetError());
+          form_login.resetFields();
         }}
         footer={null}
         closable={false}
@@ -97,7 +98,7 @@ const Login = () => {
               onFinishFailed={onFinishFailed}
               autoComplete="off"
               layout="vertical"
-              form={form}
+              form={form_login}
             >
               <Form.Item
                 style={{ width: "100%" }}
@@ -150,6 +151,8 @@ const Login = () => {
                     onClick={() => {
                       dispatch(modalActions.closeLoginForm());
                       dispatch(modalActions.openSigninForm());
+                      dispatch(userActions.resetError());
+                      form_login.resetFields();
                     }}
                   >
                     Sign up

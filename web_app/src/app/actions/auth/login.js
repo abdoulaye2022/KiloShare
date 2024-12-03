@@ -39,7 +39,7 @@ export async function login_user(email, password) {
       switch (error.response.status) {
         case 400:
           throw new Error(
-            "Bad Request: The server could not understand the request."
+            "Invalid email or password. Please check your credentials and try again."
           );
         case 401:
           throw new Error(
