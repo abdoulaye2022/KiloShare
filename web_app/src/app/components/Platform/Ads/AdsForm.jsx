@@ -23,12 +23,8 @@ import {
 import { getNames } from "country-list";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import moment from "moment";
-
-import dayjs from "dayjs";
-import utc from "dayjs/plugin/utc";
 import { adActions } from "@/app/lib/redux/actions/ads.actions";
-
-dayjs.extend(utc);
+import { convertToMySQLFormat } from "@/app/utils/utils";
 
 const { Option } = Select;
 const { Text, Title } = Typography;
@@ -55,11 +51,6 @@ function AdsForm() {
       message.error(`${info.file.name} file upload failed.`);
     }
     setFileList(info.fileList);
-  };
-
-  const convertToMySQLFormat = (dateStr) => {
-    const formattedDate = dayjs.utc(dateStr).local().format("YYYY-MM-DD");
-    return formattedDate;
   };
 
   const onFinish = (values) => {
@@ -145,7 +136,7 @@ function AdsForm() {
             <Col xs={24} md={12}>
               <Form.Item
                 name="space_available"
-                label={<Text strong>Space Available (KG)</Text>}
+                label={<Text strong>Space Available</Text>}
                 rules={[
                   {
                     required: true,
@@ -158,6 +149,7 @@ function AdsForm() {
                   min={1}
                   style={{ width: "100%" }}
                   placeholder="Enter available space"
+                  addonBefore="Kg"
                 />
               </Form.Item>
             </Col>
@@ -172,6 +164,7 @@ function AdsForm() {
                   size="large"
                   style={{ width: "100%" }}
                   placeholder="Enter price per kg"
+                  addonBefore="$"
                 />
               </Form.Item>
             </Col>
@@ -323,9 +316,9 @@ function AdsForm() {
                       if (
                         !value ||
                         !departureDate ||
-                        value.isAfter(departureDate) ||
                         !arrivalDate ||
-                        value.isAfter(arrivalDate)
+                        (value.isAfter(departureDate) &&
+                        value.isAfter(arrivalDate))
                       ) {
                         return Promise.resolve();
                       }

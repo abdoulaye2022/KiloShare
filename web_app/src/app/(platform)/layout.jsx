@@ -24,15 +24,15 @@ function PlatformLayout({ children }) {
 
   return (
     <>
-      <Layout>
+      <Layout style={{ minHeight: "calc(100vh - 91px)" }}>
         <Affix offsetTop={0}>
           <Navbar />
         </Affix>
 
-        <Content style={{ marginTop: 15, minHeight: "calc(100vh - 91px)" }}>
+        <Content style={{ marginTop: 15, backgroundColor: "red" }}>
           <Row>
             <Col md={4} style={{ padding: 10 }}></Col>
-            <Col xs={24} sm={24} md={16} style={{ padding: 10 }}>
+            <Col xs={24} sm={24} md={16} style={{ padding: 10 }} >
               {children}
             </Col>
           </Row>

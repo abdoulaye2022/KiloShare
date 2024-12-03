@@ -39,7 +39,7 @@ class Ad
                                     INNER JOIN categories c ON c.id = a.category_id WHERE a.is_deleted = 0");
         return $stmt;
     }
-
+    
     public function create($title, $description, $space_available, $price_kilo, $departure_country, $arrival_country, $departure_city, $arrival_city, 
                     $departure_date, $arrival_date, $collection_date, $user_id, $status_id, $category_id, $photo, $created_by)
     {

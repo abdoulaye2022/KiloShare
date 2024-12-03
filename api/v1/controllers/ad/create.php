@@ -18,7 +18,6 @@ if ($_SERVER['REQUEST_METHOD'] != 'POST') {
 
 include("utils/check_token.php");
 
-
 if(!isset($_POST['title']) || !isset($_POST['description']) || !isset($_POST['space_available']) || !isset($_POST['price_kilo']) || !isset($_POST['departure_city']) ||
     !isset($_POST['departure_country']) || !isset($_POST['arrival_country']) || !isset($_POST['arrival_city']) || !isset($_POST['departure_date']) || !isset($_POST['arrival_date']) 
     || !isset($_POST['collection_date']) || !isset($_POST['user_id']) || !isset($_POST['category_id']) || empty($_POST['title']) ||
@@ -219,9 +218,9 @@ $arrival_city = $helper->validateString($_POST['arrival_city']);
 $departure_date = $helper->validateString($_POST['departure_date']);
 $arrival_date = $helper->validateString($_POST['arrival_date']);
 $collection_date = $helper->validateString($_POST['collection_date']);
-$user_id = $helper->isValidInteger($_POST['user_id']);
+$user_id = $helper->validateInteger($_POST['user_id']);
 $status_id = 1;
-$category_id = $helper->isValidInteger($_POST['category_id']);
+$category_id = $helper->validateInteger($_POST['category_id']);
 
 $ad_id = $adModel->create($title, $description, $space_available, $price_kilo, $departure_country, $arrival_country, $departure_city, $arrival_city, 
                             $departure_date, $arrival_date, $collection_date, $user_id, $status_id, $category_id, $fileName, $auth_id);
