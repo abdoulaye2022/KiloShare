@@ -1,26 +1,20 @@
 "use client";
 
-import Footer from "../components/Platform/Layouts/Footer";
-import Navbar from "../components/Platform/Layouts/Navbar";
-import Login from "../components/Platform/Layouts/Login";
+import Footer from "@/app/components/Platform/Layouts/Footer";
+import Navbar from "@/app/components/Platform/Layouts/Navbar";
+import Login from "@/app/components/Platform/Layouts/Login";
 import React, { useEffect } from "react";
 import { Affix, Col, Layout, Row } from "antd";
-import { useAppDispatch, useAppSelector } from "../lib/redux/hooks";
-import Signin from "../components/Platform/Layouts/Signin";
-import { userActions } from "../lib/redux/actions/users.actions";
 import { useRouter } from "next/navigation";
+import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
+import Signin from "@/app/components/Platform/Layouts/Signin";
 
 const { Content } = Layout;
 
 function PlatformLayout({ children }) {
   const openLogin = useAppSelector((state) => state.modal.isOpenLoginForm);
   const openSignin = useAppSelector((state) => state.modal.isOpenSigninForm);
-  const dispatch = useAppDispatch();
   const router = useRouter();
-
-  useEffect(() => {
-    dispatch(userActions.isValidJwt(() => router.replace("/")));
-  }, []);
 
   return (
     <>

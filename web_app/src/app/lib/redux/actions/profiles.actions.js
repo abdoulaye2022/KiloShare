@@ -21,7 +21,14 @@ function getAll() {
         dispatch(successGetAll(res.data));
       })
       .catch((err) => {
-        dispatch(failureGetAll(err.message));
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureGetAll(parsedError.message));
+          }
+        } catch {
+          dispatch(failureGetAll("An unexpected error occurred."));
+        }
       });
   };
 }
@@ -34,10 +41,21 @@ function add(firstname, lastname, phone, email, profile_id, password) {
     profileServices
       .api_add(firstname, lastname, phone, email, profile_id, password)
       .then((res) => {
-        dispatch(successAdd(res.data));
+        if (res.data) {
+          dispatch(successAdd(res.data));
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
       })
       .catch((err) => {
-        dispatch(failureAdd(err.message));
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureAdd(parsedError.message));
+          }
+        } catch {
+          dispatch(failureAdd("An unexpected error occurred."));
+        }
       });
   };
 }

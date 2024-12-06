@@ -23,7 +23,8 @@ function Home() {
   useEffect(() => {
     dispatch(adActions.getAll());
     dispatch(categoryActions.getAll());
-  }, [dispatch]); // Added dispatch to the dependency array for optimal effect handling
+    console.log("Je suis home monter")
+  }, [dispatch]);
 
   return (
     <Layout style={{ minHeight: "calc(100vh)" }}>

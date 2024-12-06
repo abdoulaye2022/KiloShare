@@ -48,6 +48,9 @@ const Login = () => {
         footer={null}
         closable={false}
         centered={true}
+        afterClose={() => {
+          form_login.resetFields();
+        }}
       >
         <div>
           <div>
