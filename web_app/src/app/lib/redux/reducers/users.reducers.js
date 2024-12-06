@@ -3,6 +3,8 @@ import { createSlice } from "@reduxjs/toolkit";
 const initialState = {
   loading: false,
   authenticated: false,
+  isEmailConfirm: false,
+  isEmailAlreadyConfirm: false,
   user: {},
   item: {},
   items: [],
@@ -182,8 +184,8 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-     // Is valid JWT
-     requestIsValidJwt(state) {
+    // Is valid JWT
+    requestIsValidJwt(state) {
       state.loading = true;
       state.error = "";
     },
@@ -195,7 +197,52 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
     resetError(state) {
-      state.error = ""
+      state.loading = false;
+      state.error = "";
+    },
+    // Confoirm email
+    requestConfirmEmail(state) {
+      state.loading = true;
+      state.error = "";
+    },
+    successConfirmEmail(state, action) {
+      state.loading = false;
+      if(action.payload) {
+        state.isEmailConfirm = true;
+        state.isEmailAlreadyConfirm = false;
+      } else {
+        state.isEmailAlreadyConfirm = true;
+        state.isEmailConfirm = false;
+      }
+    },
+    failureConfirmEmail(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // Update user profil
+    requestUpdateUserProfil: (state) => {
+      state.loading = true;
+    },
+    successUpdateUserProfil: (state, action) => {
+      state.loading = false;
+      state.user = action.payload
+      state.error = "";
+    },
+    failureUpdateUserProfil: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // Update user profil
+    requestChangePassword: (state) => {
+      state.loading = true;
+    },
+    successChangePassword: (state) => {
+      state.loading = false;
+      state.error = "";
+    },
+    failureChangePassword: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     }
   },
 });
@@ -235,6 +282,15 @@ export const {
   successSignin,
   failureSignin,
   resetError,
+  requestConfirmEmail,
+  successConfirmEmail,
+  failureConfirmEmail,
+  requestUpdateUserProfil,
+  successUpdateUserProfil,
+  failureUpdateUserProfil,
+  requestChangePassword,
+  successChangePassword,
+  failureChangePassword
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

@@ -3,20 +3,32 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-const cookieStore = cookies();
-
-const jwtToken = cookieStore.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value;
-
-export async function add_ad(data) {
+export async function changePassword_user(oldPassword, newPassword) {
   try {
-    const response = await axios.post("/api/v1/ads/create", data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${jwtToken}`,
-      },
-    });
+    const cookieStore = cookies();
 
-    return response.data;
+    const jwtToken = cookieStore.get(
+      process.env.NEXT_PUBLIC_COOKIE_NAME
+    )?.value;
+
+    const response = await axios.put(
+      "/api/v1/changePassword",
+      {
+        oldPassword: oldPassword,
+        newPassword: newPassword,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
+
+    if (response) {
+      return response.data;
+    } else {
+      throw new Error("No data received");
+    }
   } catch (error) {
     if (error.response) {
       const status = error.status || error.response.status;

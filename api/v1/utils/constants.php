@@ -39,7 +39,8 @@ $error_message = [
 	'suspended_account' => 'The account is suspended. Please contact support for assistance.',
 	'invalid_category_id' => 'The category ID is invalid.',
 	'failed_file_upload' => 'Error during file upload. Error code',
-	'error_saving_file' => 'Error while saving the file.'
+	'error_saving_file' => 'Error while saving the file.',
+	'invalid_password' => 'The password you entered is incorrect. Please try again.'
 ];
 
 $countries =array(

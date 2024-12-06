@@ -42,4 +42,16 @@ class Auth {
         return $stmt;
     }
 
+    public function changePassword ($id, $newPassword) {
+        $stmt = $this->_cn->prepare("UPDATE users SET password = :password WHERE id = :id ");
+
+        $stmt->bindParam(':password', $newPassword, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
 }

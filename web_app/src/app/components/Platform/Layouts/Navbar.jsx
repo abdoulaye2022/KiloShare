@@ -53,7 +53,7 @@ function Navbar() {
         <>
           <LoginOutlined /> Log In
         </>
-      )
+      ),
     },
     {
       key: "2",
@@ -61,7 +61,7 @@ function Navbar() {
         <>
           <UserAddOutlined /> Sign In
         </>
-      )
+      ),
     },
     {
       type: "divider",
@@ -89,6 +89,14 @@ function Navbar() {
       key: "3",
       label: (
         <>
+          <UserOutlined /> My Profil
+        </>
+      ),
+    },
+    {
+      key: "4",
+      label: (
+        <>
           <UnorderedListOutlined /> My Listings
         </>
       ),
@@ -97,7 +105,7 @@ function Navbar() {
       type: "divider",
     },
     {
-      key: "4",
+      key: "5",
       label: (
         <>
           <InfoCircleOutlined /> About us
@@ -105,7 +113,7 @@ function Navbar() {
       ),
     },
     {
-      key: "5",
+      key: "6",
       label: (
         <>
           <SettingOutlined /> Settings
@@ -113,7 +121,7 @@ function Navbar() {
       ),
     },
     {
-      key: "6",
+      key: "7",
       label: (
         <>
           <LogoutOutlined /> Logout
@@ -130,7 +138,10 @@ function Navbar() {
       case "2":
         dispatch(modalActions.openSigninForm());
         break;
-      case "6":
+      case "3":
+        router.push("/my-profil");
+        break;
+      case "7":
         dispatch(userActions.logout(() => router.replace("/")));
         break;
       default:
@@ -140,16 +151,23 @@ function Navbar() {
 
   return (
     <Header style={{ display: "flex", justifyContent: "space-between" }}>
-      <div className="demo-logo" style={{ width: 100 }}>
-        <h3 style={{ color: "white", fontWeight: "bold" }}>
-          <Image
+      <div className="demo-logo" style={{ minWidth: isMobile ? 100 : 180, cursor: "pointer" }} onClick={() => router.push('/')}>
+        <h3
+          style={{
+            color: "white",
+            fontWeight: "bold",
+            fontSize: isMobile ? 14 : 24,
+          }}
+        >
+          KILO-SHARE
+          {/* <Image
             src={isMobile ? "/logo_mobile.png" : "/logo.png"}
             width={isMobile ? 105 : 200}
             height={isMobile ? 35 : 50}
             alt="Logo"
             style={{ cursor: "pointer" }}
             onClick={() => router.push("/")}
-          />
+          /> */}
         </h3>
       </div>
       <div
@@ -176,22 +194,25 @@ function Navbar() {
               ]}
               style={{ marginRight: 20, width: 100 }}
             />
-
-            <Button
-              size={isMobile ? "middle" : "large"}
-              icon={<PlusCircleOutlined />}
-              type="primary"
-              style={{ marginRight: 20 }}
-              onClick={() => {
-                authenticated
-                  ? router.push("/post-ad")
-                  : dispatch(modalActions.openLoginForm());
-              }}
-            >
-              Create an Ad
-            </Button>
           </>
         ) : null}
+
+        <Button
+          size={isMobile ? "middle" : "large"}
+          icon={<PlusCircleOutlined />}
+          type="primary"
+          style={{ marginRight: 20 }}
+          onClick={() => {
+            if (authenticated) {
+              router.push("/post-ad");
+            } else {
+              dispatch(modalActions.openLoginForm());
+              dispatch(userActions.resetError());
+            }
+          }}
+        >
+          Create an Ad
+        </Button>
 
         <Dropdown
           menu={{

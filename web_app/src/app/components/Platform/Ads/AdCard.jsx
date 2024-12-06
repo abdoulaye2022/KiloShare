@@ -8,7 +8,7 @@ import {
   Row,
   Badge,
   Space,
-  Tooltip
+  Tooltip,
 } from "antd";
 import {
   CalendarOutlined,
@@ -38,6 +38,7 @@ function AdCard({ ad }) {
 
   return (
     <Card
+      style={{ minWidth: 310, minHeight: 485 }}
       size="small"
       hoverable
       className="overflow-hidden"
@@ -91,9 +92,11 @@ function AdCard({ ad }) {
             alignItems: "flex-start",
           }}
         >
-          <Title level={4} style={{ margin: 0, fontSize: 16 }}>
-            {title}
-          </Title>
+          <Tooltip title={`${title}`}>
+            <Title level={4} style={{ margin: 0, fontSize: 16 }}>
+              {title}
+            </Title>
+          </Tooltip>
           <Badge
             count={`$${price_kilo}`}
             style={{

@@ -6,6 +6,8 @@ $routes = [
     '/api/v1/login' => 'controllers/auth/login.php',
     '/api/v1/signin' => 'controllers/auth/signin.php',
     '/api/v1/isValidJwt' => 'controllers/auth/isValidJwt.php',
+    '/api/v1/confirmEmail' => 'controllers/auth/confirmEmail.php',
+    '/api/v1/changePassword' => 'controllers/auth/changePassword.php',
 
     // User
     '/api/v1/users/getAll' => 'controllers/user/getAll.php',
@@ -14,6 +16,7 @@ $routes = [
     '/api/v1/users/delete/{id}' => 'controllers/user/delete.php',
     '/api/v1/users/suspend/{id}' => 'controllers/user/suspend.php',
     '/api/v1/users/unsuspend/{id}' => 'controllers/user/unsuspend.php',
+    '/api/v1/users/updateUserProfil' => 'controllers/user/updateUserProfil.php',
 
     // Ads
     '/api/v1/ads/getAll' => 'controllers/ad/getAll.php',

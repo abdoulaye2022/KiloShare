@@ -14,41 +14,18 @@ const persistConfig = {
   whitelist: ["user", "profile", "modal", "menu", "category"],
 };
 
-const appInitialState = {
-  user: {
-    loading: false,
-    authenticated: false,
-    user: {},
-    item: {},
-    items: [],
-    error: "",
-  },
-  profile: {
-    loading: false,
-    item: {},
-    items: [],
-    error: "",
-  },
-  category: {
-    loading: false,
-    item: {},
-    items: [],
-    error: "",
-  }
-};
-
 const appReducers = combineReducers({
   user: userReducer,
   profile: profileReducer,
   modal: modalReducer,
   menu: menusReducer,
   category: categoryReducer,
-  ad: adReducer
+  ad: adReducer,
 });
 
 const rootReducer = (state, action) => {
   if (action.type === "user/successLogOut") {
-    state = appInitialState;
+    storage.removeItem("persist:root");
   }
   return appReducers(state, action);
 };

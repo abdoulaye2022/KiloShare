@@ -1,22 +1,20 @@
 "use server";
 
 import axios from "../../utils/axiosConfig";
-import { cookies } from "next/headers";
 
-const cookieStore = cookies();
-
-const jwtToken = cookieStore.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value;
-
-export async function add_ad(data) {
+export async function confirmEmail_user(token) {
   try {
-    const response = await axios.post("/api/v1/ads/create", data, {
+    const response = await axios.get("/api/v1/confirmEmail", {
       headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${jwtToken}`,
+        Authorization: `Bearer ${token}`,
       },
     });
 
-    return response.data;
+    if (response) {
+      return response.data;
+    } else {
+      throw new Error("No data received");
+    }
   } catch (error) {
     if (error.response) {
       const status = error.status || error.response.status;

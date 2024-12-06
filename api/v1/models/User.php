@@ -104,4 +104,42 @@ class User
             return false;
         }
     }
+
+    public function confirmEmail ($id) {
+        $stmt = $this->_cn->prepare("UPDATE users SET isVerified = :isVerified WHERE id = :id");
+        $isVerified = 1;
+        $stmt->bindParam(':isVerified', $isVerified, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public function isAlreadyConfirmEmail ($id) {
+        $stmt = $this->_cn->prepare("SELECT * FROM users WHERE isVerified = :isVerified AND id = :id AND is_deleted = 0");
+        $isVerified = 1;
+        $stmt->bindParam(':isVerified', $isVerified, PDO::PARAM_INT);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            return $stmt;
+        }
+    }
+
+    public function updateUserProfil($id, $firstname, $lastname, $phone)
+    {
+        $stmt = $this->_cn->prepare("UPDATE users SET firstname = :firstname, lastname = :lastname, phone = :phone, updated_at = NOW() WHERE id = :id ");
+
+        $stmt->bindParam(':firstname', $firstname, PDO::PARAM_STR);
+        $stmt->bindParam(':lastname', $lastname, PDO::PARAM_STR);
+        $stmt->bindParam(':phone', $phone, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
 }

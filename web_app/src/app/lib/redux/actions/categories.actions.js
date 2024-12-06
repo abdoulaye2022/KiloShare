@@ -14,10 +14,21 @@ function getAll() {
     dispatch(requestGetAll());
     getAll_categories()
       .then((res) => {
-        dispatch(successGetAll(res.data));
+        if (res.data) {
+          dispatch(successGetAll(res.data));
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
       })
       .catch((err) => {
-        dispatch(failureGetAll(err.message));
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureGetAll(parsedError.message));
+          }
+        } catch {
+          dispatch(failureGetAll("An unexpected error occurred."));
+        }
       });
   };
 }
