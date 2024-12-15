@@ -17,8 +17,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 // localhost
 // 10.0.2.2
-$dotenv = Dotenv\Dotenv::createImmutable($_SERVER['HTTP_HOST'] == 'localhost' ? $_SERVER['DOCUMENT_ROOT'] . '/KiloShare/api/v1/' : $_SERVER['DOCUMENT_ROOT'] . "/api/v1/");
+$dotenv = Dotenv\Dotenv::createImmutable($_SERVER['HTTP_HOST'] == 'localhost' ? $_SERVER['DOCUMENT_ROOT'] . '/KiloShare/api/v1/' : $_SERVER['DOCUMENT_ROOT'] . "/../");
 $dotenv->load();
+
+define('BASE_URL', $_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost:3000' : 'https://kilo-share.com');
+
 
 $key = $_ENV['JWT_SECRET'];
 
@@ -36,6 +39,7 @@ require_once "config/DB.php";
 require_once "utils/Helper.php";
 require_once "utils/ErrorHandler.php";
 require_once "utils/constants.php";
+require_once "utils/MailSender.php";
 
 require_once "models/Auth.php";
 require_once "models/User.php";
@@ -62,4 +66,5 @@ $profileModel = new Profile($cn);
 $statusModel = new Status($cn);
 $documentTypeModel = new DocumentType($cn);
 $categoryModel = new Category($cn);
+$mailSender = new MailSender();
 ?>

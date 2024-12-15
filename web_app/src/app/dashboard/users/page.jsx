@@ -20,7 +20,7 @@ import {
   Popconfirm,
 } from "antd";
 import { useEffect, useState } from "react";
-import UserForm from "@/app/components/Dashboard/modals/UserForm";
+import UserForm from "@/app/components/Dashboard/Users/UserForm";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import { userActions } from "@/app/lib/redux/actions/users.actions";
 import { profileActions } from "@/app/lib/redux/actions/profiles.actions";

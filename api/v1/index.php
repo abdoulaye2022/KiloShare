@@ -8,6 +8,8 @@ $routes = [
     '/api/v1/isValidJwt' => 'controllers/auth/isValidJwt.php',
     '/api/v1/confirmEmail' => 'controllers/auth/confirmEmail.php',
     '/api/v1/changePassword' => 'controllers/auth/changePassword.php',
+    '/api/v1/forgotPassword' => 'controllers/auth/forgotPassword.php',
+    '/api/v1/resetPassword' => 'controllers/auth/resetPassword.php',
 
     // User
     '/api/v1/users/getAll' => 'controllers/user/getAll.php',
@@ -23,6 +25,8 @@ $routes = [
     '/api/v1/ads/create' => 'controllers/ad/create.php',
     '/api/v1/ads/update/{id}' => 'controllers/ad/update.php',
     '/api/v1/ads/delete/{id}' => 'controllers/ad/delete.php',
+    '/api/v1/ads/approve/{id}' => 'controllers/ad/approve.php',
+    '/api/v1/ads/reject/{id}' => 'controllers/ad/reject.php',
 
     // Profiles
     '/api/v1/profiles/getAll' => 'controllers/profile/getAll.php',
@@ -42,7 +46,7 @@ $routes = [
     '/api/v1/document_types/update/{id}' => 'controllers/document_type/update.php',
     '/api/v1/document_types/delete/{id}' => 'controllers/document_type/delete.php',
 
-    // Document_types
+    // Category
     '/api/v1/categories/getAll' => 'controllers/category/getAll.php',
 
 ];

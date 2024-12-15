@@ -147,6 +147,18 @@ if($dateArrival > $dateCollections) {
     exit();
 }
 
+if(strlen($_POST['title']) > 60) {
+    $error = [
+        "success" => false,
+        "status" => 400,
+        "message" => $errorHandler::getMessage('title_exceed_maximun')
+    ];
+    http_response_code(400);
+    header('Content-Type: application/json');
+    echo json_encode($error);
+    exit();
+}
+
 $fileName = "";
 if (isset($_FILES['photo'])) {
         
@@ -221,9 +233,10 @@ $collection_date = $helper->validateString($_POST['collection_date']);
 $user_id = $helper->validateInteger($_POST['user_id']);
 $status_id = 1;
 $category_id = $helper->validateInteger($_POST['category_id']);
+$slug = $helper->createSlug($title);
 
 $ad_id = $adModel->create($title, $description, $space_available, $price_kilo, $departure_country, $arrival_country, $departure_city, $arrival_city, 
-                            $departure_date, $arrival_date, $collection_date, $user_id, $status_id, $category_id, $fileName, $auth_id);
+                            $departure_date, $arrival_date, $collection_date, $user_id, $status_id, $category_id, $fileName, $auth_id, $slug);
 if($ad_id == false) {
 	$error = [
         "success" => false,

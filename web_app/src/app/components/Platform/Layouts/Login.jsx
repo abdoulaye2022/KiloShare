@@ -62,7 +62,7 @@ const Login = () => {
                 textAlign: "center",
               }}
             >
-              KiloShare
+              Kilo-Share
             </Title>
             <Divider
               style={{
@@ -150,7 +150,11 @@ const Login = () => {
                 <p>
                   Don't have an account?{" "}
                   <span
-                    style={{ color: "#4096ff", fontWeight: "bold", cursor: 'pointer' }}
+                    style={{
+                      color: "#4096ff",
+                      fontWeight: "bold",
+                      cursor: "pointer",
+                    }}
                     onClick={() => {
                       dispatch(modalActions.closeLoginForm());
                       dispatch(modalActions.openSigninForm());
@@ -159,6 +163,23 @@ const Login = () => {
                     }}
                   >
                     Sign up
+                  </span>
+                  &nbsp;
+                  <span
+                    style={{
+                      color: "#4096ff",
+                      fontWeight: "bold",
+                      cursor: "pointer",
+                      float: "right"
+                    }}
+                    onClick={() => {
+                      dispatch(modalActions.closeLoginForm());
+                      dispatch(modalActions.openRequestResetPassword());
+                      dispatch(userActions.resetError());
+                      form_login.resetFields();
+                    }}
+                  >
+                    Forget my password?
                   </span>
                 </p>
               </Form.Item>

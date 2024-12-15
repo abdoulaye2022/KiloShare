@@ -104,7 +104,8 @@ if (!password_verify($password, $user['password'])) {
 }
 
 $userinfo = array(
-    "id" => $user['id']
+    "id" => $user['id'],
+    "profile_id" => $user['profile_id']
 );
 
 $payload [] = $userinfo;

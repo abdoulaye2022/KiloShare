@@ -16,11 +16,15 @@ import {
   EyeOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
+import { useRouter } from "next/navigation";
+import { adActions } from "@/app/lib/redux/actions/ads.actions";
+import { useAppDispatch } from "@/app/lib/redux/hooks";
 
 const { Text, Title } = Typography;
 
 function AdCard({ ad }) {
   const {
+    id,
     title,
     description,
     space_available,
@@ -32,7 +36,10 @@ function AdCard({ ad }) {
     departure_date,
     arrival_date,
     photo,
+    slug
   } = ad;
+  const router = useRouter();
+  const dispatch = useAppDispatch();
 
   const formatDate = (date) => dayjs(date).format("D MMM YYYY");
 
@@ -93,7 +100,11 @@ function AdCard({ ad }) {
           }}
         >
           <Tooltip title={`${title}`}>
-            <Title level={4} style={{ margin: 0, fontSize: 16 }}>
+            <Title
+              level={4}
+              ellipsis={true}
+              style={{ margin: 0, fontSize: 16 }}
+            >
               {title}
             </Title>
           </Tooltip>
@@ -187,6 +198,10 @@ function AdCard({ ad }) {
           block
           size="large"
           style={{ marginTop: 16 }}
+          onClick={() => {
+            dispatch(adActions.selectedAd(id));
+            router.push(`/ads/${id}/${slug}`);
+          }}
         >
           View details
         </Button>

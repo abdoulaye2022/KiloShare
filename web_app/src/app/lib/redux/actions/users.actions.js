@@ -42,6 +42,15 @@ import {
   requestChangePassword,
   successChangePassword,
   failureChangePassword,
+  requestRequestResetPassword,
+  successRequestResetPassword,
+  failureRequestResetPassword,
+  requestResetPasswordReducer,
+  successResetPassword,
+  failureResetPassword,
+  requestgetToken,
+  successgetToken,
+  failuregetToken,
 } from "../reducers/users.reducers";
 import { modalActions } from "./modals.actions";
 import { add_user } from "@/app/actions/users/add";
@@ -59,6 +68,9 @@ import { categoryActions } from "./categories.actions";
 import { updateUserProfil_user } from "@/app/actions/users/updateUserProfil";
 import { changePassword_user } from "@/app/actions/auth/changePassword";
 import { message } from "antd";
+import { requestResetPassword_user } from "@/app/actions/auth/requestResetPassword";
+import { resetPassword_user } from "@/app/actions/auth/resetPassword";
+import { getJwt_user } from "@/app/actions/auth/getJwt";
 
 export const userActions = {
   login,
@@ -77,6 +89,9 @@ export const userActions = {
   confirmEmail,
   updateUserProfil,
   changePassword,
+  requestResetPassword,
+  resetPassword,
+  getToken,
 };
 
 function login(email, password) {
@@ -130,14 +145,16 @@ function signin(firstname, lastname, email, password) {
   };
 }
 
-function logout(cb) {
+function logout(cb = null) {
   return function (dispatch) {
     dispatch(requestLogOut());
     logout_user()
       .then((res) => {
         if (res) {
-          dispatch(successLogOut());
-          cb();
+          setTimeout(() => {
+            dispatch(successLogOut());
+            if (cb) cb();
+          }, 500);
           dispatch(adActions.getAll());
           dispatch(categoryActions.getAll());
         } else {
@@ -238,6 +255,8 @@ function updateUserProfil(firstname, lastname, phone) {
     dispatch(requestUpdateUserProfil());
     updateUserProfil_user(firstname, lastname, phone)
       .then((res) => {
+        console.log("TTres important");
+        console.log(res);
         if (res.data) {
           dispatch(successUpdateUserProfil(res.data));
           message.success("Profile updated successfully");
@@ -415,6 +434,91 @@ function changePassword(oldPassword, newPassword) {
           }
         } catch {
           dispatch(failureChangePassword("An unexpected error occurred."));
+        }
+      });
+  };
+}
+
+function requestResetPassword(email) {
+  return function (dispatch) {
+    dispatch(requestRequestResetPassword());
+    requestResetPassword_user(email)
+      .then((res) => {
+        if (res.success) {
+          dispatch(successRequestResetPassword(res.data));
+          dispatch(modalActions.closeRequestResetPassword());
+          message.success(
+            "A password reset email has been sent to your inbox. Please check your email and follow the instructions to reset your password."
+          );
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        console.log("merde");
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureRequestResetPassword(parsedError.message));
+            message.error(parsedError.message);
+          }
+        } catch {
+          dispatch(
+            failureRequestResetPassword("An unexpected error occurred.")
+          );
+        }
+      });
+  };
+}
+
+function resetPassword(password, token, cb) {
+  return function (dispatch) {
+    dispatch(requestResetPasswordReducer());
+    resetPassword_user(password, token)
+      .then((res) => {
+        if (res.data) {
+          dispatch(successResetPassword(res.data));
+          dispatch(modalActions.closeResetPassword());
+          message.success("Password updated successfully.");
+          cb();
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureResetPassword(parsedError.message));
+            message.error(parsedError.message);
+          }
+        } catch {
+          dispatch(failureResetPassword("An unexpected error occurred."));
+        }
+      });
+  };
+}
+
+function getToken() {
+  return function (dispatch) {
+    dispatch(requestgetToken());
+    getJwt_user()
+      .then((res) => {
+        if (res === null) {
+          dispatch(logout());
+        } else if (res) {
+          dispatch(userActions.isValidJwt());
+        }
+      })
+      .catch((err) => {
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failuregetToken(parsedError.message));
+            message.error(parsedError.message);
+          }
+        } catch {
+          dispatch(failuregetToken("An unexpected error occurred."));
         }
       });
   };

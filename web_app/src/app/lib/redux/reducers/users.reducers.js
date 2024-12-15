@@ -243,6 +243,41 @@ const userSlice = createSlice({
     failureChangePassword: (state, action) => {
       state.loading = false;
       state.error = action.payload;
+    },
+    // Request reset password
+    requestRequestResetPassword: (state) => {
+      state.loading = true;
+    },
+    successRequestResetPassword: (state) => {
+      state.loading = false;
+      state.error = "";
+    },
+    failureRequestResetPassword: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // Request reset password
+    requestResetPasswordReducer: (state) => {
+      state.loading = true;
+    },
+    successResetPassword: (state) => {
+      state.loading = false;
+      state.error = "";
+    },
+    failureResetPassword: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // Obtenir le jwt
+    requestgetToken: (state) => {
+      state.loading = true;
+    },
+    successgetToken: (state) => {
+      state.loading = false;
+    },
+    failuregetToken: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     }
   },
 });
@@ -290,7 +325,16 @@ export const {
   failureUpdateUserProfil,
   requestChangePassword,
   successChangePassword,
-  failureChangePassword
+  failureChangePassword,
+  requestRequestResetPassword,
+  successRequestResetPassword,
+  failureRequestResetPassword,
+  requestResetPasswordReducer,
+  successResetPassword,
+  failureResetPassword,
+  requestgetToken,
+  successgetToken,
+  failuregetToken
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

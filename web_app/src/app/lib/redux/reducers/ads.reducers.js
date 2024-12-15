@@ -6,6 +6,7 @@ const initialState = {
   items: [],
   isFiltered: false,
   filteredItems: [],
+  lastFetchedAdTime: null,
   error: "",
 };
 
@@ -15,27 +16,28 @@ export const adSlice = createSlice({
   reducers: {
     // ADD
     requestAdd: (state) => {
-      state.loading = true; // Mise à jour de l'état sans réinitialiser
+      state.loading = true;
     },
     successAdd: (state, action) => {
       state.loading = false;
-      state.items.push(action.payload); // Ajout de l'annonce à l'état
+      state.items.push(action.payload);
     },
     failureAdd: (state, action) => {
       state.loading = false;
-      state.error = action.payload; // Enregistrement de l'erreur
+      state.error = action.payload;
     },
     // GETALL
     requestGetAll: (state) => {
-      state.loading = true; // Mise à jour de l'état sans réinitialiser
+      state.loading = true;
     },
     successGetAll: (state, action) => {
       state.loading = false;
-      state.items = action.payload; // Mise à jour de la liste des annonces
+      state.items = action.payload;
+      state.lastFetchedAdTime = Date.now();
     },
     failureGetAll: (state, action) => {
       state.loading = false;
-      state.error = action.payload; // Enregistrement de l'erreur
+      state.error = action.payload;
     },
     // Filtered Ads
     filteredAds: (state, action) => {
@@ -80,7 +82,48 @@ export const adSlice = createSlice({
     resetFilter: (state) => {
       state.isFiltered = false,
       state.filteredItems = []
-    }
+    },
+    selectedAd: (state, action) => {
+      state.item = state.items.find((item) => item.id === action.payload);
+    },
+    // Reject
+    requestReject: (state) => {
+      state.loading = true;
+    },
+    successReject: (state, action) => {
+      state.loading = false;
+      state.items = [
+        ...state.items.map((p) => {
+          if (p.id === action.payload.id) {
+            p = action.payload;
+          }
+          return p;
+        }),
+      ];
+    },
+    failureReject: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // Approve
+    requestApprove: (state) => {
+      state.loading = true;
+    },
+    successApprove: (state, action) => {
+      state.loading = false;
+      state.items = [
+        ...state.items.map((p) => {
+          if (p.id === action.payload.id) {
+            p = action.payload;
+          }
+          return p;
+        }),
+      ];
+    },
+    failureApprove: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -92,7 +135,14 @@ export const {
   successAdd,
   failureAdd,
   filteredAds,
-  resetFilter
+  resetFilter,
+  selectedAd,
+  requestReject,
+  successReject,
+  failureReject,
+  requestApprove,
+  successApprove,
+  failureApprove
 } = adSlice.actions;
 
 export const adReducer = adSlice.reducer;
