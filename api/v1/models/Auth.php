@@ -35,12 +35,18 @@ class Auth {
         return false;
     }
     
-    public function emailExist ($email) {
-        $stmt = $this->_cn->prepare("SELECT * FROM users WHERE email = :email");
-        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
-        $stmt->execute();
-        return $stmt;
-    }
+    public function doesEmailExist($email) {
+        try {
+            $stmt = $this->_cn->prepare("SELECT id, firstname, lastname FROM users WHERE email = :email LIMIT 1");
+            $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+            $stmt->execute();
+    
+            return $stmt;
+        } catch (PDOException $e) {
+            error_log("Database error: " . $e->getMessage());
+            return false;
+        }
+    }    
 
     public function changePassword ($id, $newPassword) {
         $stmt = $this->_cn->prepare("UPDATE users SET password = :password WHERE id = :id ");
@@ -53,5 +59,41 @@ class Auth {
         }
         return false;
     }
+
+    public function changePasswordByEmail ($email, $newPassword) {
+        $hashedPassword = password_hash($newPassword, PASSWORD_DEFAULT);
+
+        $stmt = $this->_cn->prepare("UPDATE users SET password = :password, updated_at = NOW() WHERE email = :email");
+
+        $stmt->bindParam(':password', $hashedPassword, PDO::PARAM_STR);
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
+    public function RequestResetPassword ($email, $token) {
+        $stmt = $this->_cn->prepare("INSERT INTO password_resets (email, token, expiry) VALUES (:email, :token, NOW() + INTERVAL 1 HOUR)");
+        $stmt->bindParam(':email', $email, PDO::PARAM_STR);
+        $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+
+        if ($stmt->execute()) {
+            return true;
+        }
+        return false;
+    }
+
+    public function resetPassword($token) {
+        $stmt = $this->_cn->prepare("SELECT email FROM password_resets WHERE token = :token AND expiry > NOW()");
+        $stmt->bindParam(':token', $token, PDO::PARAM_STR);
+    
+        if ($stmt->execute()) {
+            return $stmt->fetch(PDO::FETCH_ASSOC);
+        }
+        return false;
+    }
+    
 
 }

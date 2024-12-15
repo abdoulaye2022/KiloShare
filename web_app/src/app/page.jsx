@@ -1,30 +1,87 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Navbar from "./components/Platform/Layouts/Navbar";
-import { Affix, Col, Divider, Layout, Row, Skeleton } from "antd";
+import {
+  Affix,
+  Button,
+  Col,
+  Divider,
+  Layout,
+  Row,
+  Skeleton,
+  Tooltip,
+} from "antd";
 import Footer from "./components/Platform/Layouts/Footer";
 import Login from "./components/Platform/Layouts/Login";
 import { useAppDispatch, useAppSelector } from "./lib/redux/hooks";
-import { adActions } from "./lib/redux/actions/ads.actions";
 import AdsList from "./components/Platform/Home/AdsList ";
 import Signin from "./components/Platform/Layouts/Signin";
 import FilterAd from "./components/Platform/Ads/FilterAd";
+import RequestResetPassword from "./components/Platform/Layouts/RequestResetPassword";
+import { userActions } from "./lib/redux/actions/users.actions";
+import { FilterOutlined } from "@ant-design/icons";
+import MobileFilterAds from "./components/Platform/Ads/MobileFilterAds";
+import { modalActions } from "./lib/redux/actions/modals.actions";
+import { adActions } from "./lib/redux/actions/ads.actions";
 import { categoryActions } from "./lib/redux/actions/categories.actions";
 
 const { Content } = Layout;
 
 function Home() {
+  const openLogin = useAppSelector((state) => state.modal.isOpenLoginForm);
+  const openSignin = useAppSelector((state) => state.modal.isOpenSigninForm);
+  const openMobileFilterAds = useAppSelector(
+    (state) => state.modal.isOpenMobileFilterAds
+  );
+  const openRequestResetPassword = useAppSelector(
+    (state) => state.modal.isOpenRequestResetPassword
+  );
   const loading = useAppSelector((state) => state.ad.loading);
   const loadingCategory = useAppSelector((state) => state.category.loading);
+  const isFiltered = useAppSelector((state) => state.ad.isFiltered);
+  const categories = useAppSelector((state) => state.category.items);
+  const ads = useAppSelector((state) => state.ad.items);
+  const lastFetchedAdTime = useAppSelector(
+    (state) => state.ad.lastFetchedAdTime
+  );
+  const lastFetchedCategoryTime = useAppSelector(
+    (state) => state.category.lastFetchedCategoryTime
+  );
   const dispatch = useAppDispatch();
 
-  // Fetching ads when the component mounts
+  const [isMobile, setIsMobile] = useState(false);
+
   useEffect(() => {
-    dispatch(adActions.getAll());
-    dispatch(categoryActions.getAll());
-    console.log("Je suis home monter")
-  }, [dispatch]);
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+
+    const handleMobileChange = (e) => {
+      setIsMobile(e.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleMobileChange);
+
+    handleMobileChange(mediaQuery);
+
+    const currentTime = Date.now();
+    if (
+      ads.length === 0 ||
+      (lastFetchedAdTime && currentTime - lastFetchedAdTime > 5 * 60 * 1000)
+    ) {
+      dispatch(adActions.getAll());
+    }
+    if (
+      categories.length === 0 ||
+      (lastFetchedCategoryTime &&
+        currentTime - lastFetchedCategoryTime > 5 * 60 * 1000)
+    ) {
+      dispatch(categoryActions.getAll());
+    }
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleMobileChange);
+    };
+  }, []);
 
   return (
     <Layout style={{ minHeight: "calc(100vh)" }}>
@@ -40,14 +97,44 @@ function Home() {
             margin: "auto",
           }}
         >
-          <Col offset={2} span={20}>
-            <FilterAd />
+          <Col offset={isMobile ? 0 : 2} span={20}>
+            {isMobile ? (
+              <>
+                <Button
+                  type={isFiltered ? "primary" : "default"}
+                  size="large"
+                  style={{
+                    width: "100%",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    transition: "all 0.3s",
+                  }}
+                  onClick={() => dispatch(modalActions.openMobileFilterAds())}
+                >
+                  <Tooltip
+                    title={isFiltered ? "Filters applied" : "Apply filters"}
+                  >
+                    <FilterOutlined
+                      spin={isFiltered}
+                      style={{
+                        color: isFiltered ? "#1890ff" : "#8c8c8c",
+                      }}
+                    />
+                  </Tooltip>
+                  {isFiltered ? "Filtered" : "Filter"}
+                </Button>
+              </>
+            ) : (
+              <FilterAd />
+            )}
           </Col>
         </Row>
 
         <Row>
           <Col span={24}>
-            <Divider />
+            <Divider style={{ marginTop: isMobile ? 17 : null }} />
           </Col>
         </Row>
 
@@ -76,8 +163,10 @@ function Home() {
         <Footer />
       </Affix>
 
-      <Login />
-      <Signin />
+      {openLogin && <Login />}
+      {openSignin && <Signin />}
+      {openRequestResetPassword && <RequestResetPassword />}
+      {openMobileFilterAds && <MobileFilterAds />}
     </Layout>
   );
 }

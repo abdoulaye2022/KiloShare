@@ -45,13 +45,6 @@ const items = [
   },
 ];
 
-const itemsHeader = [
-  {
-    label: "Test",
-    key: "1",
-  },
-];
-
 function HeaderApp() {
   const router = useRouter();
   const user = useAppSelector((state) => state.user.user);
@@ -68,21 +61,10 @@ function HeaderApp() {
           padding: 0,
           background: "#001529",
           display: "flex",
-          justifyContent: "space-between",
+          justifyContent: "end",
           paddingRight: 20,
         }}
       >
-        <Menu
-          theme="dark"
-          mode="horizontal"
-          defaultSelectedKeys={["1"]}
-          items={itemsHeader}
-          style={{
-            minWidth: 0,
-            flex: 1,
-          }}
-        />
-
         <Dropdown
           menu={{
             items,

@@ -59,7 +59,7 @@ function Navbar() {
       key: "2",
       label: (
         <>
-          <UserAddOutlined /> Sign In
+          <UserAddOutlined /> Sign Up
         </>
       ),
     },

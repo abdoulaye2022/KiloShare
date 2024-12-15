@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   item: {},
   items: [],
+  lastFetchedCategoryTime: null,
   error: null,
 };
 
@@ -18,6 +19,7 @@ export const categorySlice = createSlice({
     successGetAll: (state, action) => {
       state.loading = false;
         state.items = action.payload;
+        state.lastFetchedCategoryTime = Date.now();
     },
     failureGetAll: (state, action) => {
       state.loading = false;

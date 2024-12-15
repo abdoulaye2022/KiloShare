@@ -40,7 +40,11 @@ $error_message = [
 	'invalid_category_id' => 'The category ID is invalid.',
 	'failed_file_upload' => 'Error during file upload. Error code',
 	'error_saving_file' => 'Error while saving the file.',
-	'invalid_password' => 'The password you entered is incorrect. Please try again.'
+	'invalid_password' => 'The password you entered is incorrect. Please try again.',
+	'title_exceed_maximun' => 'Please provide a title that does not exceed the maximum length of 60 characters.',
+	'email_not_found' => 'No account found with this email address.',
+	'token_invalid_or_expired' => 'Reset password failed for token',
+	'email_error' => 'An error occurred while sending the email.'
 ];
 
 $countries =array(

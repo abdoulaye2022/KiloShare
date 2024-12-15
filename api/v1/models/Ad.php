@@ -13,7 +13,7 @@ class Ad
         $stmt = $this->_cn->prepare("SELECT a.id, a.title, a.description, a.space_available, a.price_kilo, a.departure_country,
                                     a.arrival_country, a.departure_city, a.arrival_city, a.departure_date, a.arrival_date, a.collection_date,
                                     a.user_id, CONCAT(u.firstname, ' ', u.lastname) AS author, u.phone, u.email, a.status_id, s.name AS status_name,
-                                    a.category_id, c.name AS category_name, a.photo, a.is_deleted, a.created_by, a.created_at, a.updated_by,
+                                    a.category_id, c.name AS category_name, a.photo, a.slug, a.is_deleted, a.created_by, a.created_at, a.updated_by,
                                     a.updated_at
                                     FROM
                                         ads a
@@ -30,7 +30,7 @@ class Ad
         $stmt = $this->_cn->query("SELECT a.id, a.title, a.description, a.space_available, a.price_kilo, a.departure_country,
                                     a.arrival_country, a.departure_city, a.arrival_city, a.departure_date, a.arrival_date, a.collection_date,
                                     a.user_id, CONCAT(u.firstname, ' ', u.lastname) AS author, u.phone, u.email, a.status_id, s.name AS status_name,
-                                    a.category_id, c.name AS category_name, a.photo, a.is_deleted, a.created_by, a.created_at, a.updated_by,
+                                    a.category_id, c.name AS category_name, a.photo, a.slug, a.is_deleted, a.created_by, a.created_at, a.updated_by,
                                     a.updated_at
                                     FROM
                                         ads a
@@ -41,13 +41,13 @@ class Ad
     }
     
     public function create($title, $description, $space_available, $price_kilo, $departure_country, $arrival_country, $departure_city, $arrival_city, 
-                    $departure_date, $arrival_date, $collection_date, $user_id, $status_id, $category_id, $photo, $created_by)
+                    $departure_date, $arrival_date, $collection_date, $user_id, $status_id, $category_id, $photo, $created_by, $slug)
     {
         $stmt = $this->_cn->prepare("INSERT INTO `ads`(`title`, `description`, `space_available`, `price_kilo`, `departure_country`, `arrival_country`,
                                      `departure_city`, `arrival_city`, `departure_date`, `arrival_date`, `collection_date`, 
-                                     `user_id`, `status_id`, `category_id`, `photo`, `created_by`, `created_at`) 
+                                     `user_id`, `status_id`, `category_id`, `photo`, `slug`, `created_by`, `created_at`) 
                                     VALUES (:title, :description, :space_available, :price_kilo, :departure_country, :arrival_country, :departure_city, :arrival_city, 
-                                    :departure_date, :arrival_date, :collection_date, :user_id, :status_id, :category_id, :photo, :created_by, NOW())");
+                                    :departure_date, :arrival_date, :collection_date, :user_id, :status_id, :category_id, :photo, :slug, :created_by, NOW())");
 
         $stmt->bindParam(':title', $title, PDO::PARAM_STR);
         $stmt->bindParam(':description', $description, PDO::PARAM_STR);
@@ -64,6 +64,7 @@ class Ad
         $stmt->bindParam(':status_id', $status_id, PDO::PARAM_INT);
         $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
         $stmt->bindParam(':photo', $photo, PDO::PARAM_STR);
+        $stmt->bindParam(':slug', $slug, PDO::PARAM_STR);
         $stmt->bindParam(':created_by', $created_by, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
@@ -112,4 +113,26 @@ class Ad
         }
     }
 
+    public function reject($id, $rejection_reason)
+    {
+        $stmt = $this->_cn->prepare("UPDATE ads SET status_id = 3, rejection_date = NOW(), rejection_reason = :rejection_reason WHERE id = :id");
+        $stmt->bindParam(':rejection_reason', $rejection_reason, PDO::PARAM_STR);
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+    
+    public function approve($id)
+    {
+        $stmt = $this->_cn->prepare("UPDATE ads SET status_id = 2, approval_date = NOW() WHERE id = :id");
+        $stmt->bindParam(':id', $id, PDO::PARAM_INT);
+        if ($stmt->execute()) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

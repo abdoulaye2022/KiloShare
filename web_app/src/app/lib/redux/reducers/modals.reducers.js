@@ -5,6 +5,9 @@ const initialState = {
   isOpenLoginForm: false,
   isAdApprovalNotice: false,
   isOpenSigninForm: false,
+  isOpenRequestResetPassword: false,
+  isOpenResetPassword: false,
+  isOpenMobileFilterAds: false,
 };
 
 export const modalSlice = createSlice({
@@ -37,6 +40,24 @@ export const modalSlice = createSlice({
     },
     closeSigninForm: (state) => {
       state.isOpenSigninForm = false;
+    },
+    openRequestResetPassword: (state) => {
+      state.isOpenRequestResetPassword = true;
+    },
+    closeRequestResetPassword: (state) => {
+      state.isOpenRequestResetPassword = false;
+    },
+    openResetPassword: (state) => {
+      state.isOpenResetPassword = true;
+    },
+    closeResetPassword: (state) => {
+      state.isOpenResetPassword = false;
+    },
+    openMobileFilterAds: (state) => {
+      state.isOpenMobileFilterAds = true;
+    },
+    closeMobileFilterAds: (state) => {
+      state.isOpenMobileFilterAds = false;
     }
   },
 });
@@ -50,7 +71,13 @@ export const {
   openAdApprovalNotice,
   closeAdApprovalNotice,
   openSigninForm,
-  closeSigninForm
+  closeSigninForm,
+  openRequestResetPassword,
+  closeRequestResetPassword,
+  openResetPassword,
+  closeResetPassword,
+  openMobileFilterAds,
+  closeMobileFilterAds
 } = modalSlice.actions;
 
 // Export du réducteur

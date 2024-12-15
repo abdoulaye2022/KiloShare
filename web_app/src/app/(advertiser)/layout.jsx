@@ -9,12 +9,16 @@ import { useAppDispatch, useAppSelector } from "../lib/redux/hooks";
 import Signin from "../components/Platform/Layouts/Signin";
 import { userActions } from "../lib/redux/actions/users.actions";
 import { useRouter } from "next/navigation";
+import ResetPassword from "../components/Platform/Layouts/RequestResetPassword";
 
 const { Content } = Layout;
 
 function PlatformLayout({ children }) {
   const openLogin = useAppSelector((state) => state.modal.isOpenLoginForm);
   const openSignin = useAppSelector((state) => state.modal.isOpenSigninForm);
+  const openResetPassword = useAppSelector(
+    (state) => state.modal.isOpenRequestResetPassword
+  );
   const dispatch = useAppDispatch();
   const router = useRouter();
 
@@ -32,7 +36,7 @@ function PlatformLayout({ children }) {
         <Content style={{ marginTop: 15 }}>
           <Row>
             <Col md={4} style={{ padding: 10 }}></Col>
-            <Col xs={24} sm={24} md={16} style={{ padding: 10 }} >
+            <Col xs={24} sm={24} md={16} style={{ padding: 10 }}>
               {children}
             </Col>
           </Row>
@@ -44,6 +48,7 @@ function PlatformLayout({ children }) {
 
         {openLogin && <Login />}
         {openSignin && <Signin />}
+        {openResetPassword && <ResetPassword />}
       </Layout>
     </>
   );

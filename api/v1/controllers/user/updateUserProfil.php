@@ -76,7 +76,6 @@ if($userFetch == false) {
 }
 
 $user = $userFetch->fetch(PDO::FETCH_ASSOC);
-
 $result = array(
     "success" => true,
     "status" => 200,

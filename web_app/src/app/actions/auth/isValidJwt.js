@@ -10,6 +10,7 @@ export async function isValidJwt_user() {
     const jwtToken = cookieStore.get(
       process.env.NEXT_PUBLIC_COOKIE_NAME
     )?.value;
+    
     const response = await axios.get("/api/v1/isValidJwt", {
       headers: {
         Authorization: `Bearer ${jwtToken}`,

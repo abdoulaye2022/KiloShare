@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import { userActions } from "@/app/lib/redux/actions/users.actions";
+import { LockOutlined } from "@ant-design/icons";
 
 const { Title, Paragraph } = Typography;
 
@@ -60,7 +61,7 @@ const Signin = () => {
         closable={false}
         centered={true}
         afterClose={() => {
-          form_login.resetFields();
+          form.resetFields();
         }}
       >
         <div>
@@ -73,7 +74,7 @@ const Signin = () => {
                 textAlign: "center",
               }}
             >
-              KiloShare
+              Kilo-Share
             </Title>
             <Divider
               style={{
@@ -83,7 +84,7 @@ const Signin = () => {
               }}
             >
               <Title level={5} style={{ color: "#4096ff" }}>
-                {t("title")}
+              Sign-In Portal 
               </Title>
             </Divider>
             <div
@@ -168,6 +169,24 @@ const Signin = () => {
                 ]}
               >
                 <Input.Password placeholder="Password" size="large" />
+              </Form.Item>
+
+              <Form.Item
+                name="confirmPassword"
+                dependencies={["newPassword"]}
+                rules={[
+                  { required: true, message: "Please confirm your password!" },
+                  ({ getFieldValue }) => ({
+                    validator(_, value) {
+                      if (!value || getFieldValue("password") === value) {
+                        return Promise.resolve();
+                      }
+                      return Promise.reject("Passwords do not match!");
+                    },
+                  }),
+                ]}
+              >
+                <Input.Password size="large" placeholder="Confirm Password" />
               </Form.Item>
 
               <Form.Item>

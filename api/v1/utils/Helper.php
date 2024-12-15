@@ -15,7 +15,7 @@ class Helper
 		// Convertir les entités HTML en caractères normaux
 		$string = html_entity_decode($string);
 		// Échapper les caractères spéciaux pour une utilisation sécurisée en HTML
-		return htmlspecialchars($string);
+		return $string;
 	}
 
 	public function validateInteger($string) {
@@ -138,6 +138,29 @@ class Helper
 	// 	// Vérifie si le prix est un nombre et a exactement deux décimales
 	// 	return preg_match('/^\d+(\.\d{2}|,\d{2})$/', $price) === 1;
 	// }
+
+	public function createSlug($title) {
+		// Convertir en minuscules
+		$slug = strtolower($title);
+	
+		// Supprimer les accents
+		$slug = iconv('UTF-8', 'ASCII//TRANSLIT', $slug);
+	
+		// Remplacer les caractères spéciaux et espaces par des tirets
+		$slug = preg_replace('/[^a-z0-9\s\-]/', '', $slug);
+		$slug = preg_replace('/\s+/', '-', $slug);
+	
+		// Supprimer les tirets multiples et ceux en début/fin de chaîne
+		$slug = preg_replace('/-+/', '-', $slug);
+		$slug = trim($slug, '-');
+
+		$slug = preg_replace('/\b(pour|mon|de|le|la|et|les|des)\b/', '', $slug);
+		$slug = substr($slug, 0, 60);
+		$slug = str_replace('---', '-', $slug);
+		$slug = str_replace('--', '-', $slug);
+	
+		return $slug;
+	}
 	
 }
 ?>

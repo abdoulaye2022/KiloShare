@@ -7,6 +7,12 @@ import {
   closeAdApprovalNotice,
   openSigninForm,
   closeSigninForm,
+  openRequestResetPassword,
+  closeRequestResetPassword,
+  openResetPassword,
+  closeResetPassword,
+  openMobileFilterAds,
+  closeMobileFilterAds
 } from "../reducers/modals.reducers";
 
 export const modalActions = {
@@ -17,5 +23,11 @@ export const modalActions = {
   openAdApprovalNotice,
   closeAdApprovalNotice,
   openSigninForm,
-  closeSigninForm
+  closeSigninForm,
+  openRequestResetPassword,
+  closeRequestResetPassword,
+  openResetPassword,
+  closeResetPassword,
+  openMobileFilterAds,
+  closeMobileFilterAds
 };

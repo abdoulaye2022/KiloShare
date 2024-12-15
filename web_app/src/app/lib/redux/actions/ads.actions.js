@@ -8,15 +8,29 @@ import {
   successGetAll,
   filteredAds,
   resetFilter,
+  selectedAd,
+  requestReject,
+  successReject,
+  failureReject,
+  requestApprove,
+  successApprove,
+  failureApprove
 } from "../reducers/ads.reducers";
 import { modalActions } from "./modals.actions";
 import { add_ad } from "@/app/actions/ads/add";
+import { reject_ad } from "@/app/actions/ads/reject";
+import { drawerActions } from "./drawers.actions";
+import { message } from "antd";
+import { approve_ad } from "@/app/actions/ads/approve";
 
 export const adActions = {
   add,
   getAll,
   filteredAds,
   resetFilter,
+  selectedAd,
+  reject,
+  approve
 };
 
 function getAll() {
@@ -59,6 +73,60 @@ function add(data) {
           }
         } catch {
           dispatch(failureAdd("An unexpected error occurred."));
+        }
+      });
+  };
+}
+
+function reject(id, reason) {
+  return function (dispatch) {
+    dispatch(requestReject());
+    reject_ad(id, reason)
+      .then((res) => {
+        if (res.data) {
+          dispatch(successReject(res.data));
+          dispatch(drawerActions.closeOpenAdsDrawer());
+          message.success("Ad rejected successfully");
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureReject(parsedError.message));
+            message.error(err.message);
+          }
+        } catch {
+          dispatch(failureReject("An unexpected error occurred."));
+        }
+      });
+  };
+}
+
+function approve(id) {
+  return function (dispatch) {
+    dispatch(requestApprove());
+    approve_ad(id)
+      .then((res) => {
+        if (res.data) {
+          dispatch(successApprove(res.data));
+          dispatch(drawerActions.closeOpenAdsDrawer());
+          message.success("Ad approved successfully");
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureApprove(parsedError.message));
+            message.error(err.message);
+          }
+        } catch {
+          dispatch(failureApprove("An unexpected error occurred."));
         }
       });
   };
