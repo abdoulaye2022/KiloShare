@@ -10,7 +10,8 @@ class User
 
     public function getOne($id)
     {
-        $stmt = $this->_cn->prepare("SELECT u.id, u.firstname, u.lastname, u.phone, u.email, u.status, u.password, u.profile_id, p.name as profile_name 
+        $stmt = $this->_cn->prepare("SELECT u.id, u.firstname, u.lastname, u.phone, u.email, u.status, u.password, u.profile_id, p.name as profile_name,
+                                    u.isVerified 
                                     FROM users u
                                     INNER JOIN profiles p ON p.id = u.profile_id 
                                     WHERE u.id = :id AND u.is_deleted = 0");
@@ -118,7 +119,11 @@ class User
     }
 
     public function isAlreadyConfirmEmail ($id) {
-        $stmt = $this->_cn->prepare("SELECT * FROM users WHERE isVerified = :isVerified AND id = :id AND is_deleted = 0");
+        $stmt = $this->_cn->prepare("SELECT u.id, u.firstname, u.lastname, u.phone, u.email, u.status, u.password, u.profile_id, p.name as profile_name,
+                                    u.isVerified 
+                                    FROM users u
+                                    INNER JOIN profiles p ON p.id = u.profile_id 
+                                    WHERE u.id = :id AND u.is_deleted = 0 AND u.isVerified = :isVerified AND u.id = :id");
         $isVerified = 1;
         $stmt->bindParam(':isVerified', $isVerified, PDO::PARAM_INT);
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);

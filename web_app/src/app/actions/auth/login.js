@@ -26,8 +26,8 @@ export async function login_user(email, password) {
         secure: true,
         sameSite: "Strict",
         path: "/",
-        maxAge: 60 * 60 * 24 * 365,
-        expires: new Date(Date.now() + 60 * 60 * 24 * 365 * 1000),
+        maxAge: 60 * 60,
+        expires: new Date(Date.now() + 60 * 60 * 1000),
       });
 
       cookies().set({
@@ -37,13 +37,15 @@ export async function login_user(email, password) {
         secure: true,
         sameSite: "Strict",
         path: "/",
-        maxAge: 60 * 60 * 24 * 365,
-        expires: new Date(Date.now() + 60 * 60 * 24 * 365 * 1000),
+        maxAge: 60 * 60,
+        expires: new Date(Date.now() + 60 * 60 * 1000),
       });
 
       return response.data;
     } else {
-      throw new Error(JSON.stringify({ status: 400, message: "No data received" }));
+      throw new Error(
+        JSON.stringify({ status: 400, message: "No data received" })
+      );
     }
   } catch (error) {
     if (error.response) {

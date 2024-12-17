@@ -25,6 +25,7 @@ function Navbar() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const authenticated = useAppSelector((state) => state.user.authenticated);
+  const user = useAppSelector((state) => state.user.user);
 
   const [defLanguage, setDefLanguage] = useState("fr");
 
@@ -97,7 +98,7 @@ function Navbar() {
       key: "4",
       label: (
         <>
-          <UnorderedListOutlined /> My Listings
+          <UnorderedListOutlined /> My Ads
         </>
       ),
     },
@@ -139,7 +140,18 @@ function Navbar() {
         dispatch(modalActions.openSigninForm());
         break;
       case "3":
-        router.push("/my-profil");
+        if (authenticated && user && user.isVerified == 1) {
+          router.push("/my-profil");
+        } else {
+          dispatch(modalActions.openVerifiedEmail());
+        }
+        break;
+      case "4":
+        if (authenticated && user && user.isVerified == 1) {
+          router.push("/my-ads");
+        } else {
+          dispatch(modalActions.openVerifiedEmail());
+        }
         break;
       case "7":
         dispatch(userActions.logout(() => router.replace("/")));
@@ -151,7 +163,11 @@ function Navbar() {
 
   return (
     <Header style={{ display: "flex", justifyContent: "space-between" }}>
-      <div className="demo-logo" style={{ minWidth: isMobile ? 100 : 180, cursor: "pointer" }} onClick={() => router.push('/')}>
+      <div
+        className="demo-logo"
+        style={{ minWidth: isMobile ? 100 : 180, cursor: "pointer" }}
+        onClick={() => router.push("/")}
+      >
         <h3
           style={{
             color: "white",
@@ -203,8 +219,10 @@ function Navbar() {
           type="primary"
           style={{ marginRight: 20 }}
           onClick={() => {
-            if (authenticated) {
+            if (authenticated && user && user.isVerified == 1) {
               router.push("/post-ad");
+            } else if (authenticated && user && user.isVerified == 0) {
+              dispatch(modalActions.openVerifiedEmail());
             } else {
               dispatch(modalActions.openLoginForm());
               dispatch(userActions.resetError());
@@ -227,9 +245,13 @@ function Navbar() {
           >
             <Avatar
               size="large"
-              icon={<UserOutlined />}
+              icon={authenticated ? null : <UserOutlined />}
               style={{ color: "black", backgroundColor: "white" }}
-            />
+            >
+              {authenticated
+                ? `${user.firstname[0]}.${user.lastname[0]}`
+                : null}
+            </Avatar>
           </div>
         </Dropdown>
       </div>

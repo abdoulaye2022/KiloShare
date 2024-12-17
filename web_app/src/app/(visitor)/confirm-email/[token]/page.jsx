@@ -3,72 +3,51 @@
 import { userActions } from "@/app/lib/redux/actions/users.actions";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import { Spin, Result } from "antd";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-const ConfirmEmail = ({ params }) => {
+const ConfirmEmailPage = ({ params }) => {
   const { token } = params;
   const dispatch = useAppDispatch();
   const loading = useAppSelector((state) => state.user.loading);
   const error = useAppSelector((state) => state.user.error);
-  const isEmailConfirm = useAppSelector(state => state.user.isEmailConfirm);
-  const isEmailAlreadyConfirm = useAppSelector(state => state.user.isEmailAlreadyConfirm);
-  const [confirmationStatus, setConfirmationStatus] = useState(null);
+  const isEmailConfirm = useAppSelector((state) => state.user.isEmailConfirm);
+  const lastVerifiedEmailTime = useAppSelector(state => state.user.lastVerifiedEmailTime);
 
   useEffect(() => {
-    if (token) {
-      dispatch(userActions.confirmEmail(token))
+    if (token && !isEmailConfirm) {
+      dispatch(userActions.confirmEmail(token));
     }
-  }, [token, dispatch]);
+  }, [token, dispatch, isEmailConfirm]);
 
-  const renderContent = () => {
-    if (loading) {
-      return (
+  return (
+    <div className="confirmation-container">
+      <h1>Email Confirmation</h1>
+      {loading ? (
         <div className="centered-content">
-          <Spin size="large" />
+          <Spin size="large" spinning={loading} />
           <p>Processing your request...</p>
         </div>
-      );
-    }
-
-    if (isEmailConfirm && !error) {
-      return (
+      ) : isEmailConfirm === true ? (
         <Result
           status="success"
           title="Your email address has been successfully confirmed!"
           subTitle="You can now start using your account."
         />
-      );
-    }
-
-    if (isEmailAlreadyConfirm && !error) {
-      return (
+      ) : !isEmailConfirm && error === "" ? (
         <Result
           status="warning"
           title="Your email address has been already confirmed!"
           subTitle="You can now start using your account."
         />
-      );
-    }
-
-    if (confirmationStatus === "error" || error) {
-      return (
+      ) : (
         <Result
           status="error"
           title="Confirmation failed"
           subTitle="Please check the link or try again later."
         />
-      );
-    }
-
-    return null;
-  };
-
-  return (
-    <div className="confirmation-container">
-      <h1>Email Confirmation</h1>
-      {renderContent()}
+      )}
     </div>
   );
 };
 
-export default ConfirmEmail;
+export default ConfirmEmailPage;

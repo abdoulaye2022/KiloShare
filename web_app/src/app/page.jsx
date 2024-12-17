@@ -25,6 +25,7 @@ import MobileFilterAds from "./components/Platform/Ads/MobileFilterAds";
 import { modalActions } from "./lib/redux/actions/modals.actions";
 import { adActions } from "./lib/redux/actions/ads.actions";
 import { categoryActions } from "./lib/redux/actions/categories.actions";
+import VerifiedEmail from "./components/Platform/Layouts/VerifiedEmail";
 
 const { Content } = Layout;
 
@@ -45,6 +46,7 @@ function Home() {
   const lastFetchedAdTime = useAppSelector(
     (state) => state.ad.lastFetchedAdTime
   );
+  const openVerifiedEmail = useAppSelector(state => state.modal.isOpenVerifiedEmail)
   const lastFetchedCategoryTime = useAppSelector(
     (state) => state.category.lastFetchedCategoryTime
   );
@@ -167,6 +169,7 @@ function Home() {
       {openSignin && <Signin />}
       {openRequestResetPassword && <RequestResetPassword />}
       {openMobileFilterAds && <MobileFilterAds />}
+      {openVerifiedEmail && <VerifiedEmail />}
     </Layout>
   );
 }

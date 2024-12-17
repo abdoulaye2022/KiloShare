@@ -12,7 +12,9 @@ import {
   openResetPassword,
   closeResetPassword,
   openMobileFilterAds,
-  closeMobileFilterAds
+  closeMobileFilterAds,
+  openVerifiedEmail,
+  closeVerifiedEmail
 } from "../reducers/modals.reducers";
 
 export const modalActions = {
@@ -29,5 +31,7 @@ export const modalActions = {
   openResetPassword,
   closeResetPassword,
   openMobileFilterAds,
-  closeMobileFilterAds
+  closeMobileFilterAds,
+  openVerifiedEmail,
+  closeVerifiedEmail
 };

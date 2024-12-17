@@ -3,46 +3,28 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-export async function signin_user(firstname, lastname, email, password) {
+export async function verifiedEmail_user(email) {
   try {
+    const cookieStore = cookies();
+
+    const jwtToken = cookieStore.get(
+      process.env.NEXT_PUBLIC_COOKIE_NAME
+    )?.value;
+
     const response = await axios.post(
-      "/api/v1/signin",
+      "/api/v1/verifiedEmail",
       {
-        firstname: firstname,
-        lastname: lastname,
         email: email,
-        password: password,
       },
       {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
         },
       }
     );
 
     if (response) {
-      cookies().set({
-        name: process.env.NEXT_PUBLIC_COOKIE_NAME,
-        value: response.data.access_token,
-        httpOnly: true,
-        secure: true,
-        sameSite: "Strict",
-        path: "/",
-        maxAge: 60 * 60,
-        expires: new Date(Date.now() + 60 * 60 * 1000),
-      });
-
-      cookies().set({
-        name: process.env.NEXT_PUBLIC_ROLE,
-        value: response.data.data.profile_id,
-        httpOnly: true,
-        secure: true,
-        sameSite: "Strict",
-        path: "/",
-        maxAge: 60 * 60,
-        expires: new Date(Date.now() + 60 * 60 * 1000),
-      });
-
       return response.data;
     } else {
       throw new Error("No data received");
@@ -53,7 +35,7 @@ export async function signin_user(firstname, lastname, email, password) {
       const message =
         error.response.data.message ||
         {
-          400: "This email address is already in use. Please use a different email.",
+          400: "Bad Request: The server could not understand the request.",
           401: "Unauthorized: Authentication is required or has failed.",
           403: "Forbidden: You do not have permission to access this resource.",
           404: "Not Found: The requested resource could not be found.",

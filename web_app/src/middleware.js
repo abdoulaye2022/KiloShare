@@ -7,7 +7,7 @@ export function middleware(request) {
   const { pathname } = request.nextUrl;
 
   // Pages nécessitant une authentification
-  const protectedPaths = ["/post-ad", "/dashboard", "/my-profil"];
+  const protectedPaths = ["/post-ad", "/dashboard", "/my-profil", "/my-ads"];
   const isProtectedPath = protectedPaths.some((path) => pathname.startsWith(path));
 
   if (isProtectedPath) {
@@ -38,6 +38,7 @@ export const config = {
   matcher: [
     "/post-ad",
     "/dashboard/:path*",
-    "/my-profil"
+    "/my-profil",
+    "/my-ads"
   ],
 };

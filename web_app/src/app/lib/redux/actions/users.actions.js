@@ -48,9 +48,9 @@ import {
   requestResetPasswordReducer,
   successResetPassword,
   failureResetPassword,
-  requestgetToken,
-  successgetToken,
-  failuregetToken,
+  requestVerifiedEmail,
+  successVerifiedEmail,
+  failureVerifiedEmail,
 } from "../reducers/users.reducers";
 import { modalActions } from "./modals.actions";
 import { add_user } from "@/app/actions/users/add";
@@ -71,6 +71,7 @@ import { message } from "antd";
 import { requestResetPassword_user } from "@/app/actions/auth/requestResetPassword";
 import { resetPassword_user } from "@/app/actions/auth/resetPassword";
 import { getJwt_user } from "@/app/actions/auth/getJwt";
+import { verifiedEmail_user } from "@/app/actions/auth/verifiedEmail";
 
 export const userActions = {
   login,
@@ -91,7 +92,7 @@ export const userActions = {
   changePassword,
   requestResetPassword,
   resetPassword,
-  getToken,
+  verifiedEmail
 };
 
 function login(email, password) {
@@ -499,26 +500,28 @@ function resetPassword(password, token, cb) {
   };
 }
 
-function getToken() {
+function verifiedEmail(email) {
   return function (dispatch) {
-    dispatch(requestgetToken());
-    getJwt_user()
+    dispatch(requestVerifiedEmail());
+    verifiedEmail_user(email)
       .then((res) => {
-        if (res === null) {
-          dispatch(logout());
-        } else if (res) {
-          dispatch(userActions.isValidJwt());
+        if (res.data) {
+          dispatch(successVerifiedEmail(res.data));
+          dispatch(modalActions.closeVerifiedEmail());
+          message.success("Link sent successfully.");
+        } else {
+          throw new Error(JSON.stringify(res));
         }
       })
       .catch((err) => {
         try {
           if (err) {
             const parsedError = JSON.parse(err.message);
-            dispatch(failuregetToken(parsedError.message));
+            dispatch(failureVerifiedEmail(parsedError.message));
             message.error(parsedError.message);
           }
         } catch {
-          dispatch(failuregetToken("An unexpected error occurred."));
+          dispatch(failureVerifiedEmail("An unexpected error occurred."));
         }
       });
   };
