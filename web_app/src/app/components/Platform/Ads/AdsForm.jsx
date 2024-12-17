@@ -25,6 +25,7 @@ import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import moment from "moment";
 import { adActions } from "@/app/lib/redux/actions/ads.actions";
 import { convertToMySQLFormat } from "@/app/utils/utils";
+import { categoryActions } from "@/app/lib/redux/actions/categories.actions";
 
 const { Option } = Select;
 const { Text, Title } = Typography;
@@ -42,6 +43,8 @@ function AdsForm() {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
+    const currentTime = Date.now();
+
     if (
       categories.length === 0 ||
       (lastFetchedCategoryTime &&

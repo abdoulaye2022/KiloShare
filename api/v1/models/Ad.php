@@ -19,7 +19,7 @@ class Ad
                                         ads a
                                     INNER JOIN users u ON u.id = a.user_id 
                                     INNER JOIN status s ON s.id = a.status_id
-                                    INNER JOIN categories c ON c.id = a.category_id WHERE a.id = :id AND a.is_deleted = 0");
+                                    INNER JOIN categories c ON c.id = a.category_id WHERE a.id = :id AND a.is_deleted = 0 AND status_id = 2");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt;
@@ -36,7 +36,7 @@ class Ad
                                         ads a
                                     INNER JOIN users u ON u.id = a.user_id 
                                     INNER JOIN status s ON s.id = a.status_id
-                                    INNER JOIN categories c ON c.id = a.category_id WHERE a.is_deleted = 0");
+                                    INNER JOIN categories c ON c.id = a.category_id WHERE a.is_deleted = 0 AND status_id = 2");
         return $stmt;
     }
     

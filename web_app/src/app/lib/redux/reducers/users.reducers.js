@@ -4,10 +4,10 @@ const initialState = {
   loading: false,
   authenticated: false,
   isEmailConfirm: false,
-  isEmailAlreadyConfirm: false,
   user: {},
   item: {},
   items: [],
+  lastVerifiedEmailTime: null,
   error: "",
 };
 
@@ -206,13 +206,21 @@ const userSlice = createSlice({
       state.error = "";
     },
     successConfirmEmail(state, action) {
+      const currentTime = Date.now();
       state.loading = false;
-      if(action.payload) {
-        state.isEmailConfirm = true;
-        state.isEmailAlreadyConfirm = false;
+      if (action.payload == false) {
+        if (state.error == "" && state.lastVerifiedEmailTime && currentTime - state.lastVerifiedEmailTime < 5 * 60 * 1000) {
+          state.isEmailConfirm = true;
+        } else {
+          state.isEmailConfirm = false;
+        }
       } else {
-        state.isEmailAlreadyConfirm = true;
-        state.isEmailConfirm = false;
+        state.isEmailConfirm = true;
+        state.loading = false;
+        state.authenticated = true;
+        state.user = action.payload;
+        state.error = "";
+        state.lastVerifiedEmailTime = Date.now();
       }
     },
     failureConfirmEmail(state, action) {
@@ -225,7 +233,7 @@ const userSlice = createSlice({
     },
     successUpdateUserProfil: (state, action) => {
       state.loading = false;
-      state.user = action.payload
+      state.user = action.payload;
       state.error = "";
     },
     failureUpdateUserProfil: (state, action) => {
@@ -268,17 +276,17 @@ const userSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-    // Obtenir le jwt
-    requestgetToken: (state) => {
+    // Verified email
+    requestVerifiedEmail: (state) => {
       state.loading = true;
     },
-    successgetToken: (state) => {
+    successVerifiedEmail: (state) => {
       state.loading = false;
     },
-    failuregetToken: (state, action) => {
+    failureVerifiedEmail: (state, action) => {
       state.loading = false;
       state.error = action.payload;
-    }
+    },
   },
 });
 
@@ -332,9 +340,9 @@ export const {
   requestResetPasswordReducer,
   successResetPassword,
   failureResetPassword,
-  requestgetToken,
-  successgetToken,
-  failuregetToken
+  requestVerifiedEmail,
+  successVerifiedEmail,
+  failureVerifiedEmail,
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

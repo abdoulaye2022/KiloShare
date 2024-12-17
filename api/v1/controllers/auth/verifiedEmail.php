@@ -5,37 +5,27 @@ use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
 
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
-    header('HTTP/1.1 405 Method Not Allowed');
-    header('Allow: POST');
-    
-    $error = [
-        "success" => false,
-        "status" => 405,
-        "message" => "405 Method Not Allowed"
-    ];
-    http_response_code(405);
-    header('Content-Type: application/json');
-    echo json_encode($error);
-    exit;
+  header('HTTP/1.1 405 Method Not Allowed');
+  header('Allow: POST');
+  
+  $error = [
+      "success" => false,
+      "status" => 405,
+      "message" => "405 Method Not Allowed"
+  ];
+  http_response_code(405);
+  header('Content-Type: application/json');
+  echo json_encode($error);
+  exit;
 }
+
+include("utils/check_token.php");
 
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
-if(!isset($data['firstname']) || !isset($data['lastname']) || !isset($data['email']) || !isset($data['password'])) {
-	$error = [
-        "success" => false,
-        "status" => 400,
-        "message" => $errorHandler::getMessage('required_fields')
-    ];
-    http_response_code(400);
-    header('Content-Type: application/json');
-    echo json_encode($error);
-    exit();
-}
-
-if(empty($data['firstname']) || empty($data['lastname']) || empty($data['email']) || empty($data['password'])) {
-	$error = [
+if (!isset($data['email']) || empty($data['email'])) {
+    $error = [
         "success" => false,
         "status" => 400,
         "message" => $errorHandler::getMessage('required_fields')
@@ -58,33 +48,14 @@ if(!$helper->isValidEmail($data['email'])) {
     exit();
 }
 
-$emailCheck = $authModel->doesEmailExist($data['email']);
-if($emailCheck->rowCount() > 0) {
-	$error = [
-        "success" => false,
-        "status" => 400,
-        "message" => $errorHandler::getMessage('email_exist')
-    ];
-    http_response_code(400);
-    header('Content-Type: application/json');
-    echo json_encode($error);
-    exit();
-}
-
-$firstname = $helper->validateString($data['firstname']);
-$lastname = $helper->validateString($data['lastname']);
 $email = $helper->validateString($data['email']);
-$password = password_hash($helper->validateString($data['password']), PASSWORD_DEFAULT);
 
-$payload_email = $payload;
-$payload_email['exp'] = time() + (60 * 60 * 24);
-
-$user_id = $authModel->signin($firstname, $lastname, $email, $password);
-if($user_id == false) {
-	$error = [
+$users = $authModel->login($email);
+if ($users && $users->rowCount() == 0) {
+    $error = [
         "success" => false,
         "status" => 400,
-        "message" => $errorHandler::getMessage('server_internal_error')
+        "message" => $errorHandler::getMessage('invalid_credentials') 
     ];
     http_response_code(400);
     header('Content-Type: application/json');
@@ -92,39 +63,32 @@ if($user_id == false) {
     exit();
 }
 
-$userFetch = $userModel->getOne($user_id);
-if($userFetch == false) {
-	$error = [
+$user = $users->fetch(PDO::FETCH_ASSOC);
+
+if($user['status'] == 0) {
+    $error = [
         "success" => false,
         "status" => 400,
-        "message" => $errorHandler::getMessage('server_internal_error')
+        "message" => $errorHandler::getMessage('suspended_account')
     ];
     http_response_code(400);
     header('Content-Type: application/json');
     echo json_encode($error);
     exit();
 }
-
-$user = $userFetch->fetch(PDO::FETCH_ASSOC);
 
 $userinfo = array(
-	"id" => $user['id']
+    "id" => $user['id'],
+    "profile_id" => $user['profile_id']
 );
 
 $payload [] = $userinfo;
-$payload_email [] = [
-    "action" => "email_confirmation"
-];
-$payload_email [] = $userinfo;
 
-$jwt = JWT::encode($payload, $key, 'HS256');
 $jwt_email = JWT::encode($payload, $key, 'HS256');
-
-unset($user['password']);
 
 $subject = "Welcome to Kiloshare! Confirm your email to get started";
 $to = [
-    ['email' => $email, 'name' => $firstname . " " . $lastname]
+    ['email' => $user['email'], 'name' => $user['firstname'] . " " . $user['lastname']]
 ];
 $body = '<!DOCTYPE html>
         <html>
@@ -220,8 +184,7 @@ if ($mailSender->send_mail($subject, $to, $body)) {
         "success" => true,
         "status" => 200,
         "message" => "Request successful.",
-        "data" => $user,
-        "access_token" => $jwt
+        "data" => true,
     );
     
     http_response_code(200);

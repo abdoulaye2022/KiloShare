@@ -180,7 +180,10 @@ function FilterAd() {
                 size="large"
                 shape="circle"
                 htmlType="submit"
-                onClick={() => dispatch(adActions.resetFilter())}
+                onClick={() => { 
+                  dispatch(adActions.resetFilter());
+                  form.resetFields();
+                }}
                 style={{ marginLeft: 10 }}
                 icon={<RedoOutlined />}
               />

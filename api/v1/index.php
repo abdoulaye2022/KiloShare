@@ -10,6 +10,7 @@ $routes = [
     '/api/v1/changePassword' => 'controllers/auth/changePassword.php',
     '/api/v1/forgotPassword' => 'controllers/auth/forgotPassword.php',
     '/api/v1/resetPassword' => 'controllers/auth/resetPassword.php',
+    '/api/v1/verifiedEmail' => 'controllers/auth/verifiedEmail.php',
 
     // User
     '/api/v1/users/getAll' => 'controllers/user/getAll.php',

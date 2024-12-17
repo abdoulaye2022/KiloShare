@@ -179,7 +179,7 @@ const Login = () => {
                       form_login.resetFields();
                     }}
                   >
-                    Forget my password?
+                    Forgot my password?
                   </span>
                 </p>
               </Form.Item>

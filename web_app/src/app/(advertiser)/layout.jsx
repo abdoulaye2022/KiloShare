@@ -33,14 +33,7 @@ function PlatformLayout({ children }) {
           <Navbar />
         </Affix>
 
-        <Content style={{ marginTop: 15 }}>
-          <Row>
-            <Col md={4} style={{ padding: 10 }}></Col>
-            <Col xs={24} sm={24} md={16} style={{ padding: 10 }}>
-              {children}
-            </Col>
-          </Row>
-        </Content>
+        <Content style={{ marginTop: 15 }}>{children}</Content>
 
         <Affix offsetBottom={0}>
           <Footer />
