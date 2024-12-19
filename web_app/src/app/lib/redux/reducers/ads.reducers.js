@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   item: {},
   items: [],
+  userAds: [],
   isFiltered: false,
   filteredItems: [],
   lastFetchedAdTime: null,
@@ -41,50 +42,69 @@ export const adSlice = createSlice({
     },
     // Filtered Ads
     filteredAds: (state, action) => {
-      state.isFiltered = true,
-      state.filteredItems = [
-        ...state.items.filter((p) => {
-          if (action.payload.departure_date != "" && action.payload.departure_date != undefined) {
-            return p.departure_date === action.payload.departure_date;
-          } else {
-            return p;
-          }
-        })
-        .filter((p) => {
-          if (action.payload.arrival_date != "" && action.payload.arrival_date != undefined) {
-            return p.arrival_date === action.payload.arrival_date;
-          } else {
-            return p;
-          }
-        })
-        .filter((p) => {
-          if (action.payload.departure_country != "" && action.payload.departure_country != undefined) {
-            return p.departure_country === action.payload.departure_country;
-          } else {
-            return p;
-          }
-        })
-        .filter((p) => {
-          if (action.payload.arrival_country != "" && action.payload.arrival_country != undefined) {
-            return p.arrival_country === action.payload.arrival_country;
-          } else {
-            return p;
-          }
-        }).filter((p) => {
-          if (action.payload.category_id != "" && action.payload.category_id != undefined) {
-            return p.category_id === action.payload.category_id;
-          } else {
-            return p;
-          }
-        })
-      ];
+      (state.isFiltered = true),
+        (state.filteredItems = [
+          ...state.items
+            .filter((p) => {
+              if (
+                action.payload.departure_date != "" &&
+                action.payload.departure_date != undefined
+              ) {
+                return p.departure_date === action.payload.departure_date;
+              } else {
+                return p;
+              }
+            })
+            .filter((p) => {
+              if (
+                action.payload.arrival_date != "" &&
+                action.payload.arrival_date != undefined
+              ) {
+                return p.arrival_date === action.payload.arrival_date;
+              } else {
+                return p;
+              }
+            })
+            .filter((p) => {
+              if (
+                action.payload.departure_country != "" &&
+                action.payload.departure_country != undefined
+              ) {
+                return p.departure_country === action.payload.departure_country;
+              } else {
+                return p;
+              }
+            })
+            .filter((p) => {
+              if (
+                action.payload.arrival_country != "" &&
+                action.payload.arrival_country != undefined
+              ) {
+                return p.arrival_country === action.payload.arrival_country;
+              } else {
+                return p;
+              }
+            })
+            .filter((p) => {
+              if (
+                action.payload.category_id != "" &&
+                action.payload.category_id != undefined
+              ) {
+                return p.category_id === action.payload.category_id;
+              } else {
+                return p;
+              }
+            }),
+        ]);
     },
     resetFilter: (state) => {
-      state.isFiltered = false,
-      state.filteredItems = []
+      (state.isFiltered = false), (state.filteredItems = []);
     },
     selectedAd: (state, action) => {
       state.item = state.items.find((item) => item.id === action.payload);
+    },
+    selectedMyAd: (state, action) => {
+      state.item = state.userAds.find((item) => item.id === action.payload);
     },
     // Reject
     requestReject: (state) => {
@@ -124,6 +144,45 @@ export const adSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    // User ads
+    requestUserAds: (state) => {
+      state.loading = true;
+    },
+    successUserAds: (state, action) => {
+      state.loading = false;
+      state.userAds = action.payload;
+    },
+    failureUserAds: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // Update ads
+    requestUpdate: (state) => {
+      state.loading = true;
+    },
+    successUpdate: (state, action) => {
+      state.loading = false;
+      state.items = [
+        ...state.items.map((p) => {
+          if (p.id === action.payload.id) {
+            p = action.payload;
+          }
+          return p;
+        }),
+      ];
+      state.userAds = [
+        ...state.userAds.map((p) => {
+          if (p.id === action.payload.id) {
+            p = action.payload;
+          }
+          return p;
+        }),
+      ];
+    },
+    failureUpdate: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -137,12 +196,19 @@ export const {
   filteredAds,
   resetFilter,
   selectedAd,
+  selectedMyAd,
   requestReject,
   successReject,
   failureReject,
   requestApprove,
   successApprove,
-  failureApprove
+  failureApprove,
+  requestUserAds,
+  successUserAds,
+  failureUserAds,
+  requestUpdate,
+  successUpdate,
+  failureUpdate
 } = adSlice.actions;
 
 export const adReducer = adSlice.reducer;

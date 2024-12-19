@@ -19,8 +19,28 @@ const geistMono = localFont({
 });
 
 export const metadata = {
-  title: "Kilo-Share",
-  description: "Partage de kilo devient plus simple",
+  title: "Kilo-share - Simplifiez le partage de colis et bagages entre voyageurs",
+  description: "Service collaboratif pour envoyer ou transporter des colis à moindre coût. Trouvez des annonces ou proposez votre espace inutilisé pour économiser et voyager malin.",
+  keywords: "partage de colis, transport collaboratif, envoi économique, bagages voyageurs, expédition sécurisée, transport colis pas cher",
+  openGraph: {
+    title: "Kilo-share - Partage de colis et bagages",
+    description: "Service collaboratif pour l'envoi de colis et bagages à moindre coût.",
+    url: "https://www.kilo-share.com",
+    images: [
+      {
+        url: "/logo.png",
+        width: 800,
+        height: 600,
+        alt: "Kilo-share Preview",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Kilo-share - Partage de colis et bagages",
+    description: "Facilitez vos envois avec un service sécurisé et économique.",
+    image: "/logo.png",
+  },
 };
 
 export default async function RootLayout({ children }) {

@@ -24,8 +24,13 @@ import { getNames } from "country-list";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import moment from "moment";
 import { adActions } from "@/app/lib/redux/actions/ads.actions";
-import { convertToMySQLFormat } from "@/app/utils/utils";
+import {
+  convertFromMySQLFormat,
+  convertToMySQLFormat,
+} from "@/app/utils/utils";
 import { categoryActions } from "@/app/lib/redux/actions/categories.actions";
+import { usePathname } from "next/navigation";
+import Image from "next/image";
 
 const { Option } = Select;
 const { Text, Title } = Typography;
@@ -42,7 +47,34 @@ function AdsForm() {
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
 
+  const pathname = usePathname();
+  const isEditPage = pathname.includes("/edit");
+  const selectedAd = useAppSelector((state) => state.ad.item);
+
   useEffect(() => {
+    if (
+      isEditPage &&
+      selectedAd.user_id === user.id &&
+      selectedAd.status_id !== 5 &&
+      selectedAd.status_id !== 4
+    ) {
+      form.setFieldsValue({
+        title: selectedAd.title,
+        description: selectedAd.description,
+        space_available: selectedAd.space_available,
+        price: selectedAd.price_kilo,
+        departure_country: selectedAd.departure_country,
+        arrival_country: selectedAd.arrival_country,
+        departure_city: selectedAd.departure_city,
+        arrival_city: selectedAd.arrival_city,
+        departure_date: convertFromMySQLFormat(selectedAd.departure_date),
+        arrival_date: convertFromMySQLFormat(selectedAd.arrival_date),
+        user_id: selectedAd.user_id,
+        category_id: selectedAd.category_id,
+        collection_date: convertFromMySQLFormat(selectedAd.collection_date),
+      });
+    }
+
     const currentTime = Date.now();
 
     if (
@@ -67,26 +99,60 @@ function AdsForm() {
   };
 
   const onFinish = (values) => {
-    const form = new FormData();
-    form.append("title", values.title);
-    form.append("description", values.description);
-    form.append("space_available", values.space_available);
-    form.append("price_kilo", values.price);
-    form.append("departure_country", values.departure_country);
-    form.append("arrival_country", values.arrival_country);
-    form.append("departure_city", values.departure_city);
-    form.append("arrival_city", values.arrival_city);
-    form.append("departure_date", convertToMySQLFormat(values.departure_date));
-    form.append("arrival_date", convertToMySQLFormat(values.arrival_date));
-    form.append(
-      "collection_date",
-      convertToMySQLFormat(values.collection_date)
-    );
-    form.append("user_id", user.id);
-    form.append("category_id", values.category_id);
-    form.append("photo", fileList.length ? fileList[0].originFileObj : null);
+    if (
+      isEditPage &&
+      selectedAd.user_id === user.id &&
+      selectedAd.status_id !== 5 &&
+      selectedAd.status_id !== 4
+    ) {
+      const form = new FormData();
+      form.append("title", values.title);
+      form.append("description", values.description);
+      form.append("space_available", values.space_available);
+      form.append("price_kilo", values.price);
+      form.append("departure_country", values.departure_country);
+      form.append("arrival_country", values.arrival_country);
+      form.append("departure_city", values.departure_city);
+      form.append("arrival_city", values.arrival_city);
+      form.append(
+        "departure_date",
+        convertToMySQLFormat(values.departure_date)
+      );
+      form.append("arrival_date", convertToMySQLFormat(values.arrival_date));
+      form.append(
+        "collection_date",
+        convertToMySQLFormat(values.collection_date)
+      );
+      form.append("user_id", user.id);
+      form.append("category_id", values.category_id);
+      form.append("photo", fileList.length ? fileList[0].originFileObj : null);
 
-    dispatch(adActions.add(form));
+      dispatch(adActions.update(selectedAd.id, form));
+    } else {
+      const form = new FormData();
+      form.append("title", values.title);
+      form.append("description", values.description);
+      form.append("space_available", values.space_available);
+      form.append("price_kilo", values.price);
+      form.append("departure_country", values.departure_country);
+      form.append("arrival_country", values.arrival_country);
+      form.append("departure_city", values.departure_city);
+      form.append("arrival_city", values.arrival_city);
+      form.append(
+        "departure_date",
+        convertToMySQLFormat(values.departure_date)
+      );
+      form.append("arrival_date", convertToMySQLFormat(values.arrival_date));
+      form.append(
+        "collection_date",
+        convertToMySQLFormat(values.collection_date)
+      );
+      form.append("user_id", user.id);
+      form.append("category_id", values.category_id);
+      form.append("photo", fileList.length ? fileList[0].originFileObj : null);
+
+      dispatch(adActions.add(form));
+    }
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -406,22 +472,44 @@ function AdsForm() {
                   label={<Text strong>Photo</Text>}
                   tooltip="Upload a photo of your item"
                 >
-                  <Upload
-                    name="file"
-                    listType="picture-card"
-                    fileList={fileList}
-                    onChange={handleFileChange}
-                    beforeUpload={() => false}
-                    maxCount={1}
-                    accept="image/*"
-                  >
-                    {fileList.length < 1 && (
-                      <div>
-                        <UploadOutlined />
-                        <div style={{ marginTop: 8 }}>Upload</div>
+                  <div style={{ display: "flex" }}>
+                    {isEditPage &&
+                    selectedAd.user_id === user.id &&
+                    selectedAd.photo &&
+                    selectedAd.status_id !== 5 &&
+                    selectedAd.status_id !== 4 ? (
+                      <div style={{ width: 110, height: 100 }}>
+                        <Image
+                          alt={selectedAd.title}
+                          src={
+                            selectedAd.photo
+                              ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/uploads/images/${selectedAd.photo}`
+                              : `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/img/valise.png`
+                          }
+                          width={100}
+                          height={100}
+                          // layout="fill"
+                          // objectFit="cover"
+                        />
                       </div>
-                    )}
-                  </Upload>
+                    ) : null}
+                    <Upload
+                      name="file"
+                      listType="picture-card"
+                      fileList={fileList}
+                      onChange={handleFileChange}
+                      beforeUpload={() => false}
+                      maxCount={1}
+                      accept="image/*"
+                    >
+                      {fileList.length < 1 && (
+                        <div>
+                          <UploadOutlined />
+                          <div style={{ marginTop: 8 }}>Upload</div>
+                        </div>
+                      )}
+                    </Upload>
+                  </div>
                 </Form.Item>
               </Col>
 

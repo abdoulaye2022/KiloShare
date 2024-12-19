@@ -3,25 +3,22 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-export async function getAll_ads() {
+const cookieStore = cookies();
+
+const jwtToken = cookieStore.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value;
+
+export async function update_ad(id, data) {
   try {
-    const cookieStore = cookies();
-
-    const jwtToken = cookieStore.get(
-      process.env.NEXT_PUBLIC_COOKIE_NAME
-    )?.value;
-
-    const response = await axios.get("/api/v1/ads/getAll", {
+    const response = await axios.put(`/api/v1/ads/update/${id}`, data, {
       headers: {
+        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${jwtToken}`,
       },
     });
 
-    if (response) {
-      return response.data;
-    } else {
-      throw new Error("No data received");
-    }
+    console.log(response);
+
+    return response.data;
   } catch (error) {
     if (error.response) {
       const status = error.status || error.response.status;

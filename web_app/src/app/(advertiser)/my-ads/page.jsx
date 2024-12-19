@@ -2,15 +2,20 @@
 
 import FilterAd from "@/app/components/Platform/Ads/FilterAd";
 import AdsList from "@/app/components/Platform/Home/AdsList ";
+import { adActions } from "@/app/lib/redux/actions/ads.actions";
 import { useAppSelector } from "@/app/lib/redux/hooks";
 import { FilterOutlined } from "@ant-design/icons";
 import { Button, Col, Divider, Row, Skeleton, Tooltip } from "antd";
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 
 function MyAds() {
   const [isMobile, setIsMobile] = useState(false);
   const isFiltered = useAppSelector((state) => state.ad.isFiltered);
   const loading = useAppSelector((state) => state.ad.loading);
+  const user = useAppSelector(state => state.user.user);
+  const userAds = useAppSelector(state => state.ad.userAds);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const mediaQuery = window.matchMedia("(max-width: 768px)");
@@ -22,6 +27,8 @@ function MyAds() {
     mediaQuery.addEventListener("change", handleMobileChange);
 
     handleMobileChange(mediaQuery);
+
+    dispatch(adActions.userAds(user.id));
   }, []);
 
   return (
