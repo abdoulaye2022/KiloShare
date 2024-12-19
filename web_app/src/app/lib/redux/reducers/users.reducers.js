@@ -1,6 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
+  loadingLogout: false,
   loading: false,
   authenticated: false,
   isEmailConfirm: false,
@@ -8,6 +9,7 @@ const initialState = {
   item: {},
   items: [],
   lastVerifiedEmailTime: null,
+  lastJwtTime: null,
   error: "",
 };
 
@@ -48,17 +50,19 @@ const userSlice = createSlice({
 
     // Logout actions
     requestLogOut(state) {
-      state.loading = true;
+      state.loadingLogout = true;
       state.error = "";
     },
     successLogOut(state) {
       state.authenticated = false;
-      state.loading = false;
       state.user = {};
       state.error = "";
     },
+    stopLoadingLogOut(state) {
+      state.loadingLogout = false;
+    },
     failureLogOut(state, action) {
-      state.loading = false;
+      state.loadingLogout = false;
       state.error = action.payload;
     },
 
@@ -190,6 +194,7 @@ const userSlice = createSlice({
       state.error = "";
     },
     successIsValidJwt(state) {
+      state.lastJwtTime = Date.now();
       state.loading = false;
     },
     failureIsValidJwt(state, action) {
@@ -343,6 +348,7 @@ export const {
   requestVerifiedEmail,
   successVerifiedEmail,
   failureVerifiedEmail,
+  stopLoadingLogOut,
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

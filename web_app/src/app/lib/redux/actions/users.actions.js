@@ -51,6 +51,7 @@ import {
   requestVerifiedEmail,
   successVerifiedEmail,
   failureVerifiedEmail,
+  stopLoadingLogOut,
 } from "../reducers/users.reducers";
 import { modalActions } from "./modals.actions";
 import { add_user } from "@/app/actions/users/add";
@@ -92,7 +93,9 @@ export const userActions = {
   changePassword,
   requestResetPassword,
   resetPassword,
-  verifiedEmail
+  verifiedEmail,
+  stopLoadingLogOut,
+  successLogOut
 };
 
 function login(email, password) {
@@ -152,12 +155,15 @@ function logout(cb = null) {
     logout_user()
       .then((res) => {
         if (res) {
-          setTimeout(() => {
+          if (cb) {
+            cb();
+          } else {
             dispatch(successLogOut());
-            if (cb) cb();
-          }, 500);
-          dispatch(adActions.getAll());
-          dispatch(categoryActions.getAll());
+            dispatch(stopLoadingLogOut());
+            dispatch(adActions.getAll());
+            dispatch(categoryActions.getAll());
+          }
+          
         } else {
           throw new Error(JSON.stringify(res));
         }
@@ -456,7 +462,6 @@ function requestResetPassword(email) {
         }
       })
       .catch((err) => {
-        console.log("merde");
         try {
           if (err) {
             const parsedError = JSON.parse(err.message);

@@ -3,7 +3,7 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-export async function getAll_ads() {
+export async function userAds_ads(user_id) {
   try {
     const cookieStore = cookies();
 
@@ -11,7 +11,7 @@ export async function getAll_ads() {
       process.env.NEXT_PUBLIC_COOKIE_NAME
     )?.value;
 
-    const response = await axios.get("/api/v1/ads/getAll", {
+    const response = await axios.get(`/api/v1/ads/userAds/${user_id}`, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },

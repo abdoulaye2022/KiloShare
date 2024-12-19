@@ -4,7 +4,7 @@ import Footer from "../components/Platform/Layouts/Footer";
 import Navbar from "../components/Platform/Layouts/Navbar";
 import Login from "../components/Platform/Layouts/Login";
 import React, { useEffect } from "react";
-import { Affix, Col, Layout, Row } from "antd";
+import { Affix, Col, Layout, Row, Spin } from "antd";
 import { useAppDispatch, useAppSelector } from "../lib/redux/hooks";
 import Signin from "../components/Platform/Layouts/Signin";
 import { userActions } from "../lib/redux/actions/users.actions";
@@ -21,9 +21,14 @@ function PlatformLayout({ children }) {
   );
   const dispatch = useAppDispatch();
   const router = useRouter();
+  const lastJwtTime = useAppSelector((state) => state.user.lastJwtTime);
+  const loadingLogout = useAppSelector((state) => state.user.loadingLogout);
 
   useEffect(() => {
-    dispatch(userActions.isValidJwt(() => router.replace("/")));
+    const currentTime = Date.now();
+    if (lastJwtTime && currentTime - lastJwtTime > 30 * 60 * 1000) {
+      dispatch(userActions.isValidJwt(() => router.replace("/")));
+    }
   }, []);
 
   return (
@@ -33,7 +38,9 @@ function PlatformLayout({ children }) {
           <Navbar />
         </Affix>
 
-        <Content style={{ marginTop: 15 }}>{children}</Content>
+        <Spin spinning={loadingLogout}>
+          <Content style={{ marginTop: 15 }}>{children}</Content>
+        </Spin>
 
         <Affix offsetBottom={0}>
           <Footer />

@@ -13,7 +13,7 @@ import {
   UserAddOutlined,
 } from "@ant-design/icons";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import { modalActions } from "@/app/lib/redux/actions/modals.actions";
 import { setLanguage } from "../../../actions/others/setLanguage";
@@ -26,6 +26,8 @@ function Navbar() {
   const dispatch = useAppDispatch();
   const authenticated = useAppSelector((state) => state.user.authenticated);
   const user = useAppSelector((state) => state.user.user);
+
+  const pathname = usePathname();
 
   const [defLanguage, setDefLanguage] = useState("fr");
 
@@ -154,7 +156,10 @@ function Navbar() {
         }
         break;
       case "7":
-        dispatch(userActions.logout(() => router.replace("/")));
+        if(pathname === '/')
+          dispatch(userActions.logout());
+        else
+          dispatch(userActions.logout(() => router.replace("/")));
         break;
       default:
         break;

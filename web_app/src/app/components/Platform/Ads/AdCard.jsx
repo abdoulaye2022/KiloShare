@@ -12,17 +12,24 @@ import {
 } from "antd";
 import {
   CalendarOutlined,
+  EditOutlined,
   EnvironmentOutlined,
   EyeOutlined,
 } from "@ant-design/icons";
 import dayjs from "dayjs";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { adActions } from "@/app/lib/redux/actions/ads.actions";
-import { useAppDispatch } from "@/app/lib/redux/hooks";
+import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
+import Image from "next/image";
 
 const { Text, Title } = Typography;
 
 function AdCard({ ad }) {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const user = useAppSelector((state) => state.user.user);
+
   const {
     id,
     title,
@@ -36,9 +43,10 @@ function AdCard({ ad }) {
     departure_date,
     arrival_date,
     photo,
-    slug
+    status_id,
+    slug,
+    user_id,
   } = ad;
-  const router = useRouter();
   const dispatch = useAppDispatch();
 
   const formatDate = (date) => dayjs(date).format("D MMM YYYY");
@@ -49,14 +57,23 @@ function AdCard({ ad }) {
       size="small"
       hoverable
       className="overflow-hidden"
+      styles={{
+        body: {
+          padding: 0,
+        },
+      }}
       cover={
-        <div style={{ position: "relative" }}>
-          <img
+        <div style={{ position: "relative", width: "100%", height: "200px" }}>
+          <Image
             alt={title}
+            src={
+              photo
+                ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/uploads/images/${photo}`
+                : `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/img/valise.png`
+            }
+            layout="fill"
+            objectFit="cover"
             style={{
-              height: 200,
-              width: "100%",
-              objectFit: "cover",
               transition: "transform 0.3s ease",
             }}
             onMouseOver={(e) => {
@@ -65,33 +82,29 @@ function AdCard({ ad }) {
             onMouseOut={(e) => {
               e.currentTarget.style.transform = "scale(1)";
             }}
-            src={
-              photo
-                ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/uploads/images/${photo}`
-                : `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/img/valise.png`
-            }
-          />
-          <Badge
-            count={`${space_available} kg available`}
-            style={{
-              position: "absolute",
-              right: 0,
-              top: 70,
-              bottom: 0,
-              backgroundColor: "#1890ff",
-              color: "#fff",
-              fontSize: 18,
-              height: 30,
-              textAlign: "center",
-              display: "flex",
-              alignItems: "center",
-              borderRadius: 0,
-            }}
           />
         </div>
       }
     >
-      <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+      <div
+        style={{
+          width: "100%",
+          backgroundColor: "#001529",
+          height: 25,
+          borderRadius: 0,
+          display: "flex",
+          justifyContent: "center",
+        }}
+      >
+        <Text
+          style={{ color: "#fff", fontSize: 14, fontWeight: "bold" }}
+        >{`${space_available} kg available`}</Text>
+      </div>
+      <Space
+        direction="vertical"
+        size="middle"
+        style={{ width: "100%", padding: 8 }}
+      >
         <div
           style={{
             display: "flex",
@@ -191,21 +204,66 @@ function AdCard({ ad }) {
             </Col>
           </Row>
         </Space>
+      </Space>
 
-        <Button
+      <div style={{ paddingTop: 0, paddingLeft: "8px", paddingRight: "8px", paddingBottom: "8px" }}>
+      <Button
           type="primary"
           icon={<EyeOutlined />}
           block
           size="large"
           style={{ marginTop: 16 }}
           onClick={() => {
-            dispatch(adActions.selectedAd(id));
+            if(user.id === user_id && pathname === "/my-ads") {
+              dispatch(adActions.selectedMyAd(id));
+            } else {
+              dispatch(adActions.selectedAd(id));
+            }
             router.push(`/ads/${id}/${slug}`);
           }}
         >
           View details
         </Button>
-      </Space>
+
+        {user.id === user_id &&
+        pathname === "/my-ads" &&
+        status_id !== 5 &&
+        status_id !== 4 ? (
+          <Button
+            type="default"
+            icon={<EditOutlined />}
+            block
+            size="large"
+            style={{
+              backgroundColor: "#4ca24c",
+              color: "white",
+              marginTop: 10,
+            }}
+            onClick={() => {
+              dispatch(adActions.selectedMyAd(id));
+              router.push(`/ads/${id}/${slug}/edit`);
+            }}
+          >
+            Update ad
+          </Button>
+        ) : null}
+
+        {status_id !== 5 && status_id !== 4 && pathname === "/my-ads" ? (
+          <Button
+            type="default"
+            icon={<EditOutlined />}
+            block
+            size="large"
+            style={{ backgroundColor: "red", color: "white", marginTop: 10 }}
+            onClick={() => {
+              dispatch(adActions.selectedMyAd(id));
+              router.push(`/ads/${id}/${slug}/edit`);
+            }}
+          >
+            Closed
+          </Button>
+        ) : null}
+      </div>
     </Card>
   );
 }

@@ -28,6 +28,7 @@ $routes = [
     '/api/v1/ads/delete/{id}' => 'controllers/ad/delete.php',
     '/api/v1/ads/approve/{id}' => 'controllers/ad/approve.php',
     '/api/v1/ads/reject/{id}' => 'controllers/ad/reject.php',
+    '/api/v1/ads/userAds/{user_id}' => 'controllers/ad/userAds.php',
 
     // Profiles
     '/api/v1/profiles/getAll' => 'controllers/profile/getAll.php',

@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
 import {
   DatePicker,
-  Input,
   Select,
   Button,
   Row,
   Col,
-  Card,
   Typography,
   Form,
 } from "antd";
@@ -16,10 +14,9 @@ import { getNames } from "country-list";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import { adActions } from "@/app/lib/redux/actions/ads.actions";
 import { convertToMySQLFormat } from "@/app/utils/utils";
+import { modalActions } from "@/app/lib/redux/actions/modals.actions";
 
-const { Title, Text } = Typography;
-const { RangePicker } = DatePicker;
-const { Option } = Select;
+const { Title } = Typography;
 
 function FilterAd() {
   const [countries, setCountries] = useState([]);
@@ -62,6 +59,7 @@ function FilterAd() {
         category_id: values.category_id,
       })
     );
+    dispatch(modalActions.closeMobileFilterAds());
   };
 
   const onFinishFailed = (errorInfo) => {
@@ -182,6 +180,7 @@ function FilterAd() {
                 htmlType="submit"
                 onClick={() => { 
                   dispatch(adActions.resetFilter());
+                  dispatch(modalActions.closeMobileFilterAds());
                   form.resetFields();
                 }}
                 style={{ marginLeft: 10 }}

@@ -14,8 +14,9 @@ import {
 } from "antd";
 import { MailOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
-import { redirect } from "next/navigation";
+import { redirect, useRouter } from "next/navigation";
 import { adActions } from "@/app/lib/redux/actions/ads.actions";
+import Image from "next/image";
 
 function AdsDetail({ params, rejected }) {
   const ad = useAppSelector((state) => state.ad.item);
@@ -42,15 +43,18 @@ function AdsDetail({ params, rejected }) {
   } = ad;
 
   const dispatch = useAppDispatch();
+  const router = useRouter();
 
   const [userMessage, setUserMessage] = useState("");
 
+  if(Object.keys(ad).length === 0 && ad.constructor === Object) {
+    window.href = "/"
+  }
+
   useEffect(() => {
-    if (params && params.id != id) {
+    if (id && params && params.id != id) {
       redirect("/not-found");
     }
-
-    dispatch(adActions.selectedAd(parseInt(id)));
   }, [id, dispatch]);
 
   const sendMessage = () => {
@@ -72,14 +76,14 @@ function AdsDetail({ params, rejected }) {
   };
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: "10px 20px" }}>
       <Card
         bordered={false}
         style={{
           width: "100%",
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
           borderRadius: "8px",
-          paddingBottom: 40,
+          // paddingBottom: 40,
         }}
       >
         {rejected === true ? (
@@ -135,28 +139,34 @@ function AdsDetail({ params, rejected }) {
           <>
             <div
               style={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                width: "100%",
+                padding: 10,
                 height: 400,
                 borderRadius: "8px",
                 marginBottom: "20px",
                 backgroundColor: "#f0f2f5",
+                position: "relative",
+                width: "100%",
               }}
             >
-              <img
+              <Image
+                alt={title}
                 src={
                   photo
                     ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/uploads/images/${photo}`
                     : `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/img/valise.png`
                 }
-                alt="Ad Photo"
+                // height={400}
+                // width={400}
+                layout="fill"
+                objectFit="cover"
                 style={{
-                  maxWidth: "100%",
-                  height: 400,
-                  objectFit: "cover",
-                  borderRadius: "8px",
+                  transition: "transform 0.3s ease",
+                }}
+                onMouseOver={(e) => {
+                  e.currentTarget.style.transform = "scale(1.05)";
+                }}
+                onMouseOut={(e) => {
+                  e.currentTarget.style.transform = "scale(1)";
                 }}
               />
             </div>
