@@ -39,7 +39,7 @@ function PlatformLayout({ children }) {
         </Affix>
 
         <Spin spinning={loadingLogout}>
-          <Content style={{ marginTop: 15 }}>{children}</Content>
+          <Content style={{ marginTop: 15, minHeight: "calc(90vh)" }}>{children}</Content>
         </Spin>
 
         <Affix offsetBottom={0}>

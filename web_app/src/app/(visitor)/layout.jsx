@@ -3,7 +3,7 @@
 import Footer from "@/app/components/Platform/Layouts/Footer";
 import Navbar from "@/app/components/Platform/Layouts/Navbar";
 import Login from "@/app/components/Platform/Layouts/Login";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Affix, Col, Layout, Row, Spin } from "antd";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
@@ -17,6 +17,24 @@ function PlatformLayout({ children }) {
   const loadingLogout = useAppSelector((state) => state.user.loadingLogout);
   const router = useRouter();
 
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(max-width: 768px)");
+
+    const handleMobileChange = (e) => {
+      setIsMobile(e.matches);
+    };
+
+    mediaQuery.addEventListener("change", handleMobileChange);
+
+    handleMobileChange(mediaQuery);
+
+    return () => {
+      mediaQuery.removeEventListener("change", handleMobileChange);
+    };
+  }, []);
+
   return (
     <>
       <Layout style={{ minHeight: "calc(100vh)" }}>
@@ -25,9 +43,9 @@ function PlatformLayout({ children }) {
         </Affix>
 
         <Spin spinning={loadingLogout}>
-          <Content>
+          <Content style={{ minHeight: "calc(90vh)" }}>
             <Row>
-              <Col md={4} style={{ padding: 10 }}></Col>
+              {isMobile ? null : <Col md={4} style={{ padding: 10 }}></Col>}
               <Col xs={24} sm={24} md={16} style={{ padding: 10 }}>
                 {children}
               </Col>

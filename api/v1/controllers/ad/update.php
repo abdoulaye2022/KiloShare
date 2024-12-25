@@ -1,9 +1,9 @@
 <?php
 require_once("controllers/Controller.php");
 
-if ($_SERVER['REQUEST_METHOD'] != 'PUT') {
+if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     header('HTTP/1.1 405 Method Not Allowed');
-    header('Allow: PUT');
+    header('Allow: POST');
     
     $error = [
         "success" => false,
@@ -17,10 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] != 'PUT') {
 }
 
 include("utils/check_token.php");
-
-echo "<pre>";
-var_dump($_POST['departure_country']); 
-echo "</pre>"; die;
 
 if(!isset($params['id']) || !isset($_POST['title']) || !isset($_POST['description']) || !isset($_POST['space_available']) || !isset($_POST['price_kilo']) || !isset($_POST['departure_city']) ||
     !isset($_POST['departure_country']) || !isset($_POST['arrival_country']) || !isset($_POST['arrival_city']) || !isset($_POST['departure_date']) || !isset($_POST['arrival_date']) 
@@ -177,7 +173,6 @@ if(strlen($_POST['title']) > 60) {
 
 $fileName = "";
 if (isset($_FILES['photo'])) {
-        
     // Récupère les informations du fichier
     $file = $_FILES['photo'];
     
@@ -203,13 +198,41 @@ if (isset($_FILES['photo'])) {
 
     // Spécifie le chemin final pour enregistrer le fichier
     $destination = $uploadDirectory . basename($fileName);
-    
+
+    // Liste des types MIME autorisés
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+    // Vérifie si le fichier a un type autorisé
+    if (!in_array($fileType, $allowedTypes)) {
+        $error = [
+            "success" => false,
+            "status" => 400,
+            "message" => "Invalid file type. Only JPG, PNG, and GIF images are allowed."
+        ];
+        http_response_code(400);
+        header('Content-Type: application/json');
+        echo json_encode($error);
+        exit();
+    }
+
+    // Vérifie si la taille du fichier est inférieure à 3 Mo (3 Mo = 3 * 1024 * 1024 octets)
+    if ($fileSize > 3 * 1024 * 1024) {
+        $error = [
+            "success" => false,
+            "status" => 400,
+            "message" => "File size exceeds 3MB."
+        ];
+        http_response_code(400);
+        header('Content-Type: application/json');
+        echo json_encode($error);
+        exit();
+    }
+
     // Vérifie si le fichier a bien été téléchargé sans erreur
     if ($file['error'] === UPLOAD_ERR_OK) {
-
         // Déplace le fichier du répertoire temporaire vers le répertoire d'upload
         if (move_uploaded_file($tmpFilePath, $destination)) {
-            
+            // Le fichier a été déplacé avec succès
         } else {
             $error = [
                 "success" => false,
@@ -250,7 +273,7 @@ $category_id = $helper->validateInteger($_POST['category_id']);
 $slug = $helper->createSlug($title);
 
 $ad_id = $adModel->update($id, $title, $description, $space_available, $price_kilo, $departure_country, $arrival_country, $departure_city, $arrival_city, 
-                $departure_date, $arrival_date, $collection_date, $category_id, $fileName, $updated_by, $slug);
+                $departure_date, $arrival_date, $collection_date, $category_id, $fileName, $auth_id, $slug);
 if($ad_id == false) {
 	$error = [
         "success" => false,
@@ -263,7 +286,7 @@ if($ad_id == false) {
     exit();
 }
 
-$adFetch = $adModel->getOne($ad_id);
+$adFetch = $adModel->getOne($id);
 if($adFetch == false) {
 	$error = [
         "success" => false,

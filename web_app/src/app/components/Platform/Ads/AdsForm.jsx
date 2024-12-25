@@ -29,8 +29,9 @@ import {
   convertToMySQLFormat,
 } from "@/app/utils/utils";
 import { categoryActions } from "@/app/lib/redux/actions/categories.actions";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const { Option } = Select;
 const { Text, Title } = Typography;
@@ -46,10 +47,17 @@ function AdsForm() {
   const user = useAppSelector((state) => state.user.user);
   const [form] = Form.useForm();
   const dispatch = useAppDispatch();
+  const t = useTranslations("AdFormPage");
 
   const pathname = usePathname();
   const isEditPage = pathname.includes("/edit");
   const selectedAd = useAppSelector((state) => state.ad.item);
+
+  const router = useRouter();
+
+  const cb = () => {
+    router.push("/my-ads");
+  };
 
   useEffect(() => {
     if (
@@ -90,11 +98,29 @@ function AdsForm() {
   const [fileList, setFileList] = useState([]);
 
   const handleFileChange = (info) => {
+    const maxSize = 3 * 1024 * 1024;
+
+    const isImage = info.file.type.startsWith("image/");
+    if (!isImage) {
+      message.error(
+        `${info.file.name} is not an image. Please upload an image file.`
+      );
+      return;
+    }
+
+    if (info.file.size > maxSize) {
+      message.error(
+        `${info.file.name} is too large. Please upload a file smaller than 3 MB.`
+      );
+      return;
+    }
+
     if (info.file.status === "done") {
       message.success(`${info.file.name} file uploaded successfully`);
     } else if (info.file.status === "error") {
       message.error(`${info.file.name} file upload failed.`);
     }
+
     setFileList(info.fileList);
   };
 
@@ -127,7 +153,7 @@ function AdsForm() {
       form.append("category_id", values.category_id);
       form.append("photo", fileList.length ? fileList[0].originFileObj : null);
 
-      dispatch(adActions.update(selectedAd.id, form));
+      dispatch(adActions.update(selectedAd.id, form, cb));
     } else {
       const form = new FormData();
       form.append("title", values.title);
@@ -174,7 +200,7 @@ function AdsForm() {
           level={2}
           style={{ textAlign: "center", marginBottom: 30, color: "#1890ff" }}
         >
-          Create New Ad
+          {t("titleForm")}
         </Title>
         <Spin spinning={loadingCategory || loadingAd}>
           <Form
@@ -192,17 +218,17 @@ function AdsForm() {
               <Col xs={24}>
                 <Form.Item
                   name="title"
-                  label={<Text strong>Title</Text>}
+                  label={<Text strong>{t("title")}</Text>}
+                  tooltip={t("titleTooltip")}
                   rules={[
-                    { required: true, message: "Please enter a title." },
+                    { required: true, message: t("titleRequired") },
                     {
                       max: 60,
-                      message:
-                        "Please provide a title that does not exceed the maximum length of 60 characters.",
+                      message: t("titleMax"),
                     },
                   ]}
                 >
-                  <Input size="large" placeholder="Enter ad title" />
+                  <Input size="large" placeholder={t("titleEx")} />
                 </Form.Item>
               </Col>
 
@@ -210,23 +236,29 @@ function AdsForm() {
                 <Form.Item
                   name="description"
                   label={<Text strong>Description</Text>}
+                  tooltip={t("descriptionTooltip")}
                   rules={[
-                    { required: true, message: "Please enter a description." },
+                    { required: true, message: t("descriptionRequired") },
+                    {
+                      max: 200,
+                      message: t("descriptionMax"),
+                    },
                   ]}
                   style={{ marginBottom: 5 }}
                 >
-                  <Input.TextArea />
+                  <Input.TextArea placeholder={t("descriptionEx")} />
                 </Form.Item>
               </Col>
 
               <Col xs={24} md={12}>
                 <Form.Item
                   name="space_available"
-                  label={<Text strong>Space Available</Text>}
+                  label={<Text strong>{t("spaceAvailable")}</Text>}
+                  tooltip={t("spaceAvailableTooltip")}
                   rules={[
                     {
                       required: true,
-                      message: "Please enter the available space.",
+                      message: t("spaceAvailableRequired"),
                     },
                   ]}
                 >
@@ -234,7 +266,7 @@ function AdsForm() {
                     size="large"
                     min={1}
                     style={{ width: "100%" }}
-                    placeholder="Enter available space"
+                    placeholder={t("spaceAvailableEx")}
                     addonBefore="Kg"
                   />
                 </Form.Item>
@@ -243,15 +275,14 @@ function AdsForm() {
               <Col xs={24} md={12}>
                 <Form.Item
                   name="price"
-                  label={<Text strong>Price</Text>}
-                  rules={[
-                    { required: true, message: "Please enter the price." },
-                  ]}
+                  label={<Text strong>{t("price")}</Text>}
+                  tooltip={t("priceTooltipe")}
+                  rules={[{ required: true, message: t("priceRequired") }]}
                 >
                   <InputNumber
                     size="large"
                     style={{ width: "100%" }}
-                    placeholder="Enter price per kg"
+                    placeholder={t("priceEx")}
                     addonBefore="$"
                   />
                 </Form.Item>
@@ -260,18 +291,19 @@ function AdsForm() {
               <Col xs={24} md={12}>
                 <Form.Item
                   name="departure_country"
-                  label={<Text strong>Departure Country</Text>}
+                  label={<Text strong>{t("departureCountry")}</Text>}
+                  tooltip={t("departureCountryTooltip")}
                   rules={[
                     {
                       required: true,
-                      message: "Please select a departure country.",
+                      message: t("departureCountryRequired"),
                     },
                   ]}
                 >
                   <Select
                     showSearch
                     size="large"
-                    placeholder="Select departure country"
+                    placeholder={t("departureCountryEx")}
                     options={countries.map((country) => ({
                       value: country,
                       label: country,
@@ -286,18 +318,19 @@ function AdsForm() {
               <Col xs={24} md={12}>
                 <Form.Item
                   name="arrival_country"
-                  label={<Text strong>Arrival Country</Text>}
+                  label={<Text strong>{t("arrivalCountry")}</Text>}
+                  tooltip={t("arrivalCountryTooltip")}
                   rules={[
                     {
                       required: true,
-                      message: "Please select an arrival country",
+                      message: t("arrivalCountryRequired"),
                     },
                   ]}
                 >
                   <Select
                     showSearch
                     size="large"
-                    placeholder="Select arrival country"
+                    placeholder={t("arrivalCountryEx")}
                     options={countries.map((country) => ({
                       value: country,
                       label: country,
@@ -312,38 +345,41 @@ function AdsForm() {
               <Col xs={24} md={12}>
                 <Form.Item
                   name="departure_city"
-                  label={<Text strong>Departure City</Text>}
+                  label={<Text strong>{t("departureCity")}</Text>}
+                  tooltip={t("departureCityTooltip")}
                   rules={[
                     {
                       required: true,
-                      message: "Please enter a departure city",
+                      message: t("departureCityRequired"),
                     },
                   ]}
                 >
-                  <Input size="large" placeholder="Enter departure city" />
+                  <Input size="large" placeholder={t("departureCityEx")} />
                 </Form.Item>
               </Col>
 
               <Col xs={24} md={12}>
                 <Form.Item
                   name="arrival_city"
-                  label={<Text strong>Arrival City</Text>}
+                  label={<Text strong>{t("arrivalCity")}</Text>}
+                  tooltip={t("arrivalCityTooltip")}
                   rules={[
-                    { required: true, message: "Please enter an arrival city" },
+                    { required: true, message: t("arrivalCityRequired") },
                   ]}
                 >
-                  <Input size="large" placeholder="Enter arrival city" />
+                  <Input size="large" placeholder={t("arrivalCityEx")} />
                 </Form.Item>
               </Col>
 
               <Col xs={24} md={8}>
                 <Form.Item
                   name="departure_date"
-                  label={<Text strong>Departure Date</Text>}
+                  label={<Text strong>{t("departureDate")}</Text>}
+                  tooltip={t("departureDateTooltip")}
                   rules={[
                     {
                       required: true,
-                      message: "Please select a departure date",
+                      message: t("departureDateRequired"),
                     },
                   ]}
                 >
@@ -354,7 +390,7 @@ function AdsForm() {
                     format="YYYY-MM-DD"
                     size="large"
                     style={{ width: "100%" }}
-                    placeholder="Select departure date"
+                    placeholder="Ex: 15 janvier 2024"
                   />
                 </Form.Item>
               </Col>
@@ -362,11 +398,12 @@ function AdsForm() {
               <Col xs={24} md={8}>
                 <Form.Item
                   name="arrival_date"
-                  label={<Text strong>Arrival Date</Text>}
+                  label={<Text strong>{t("arrivalDate")}</Text>}
+                  tooltip={t("arrivalDateTooltip")}
                   rules={[
                     {
                       required: true,
-                      message: "Please select an arrival date",
+                      message: t("arrivalDateRequired"),
                     },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
@@ -379,7 +416,7 @@ function AdsForm() {
                           return Promise.resolve();
                         }
                         return Promise.reject(
-                          new Error("Arrival date must be after departure date")
+                          new Error(t("arrivalDateAfterDepartureDate"))
                         );
                       },
                     }),
@@ -392,7 +429,7 @@ function AdsForm() {
                     format="YYYY-MM-DD"
                     size="large"
                     style={{ width: "100%" }}
-                    placeholder="Select arrival date"
+                    placeholder="Ex: 16 janvier 2024"
                   />
                 </Form.Item>
               </Col>
@@ -400,11 +437,12 @@ function AdsForm() {
               <Col xs={24} md={8}>
                 <Form.Item
                   name="collection_date"
-                  label={<Text strong>Pick up Date</Text>}
+                  label={<Text strong>{t("pickUpDate")}</Text>}
+                  tooltip={t("collectionDateTooltip")}
                   rules={[
                     {
                       required: true,
-                      message: "Please select a collection date",
+                      message: t("collectionDate"),
                     },
                     ({ getFieldValue }) => ({
                       validator(_, value) {
@@ -420,9 +458,7 @@ function AdsForm() {
                           return Promise.resolve();
                         }
                         return Promise.reject(
-                          new Error(
-                            "Collection date must be after departure and arrival date"
-                          )
+                          new Error(t("collectionDateAfterDepartureDate"))
                         );
                       },
                     }),
@@ -435,7 +471,7 @@ function AdsForm() {
                     format="YYYY-MM-DD"
                     size="large"
                     style={{ width: "100%" }}
-                    placeholder="Select collection date"
+                    placeholder="Ex: 18 janvier 2024"
                   />
                 </Form.Item>
               </Col>
@@ -443,26 +479,27 @@ function AdsForm() {
               <Col xs={24} md={12}>
                 <Form.Item
                   name="category_id"
-                  label={<Text strong>Category</Text>}
+                  label={<Text strong>{t("category")}</Text>}
+                  tooltip={t("categoryTooltip")}
                   rules={[
                     {
                       required: true,
-                      message: "Please select a category",
+                      message: t("categoryRequired"),
                     },
                   ]}
                 >
                   <Select
                     showSearch
                     size="large"
-                    placeholder="Select category"
-                    options={
-                      categories.length > 0
+                    placeholder={t("categoryEx")}
+                    options={[
+                      ...(categories.length > 0
                         ? categories.map((p) => ({
                             value: p.id,
                             label: p.name,
                           }))
-                        : null
-                    }
+                        : []),
+                    ]}
                   />
                 </Form.Item>
               </Col>
@@ -470,7 +507,7 @@ function AdsForm() {
               <Col xs={24} md={12}>
                 <Form.Item
                   label={<Text strong>Photo</Text>}
-                  tooltip="Upload a photo of your item"
+                  tooltip={t("uploadPhotoItem")}
                 >
                   <div style={{ display: "flex" }}>
                     {isEditPage &&
@@ -505,7 +542,7 @@ function AdsForm() {
                       {fileList.length < 1 && (
                         <div>
                           <UploadOutlined />
-                          <div style={{ marginTop: 8 }}>Upload</div>
+                          <div style={{ marginTop: 8 }}>{t("upload")}</div>
                         </div>
                       )}
                     </Upload>
@@ -521,7 +558,7 @@ function AdsForm() {
                     htmlType="reset"
                     icon={<ReloadOutlined />}
                   >
-                    Reset
+                    {t("reset")}
                   </Button>
                   <Button
                     size="large"
@@ -529,7 +566,7 @@ function AdsForm() {
                     htmlType="submit"
                     icon={<CheckOutlined />}
                   >
-                    Publish Ad
+                    {t("publishAd")}
                   </Button>
                 </Form.Item>
               </Col>

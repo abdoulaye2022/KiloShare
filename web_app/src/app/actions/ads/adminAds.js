@@ -3,19 +3,16 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-const cookieStore = cookies();
-
-const jwtToken = cookieStore.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value;
-
-export async function update_ad(id, data) {
+export async function adminAds_ads() {
   try {
-    if (!(data instanceof FormData)) {
-      throw new Error("Data must be an instance of FormData.");
-    }
+    const cookieStore = cookies();
 
-    const response = await axios.post(`/api/v1/ads/update/${id}`, data, {
+    const jwtToken = cookieStore.get(
+      process.env.NEXT_PUBLIC_COOKIE_NAME
+    )?.value;
+
+    const response = await axios.get("/api/v1/ads/adminAds", {
       headers: {
-        "Content-Type": "multipart/form-data",
         Authorization: `Bearer ${jwtToken}`,
       },
     });

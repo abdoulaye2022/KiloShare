@@ -3,23 +3,30 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-const cookieStore = cookies();
-
-const jwtToken = cookieStore.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value;
-
-export async function update_ad(id, data) {
+export async function closeAd_ad(id) {
   try {
-    if (!(data instanceof FormData)) {
-      throw new Error("Data must be an instance of FormData.");
+    const cookieStore = cookies();
+
+    const jwtToken = cookieStore.get(
+      process.env.NEXT_PUBLIC_COOKIE_NAME
+    )?.value;
+
+    if (!jwtToken) {
+      throw {
+        status: 401,
+        message: "Unauthorized: JWT token is missing.",
+      };
     }
 
-    const response = await axios.post(`/api/v1/ads/update/${id}`, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${jwtToken}`,
-      },
-    });
-
+    const response = await axios.put(
+      `/api/v1/ads/closedAd/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${jwtToken}`,
+        },
+      }
+    );
     if (response) {
       return response.data;
     } else {

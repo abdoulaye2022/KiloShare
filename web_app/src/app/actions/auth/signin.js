@@ -28,8 +28,7 @@ export async function signin_user(firstname, lastname, email, password) {
         secure: true,
         sameSite: "Strict",
         path: "/",
-        maxAge: 60 * 60,
-        expires: new Date(Date.now() + 60 * 60 * 1000),
+        maxAge: 60 * 60
       });
 
       cookies().set({
@@ -39,8 +38,7 @@ export async function signin_user(firstname, lastname, email, password) {
         secure: true,
         sameSite: "Strict",
         path: "/",
-        maxAge: 60 * 60,
-        expires: new Date(Date.now() + 60 * 60 * 1000),
+        maxAge: 60 * 60
       });
 
       return response.data;

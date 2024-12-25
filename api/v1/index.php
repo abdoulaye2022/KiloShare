@@ -29,6 +29,9 @@ $routes = [
     '/api/v1/ads/approve/{id}' => 'controllers/ad/approve.php',
     '/api/v1/ads/reject/{id}' => 'controllers/ad/reject.php',
     '/api/v1/ads/userAds/{user_id}' => 'controllers/ad/userAds.php',
+    '/api/v1/ads/adminAds' => 'controllers/ad/adminAds.php',
+    '/api/v1/ads/messageAd' => 'controllers/ad/messageAd.php',
+    '/api/v1/ads/closedAd/{id}' => 'controllers/ad/closedAd.php',
 
     // Profiles
     '/api/v1/profiles/getAll' => 'controllers/profile/getAll.php',
@@ -53,13 +56,12 @@ $routes = [
 
 ];
 
-// Recuperation de l'URI de la requete
 $uri = $_SERVER['REQUEST_URI'];
 
-// Recherche de la route correspondante
 foreach ($routes as $route => $controller) {
-    // Remplacement des parametres dans l'URI par des expressions regulieres
-    $route = "/KiloShare".$route;
+    if($_SERVER['HTTP_HOST'] == 'localhost')
+        $route = "/KiloShare".$route;
+
     $pattern = str_replace('/', '\/', $route);
     $pattern = preg_replace('/\{([^\}]+)\}/', '(?P<$1>[^\/]+)', $pattern);
     $pattern = '/^' . $pattern . '$/';

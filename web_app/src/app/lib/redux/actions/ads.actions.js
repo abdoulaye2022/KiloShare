@@ -22,6 +22,16 @@ import {
   requestUpdate,
   successUpdate,
   failureUpdate,
+  requestAdminAds,
+  successAdminAds,
+  failureAdminAds,
+  requestMessageAd,
+  successMessageAd,
+  failureMessageAd,
+  selectedAdminAd,
+  requestClosedAd,
+  successClosedAd,
+  failureClosedAd
 } from "../reducers/ads.reducers";
 import { modalActions } from "./modals.actions";
 import { add_ad } from "@/app/actions/ads/add";
@@ -31,6 +41,10 @@ import { message } from "antd";
 import { approve_ad } from "@/app/actions/ads/approve";
 import { userAds_ads } from "@/app/actions/ads/userAds";
 import { update_ad } from "@/app/actions/ads/update";
+import { adminAds_ads } from "@/app/actions/ads/adminAds";
+import { messageAd_ad } from "@/app/actions/ads/messageAd";
+import { userActions } from "./users.actions";
+import { closeAd_ad } from "@/app/actions/ads/closedAd";
 
 export const adActions = {
   add,
@@ -43,6 +57,10 @@ export const adActions = {
   approve,
   userAds,
   update,
+  adminAds,
+  messageAd,
+  closedAd,
+  selectedAdminAd
 };
 
 function getAll() {
@@ -160,6 +178,7 @@ function userAds(id) {
           if (err) {
             const parsedError = JSON.parse(err.message);
             dispatch(failureUserAds(parsedError.message));
+            message.error(err.message);
           }
         } catch {
           dispatch(failureUserAds("An unexpected error occurred."));
@@ -168,13 +187,15 @@ function userAds(id) {
   };
 }
 
-function update(id, data) {
+function update(id, data, cb) {
   return function (dispatch) {
     dispatch(requestUpdate());
     update_ad(id, data)
       .then((res) => {
         if (res.data) {
           dispatch(successUpdate(res.data));
+          message.success("Ad updated successfully");
+          cb();
         } else {
           throw new Error(JSON.stringify(res));
         }
@@ -184,9 +205,86 @@ function update(id, data) {
           if (err) {
             const parsedError = JSON.parse(err.message);
             dispatch(failureUpdate(parsedError.message));
+            message.error(err.message);
           }
         } catch {
           dispatch(failureUpdate("An unexpected error occurred."));
+        }
+      });
+  };
+}
+
+function adminAds() {
+  return function (dispatch) {
+    dispatch(requestAdminAds());
+    adminAds_ads()
+      .then((res) => {
+        if (res.data) {
+          dispatch(successAdminAds(res.data));
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureAdminAds(parsedError.message));
+          }
+        } catch {
+          dispatch(failureAdminAds("An unexpected error occurred."));
+        }
+      });
+  };
+}
+
+function messageAd(user_id, ad_id, message) {
+  return function (dispatch) {
+    dispatch(requestMessageAd());
+    messageAd_ad(user_id, ad_id, message)
+      .then((res) => {
+        if (res.data) {
+          dispatch(successMessageAd(res.data));
+          message.success("Message sent successfully");
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureMessageAd(parsedError.message));
+            message.error(err.message);
+          }
+        } catch {
+          dispatch(failureMessageAd("An unexpected error occurred."));
+        }
+      });
+  };
+}
+
+function closedAd(ad_id) {
+  return function (dispatch) {
+    dispatch(requestClosedAd());
+    closeAd_ad(ad_id)
+      .then((res) => {
+        if (res.data) {
+          dispatch(successClosedAd(res.data));
+          message.success("Ad closed successfully");
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureClosedAd(parsedError.message));
+            message.error(err.message);
+          }
+        } catch {
+          dispatch(failureClosedAd("An unexpected error occurred."));
         }
       });
   };

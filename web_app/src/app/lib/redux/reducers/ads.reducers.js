@@ -1,13 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { message } from "antd";
 
 const initialState = {
   loading: false,
   item: {},
   items: [],
   userAds: [],
+  adminAds: [],
   isFiltered: false,
   filteredItems: [],
   lastFetchedAdTime: null,
+  messageSent: false,
   error: "",
 };
 
@@ -100,8 +103,13 @@ export const adSlice = createSlice({
     resetFilter: (state) => {
       (state.isFiltered = false), (state.filteredItems = []);
     },
+    selectedAdminAd: (state, action) => {
+      state.item = state.adminAds.find((item) => item.id === action.payload);
+      state.messageSent = false
+    },
     selectedAd: (state, action) => {
       state.item = state.items.find((item) => item.id === action.payload);
+      state.messageSent = false
     },
     selectedMyAd: (state, action) => {
       state.item = state.userAds.find((item) => item.id === action.payload);
@@ -112,8 +120,8 @@ export const adSlice = createSlice({
     },
     successReject: (state, action) => {
       state.loading = false;
-      state.items = [
-        ...state.items.map((p) => {
+      state.adminAds = [
+        ...state.adminAds.map((p) => {
           if (p.id === action.payload.id) {
             p = action.payload;
           }
@@ -131,8 +139,8 @@ export const adSlice = createSlice({
     },
     successApprove: (state, action) => {
       state.loading = false;
-      state.items = [
-        ...state.items.map((p) => {
+      state.adminAds = [
+        ...state.adminAds.map((p) => {
           if (p.id === action.payload.id) {
             p = action.payload;
           }
@@ -178,8 +186,52 @@ export const adSlice = createSlice({
           return p;
         }),
       ];
+      state.adminAds = [
+        ...state.adminAds.map((p) => {
+          if (p.id === action.payload.id) {
+            p = action.payload;
+          }
+          return p;
+        }),
+      ];
     },
     failureUpdate: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+     // Admin ads
+     requestAdminAds: (state) => {
+      state.loading = true;
+    },
+    successAdminAds: (state, action) => {
+      state.loading = false;
+      state.adminAds = action.payload
+    },
+    failureAdminAds: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // Message
+    requestMessageAd: (state) => {
+      state.loading = true;
+    },
+    successMessageAd: (state, action) => {
+      state.loading = false;
+      state.messageSent = action.payload;
+    },
+    failureMessageAd: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // Closed Ad
+    requestClosedAd: (state) => {
+      state.loading = true;
+    },
+    successClosedAd: (state, action) => {
+      state.loading = false;
+      state.item = action.payload;
+    },
+    failureClosedAd: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
@@ -208,7 +260,17 @@ export const {
   failureUserAds,
   requestUpdate,
   successUpdate,
-  failureUpdate
+  failureUpdate,
+  requestAdminAds,
+  successAdminAds,
+  failureAdminAds,
+  requestMessageAd,
+  successMessageAd,
+  failureMessageAd,
+  selectedAdminAd,
+  requestClosedAd,
+  successClosedAd,
+  failureClosedAd
 } = adSlice.actions;
 
 export const adReducer = adSlice.reducer;

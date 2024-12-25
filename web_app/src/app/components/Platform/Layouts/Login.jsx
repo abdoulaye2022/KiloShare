@@ -110,11 +110,11 @@ const Login = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter your email",
+                    message: t("emailRequired"),
                   },
                   {
                     type: "email",
-                    message: "The input is not a valid email",
+                    message: t("emailInvalid"),
                   },
                 ]}
               >
@@ -128,11 +128,11 @@ const Login = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your password!",
+                    message: t("passwordRequired")
                   },
                 ]}
               >
-                <Input.Password placeholder="Password" size="large" />
+                <Input.Password placeholder={t("password")} size="large" />
               </Form.Item>
 
               <Form.Item>
@@ -148,7 +148,7 @@ const Login = () => {
 
               <Form.Item>
                 <p>
-                  Don't have an account?{" "}
+                  {t("don'tHaveAccount")}{" "}
                   <span
                     style={{
                       color: "#4096ff",
@@ -162,7 +162,7 @@ const Login = () => {
                       form_login.resetFields();
                     }}
                   >
-                    Sign up
+                    {t("signUp")}
                   </span>
                   &nbsp;
                   <span
@@ -179,7 +179,7 @@ const Login = () => {
                       form_login.resetFields();
                     }}
                   >
-                    Forgot my password?
+                    {t("forgotMyPassword")}
                   </span>
                 </p>
               </Form.Item>

@@ -1,7 +1,18 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, Avatar, Button, Input, Form, message, Tabs, Row, Col } from "antd";
+import {
+  Card,
+  Avatar,
+  Button,
+  Input,
+  Form,
+  message,
+  Tabs,
+  Row,
+  Col,
+  Spin,
+} from "antd";
 import {
   UserOutlined,
   EditOutlined,
@@ -17,7 +28,10 @@ const { TabPane } = Tabs;
 function MyProfil() {
   const [isEditing, setIsEditing] = useState(false);
   const [form] = Form.useForm();
+  const [formPassword] = Form.useForm();
   const user = useAppSelector((state) => state.user.user);
+  const authenticated = useAppSelector((state) => state.user.authenticated);
+  const loading = useAppSelector((state) => state.user.loading);
   const dispatch = useAppDispatch();
 
   const handleSubmitProfile = (values) => {
@@ -36,6 +50,7 @@ function MyProfil() {
     dispatch(
       userActions.changePassword(values.oldPassword, values.newPassword)
     );
+    formPassword.resetFields();
   };
 
   return (
@@ -64,7 +79,15 @@ function MyProfil() {
                 marginBottom: "20px",
               }}
             >
-              <Avatar size={64} icon={<UserOutlined />} />
+              <Avatar
+                size="large"
+                icon={authenticated ? null : <UserOutlined />}
+                style={{ color: "white", backgroundColor: "#1677ff" }}
+              >
+                {authenticated
+                  ? `${user.firstname[0]}.${user.lastname[0]}`
+                  : null}
+              </Avatar>
               <div style={{ marginLeft: "20px" }}>
                 <h3>{`${user.firstname} ${user.lastname}`}</h3>
               </div>
@@ -151,58 +174,83 @@ function MyProfil() {
               </Tabs.TabPane>
 
               <Tabs.TabPane tab="Change Password" key="2">
-                <Form onFinish={handleSubmitPassword} layout="vertical">
-                  <Form.Item
-                    label="Old Password"
-                    name="oldPassword"
-                    rules={[
-                      { required: true, message: "Old password is required!" },
-                    ]}
+                <Spin spinning={loading}>
+                  <Form
+                    onFinish={handleSubmitPassword}
+                    layout="vertical"
+                    form={formPassword}
                   >
-                    <Input.Password prefix={<LockOutlined />} />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="New Password"
-                    name="newPassword"
-                    rules={[
-                      { required: true, message: "New password is required!" },
-                    ]}
-                  >
-                    <Input.Password prefix={<LockOutlined />} />
-                  </Form.Item>
-
-                  <Form.Item
-                    label="Confirm New Password"
-                    name="confirmPassword"
-                    dependencies={["newPassword"]}
-                    rules={[
-                      {
-                        required: true,
-                        message: "Please confirm your password!",
-                      },
-                      ({ getFieldValue }) => ({
-                        validator(_, value) {
-                          if (
-                            !value ||
-                            getFieldValue("newPassword") === value
-                          ) {
-                            return Promise.resolve();
-                          }
-                          return Promise.reject("Passwords do not match!");
+                    <Form.Item
+                      label="Old Password"
+                      name="oldPassword"
+                      rules={[
+                        {
+                          required: true,
+                          message: "Old password is required!",
                         },
-                      }),
-                    ]}
-                  >
-                    <Input.Password prefix={<LockOutlined />} />
-                  </Form.Item>
+                      ]}
+                    >
+                      <Input.Password prefix={<LockOutlined />} />
+                    </Form.Item>
 
-                  <Form.Item>
-                    <Button type="primary" htmlType="submit">
-                      Update Password
-                    </Button>
-                  </Form.Item>
-                </Form>
+                    <Form.Item
+                      label="New Password"
+                      name="newPassword"
+                      rules={[
+                        {
+                          required: true,
+                          message: "New password is required!",
+                        },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (
+                              !value ||
+                              getFieldValue("oldPassword") !== value
+                            ) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject(
+                              "The new password must be different from the current password. Please choose a unique password."
+                            );
+                          },
+                        }),
+                      ]}
+                    >
+                      <Input.Password prefix={<LockOutlined />} />
+                    </Form.Item>
+
+                    <Form.Item
+                      label="Confirm New Password"
+                      name="confirmPassword"
+                      dependencies={["newPassword"]}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please confirm your password!",
+                        },
+                        ({ getFieldValue }) => ({
+                          validator(_, value) {
+                            if (
+                              !value ||
+                              getFieldValue("newPassword") === value
+                            ) {
+                              return Promise.resolve();
+                            }
+                            return Promise.reject("Passwords do not match!");
+                          },
+                        }),
+                      ]}
+                    >
+                      <Input.Password prefix={<LockOutlined />} />
+                    </Form.Item>
+
+                    <Form.Item>
+                      <Button type="primary" htmlType="submit">
+                        Update Password
+                      </Button>
+                    </Form.Item>
+                  </Form>
+                </Spin>
               </Tabs.TabPane>
 
               <Tabs.TabPane tab="Préférences" key="3">
