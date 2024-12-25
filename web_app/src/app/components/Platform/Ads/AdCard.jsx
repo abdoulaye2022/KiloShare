@@ -9,6 +9,7 @@ import {
   Badge,
   Space,
   Tooltip,
+  Popconfirm,
 } from "antd";
 import {
   CalendarOutlined,
@@ -21,12 +22,14 @@ import { usePathname, useRouter } from "next/navigation";
 import { adActions } from "@/app/lib/redux/actions/ads.actions";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
 
 const { Text, Title } = Typography;
 
 function AdCard({ ad }) {
   const router = useRouter();
   const pathname = usePathname();
+  const t = useTranslations("AdCardPage");
 
   const user = useAppSelector((state) => state.user.user);
 
@@ -71,7 +74,7 @@ function AdCard({ ad }) {
                 ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/uploads/images/${photo}`
                 : `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/img/valise.png`
             }
-            layout="fill"
+            fill
             objectFit="cover"
             style={{
               transition: "transform 0.3s ease",
@@ -147,7 +150,7 @@ function AdCard({ ad }) {
               <Space size="small">
                 <EnvironmentOutlined style={{ color: "#1890ff" }} />
                 <div>
-                  <Text strong>Departure</Text>
+                  <Text strong>{t("departure")}</Text>
                   <br />
                   <Tooltip title={`${arrival_city}, ${arrival_country}`}>
                     <Text
@@ -165,7 +168,7 @@ function AdCard({ ad }) {
               <Space size="small">
                 <EnvironmentOutlined style={{ color: "#1890ff" }} />
                 <div>
-                  <Text strong>Arrival</Text>
+                  <Text strong>{t("arrival")}</Text>
                   <br />
                   <Tooltip title={`${arrival_city}, ${arrival_country}`}>
                     <Text
@@ -186,7 +189,7 @@ function AdCard({ ad }) {
               <Space size="small">
                 <CalendarOutlined style={{ color: "#1890ff" }} />
                 <div>
-                  <Text strong>Departure</Text>
+                  <Text strong>{t("departure")}</Text>
                   <br />
                   <Text type="secondary">{formatDate(departure_date)}</Text>
                 </div>
@@ -196,7 +199,7 @@ function AdCard({ ad }) {
               <Space size="small">
                 <CalendarOutlined style={{ color: "#1890ff" }} />
                 <div>
-                  <Text strong>Arrival</Text>
+                  <Text strong>{t("arrival")}</Text>
                   <br />
                   <Text type="secondary">{formatDate(arrival_date)}</Text>
                 </div>
@@ -206,23 +209,35 @@ function AdCard({ ad }) {
         </Space>
       </Space>
 
-      <div style={{ paddingTop: 0, paddingLeft: "8px", paddingRight: "8px", paddingBottom: "8px" }}>
-      <Button
+      <div
+        style={{
+          paddingTop: 0,
+          paddingLeft: "8px",
+          paddingRight: "8px",
+          paddingBottom: "8px",
+        }}
+      >
+        <Button
           type="primary"
-          icon={<EyeOutlined />}
+          // icon={<EyeOutlined />}
           block
           size="large"
           style={{ marginTop: 16 }}
           onClick={() => {
-            if(user.id === user_id && pathname === "/my-ads") {
+            if (user.id === user_id && pathname === "/my-ads") {
               dispatch(adActions.selectedMyAd(id));
+            } else if (
+              user.profile_id === 1 &&
+              pathname.startsWith("/dashboard")
+            ) {
+              dispatch(adActions.selectedAdminAd());
             } else {
               dispatch(adActions.selectedAd(id));
             }
             router.push(`/ads/${id}/${slug}`);
           }}
         >
-          View details
+          {t("viewDetails")}
         </Button>
 
         {user.id === user_id &&
@@ -244,24 +259,33 @@ function AdCard({ ad }) {
               router.push(`/ads/${id}/${slug}/edit`);
             }}
           >
-            Update ad
+            {t("updateAd")}
           </Button>
         ) : null}
 
         {status_id !== 5 && status_id !== 4 && pathname === "/my-ads" ? (
-          <Button
-            type="default"
-            icon={<EditOutlined />}
-            block
-            size="large"
-            style={{ backgroundColor: "red", color: "white", marginTop: 10 }}
-            onClick={() => {
-              dispatch(adActions.selectedMyAd(id));
-              router.push(`/ads/${id}/${slug}/edit`);
+          <Popconfirm
+            title="Close this ad"
+            description="Are you sure you want to close this ad?"
+            onConfirm={() => {
+              {
+                status_id != 5 ? dispatch(adActions.closedAd(id)) : null;
+              }
             }}
+            okText="Yes"
+            cancelText="No"
           >
-            Closed
-          </Button>
+            <Button
+              type="default"
+              icon={<EditOutlined />}
+              block
+              size="large"
+              disabled={status_id === 5}
+              style={{ backgroundColor: "red", color: "white", marginTop: 10 }}
+            >
+              {t("closed")}
+            </Button>
+          </Popconfirm>
         ) : null}
       </div>
     </Card>

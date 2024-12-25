@@ -28,6 +28,7 @@ $error_message = [
 	'title_too_long' => 'The title exceeds 50 characters. Please shorten the title.',
 	'description_too_long' => 'The description is too long. It must not exceed the character limit.',
 	'invalid_user_id' => 'The user ID is invalid. Please provide a valid user number.',
+	'invalid_ad_id' => 'The ad ID is invalid. Please provide a valid ad number.',
 	'invalid_status_code' => 'The status code provided is invalid. Please use a valid status number.',
 	'invalid_price' => 'The price is invalid. Please enter a valid amount.',
 	'invalid_space_available' => 'The space available is invalid. Please enter a valid space available.',

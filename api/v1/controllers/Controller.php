@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require_once ('vendor/autoload.php');
+require_once (__DIR__ . '/../vendor/autoload.php');
 
 header("Access-Control-Allow-Origin: *");
 header("Content-Type: application/json; charset=UTF-8");
@@ -17,7 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'OPTIONS') {
 
 // localhost
 // 10.0.2.2
-$dotenv = Dotenv\Dotenv::createImmutable($_SERVER['HTTP_HOST'] == 'localhost' ? $_SERVER['DOCUMENT_ROOT'] . '/KiloShare/api/v1/' : $_SERVER['DOCUMENT_ROOT'] . "/../");
+$dotenv = Dotenv\Dotenv::createImmutable($_SERVER['HTTP_HOST'] == 'localhost' ? $_SERVER['DOCUMENT_ROOT'] . '/KiloShare/api/v1/' : __DIR__ . "/../../../../");
 $dotenv->load();
 
 define('BASE_URL', $_SERVER['HTTP_HOST'] == 'localhost' ? 'http://localhost:3000' : 'https://kilo-share.com');
@@ -35,19 +35,20 @@ $payload = [
     'rand' => uniqid(),
 ];
 
-require_once "config/DB.php";
-require_once "utils/Helper.php";
-require_once "utils/ErrorHandler.php";
-require_once "utils/constants.php";
-require_once "utils/MailSender.php";
+require_once __DIR__ . "/../config/DB.php";
+require_once __DIR__ . "/../utils/Helper.php";
+require_once __DIR__ . "/../utils/ErrorHandler.php";
+require_once __DIR__ . "/../utils/constants.php";
+require_once __DIR__ . "/../utils/MailSender.php";
 
-require_once "models/Auth.php";
-require_once "models/User.php";
-require_once "models/Ad.php";
-require_once "models/Profile.php";
-require_once "models/Status.php";
-require_once "models/DocumentType.php";
-require_once "models/Category.php";
+require_once __DIR__ . "/../models/Auth.php";
+require_once __DIR__ . "/../models/User.php";
+require_once __DIR__ . "/../models/Ad.php";
+require_once __DIR__ . "/../models/Profile.php";
+require_once __DIR__ . "/../models/Status.php";
+require_once __DIR__ . "/../models/DocumentType.php";
+require_once __DIR__ . "/../models/Category.php";
+require_once __DIR__ . "/../models/Message.php";
 
 
 $db = new DB($_ENV['DB_HOST'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME']);
@@ -67,4 +68,5 @@ $statusModel = new Status($cn);
 $documentTypeModel = new DocumentType($cn);
 $categoryModel = new Category($cn);
 $mailSender = new MailSender();
+$mailMessage = new Message($cn);
 ?>

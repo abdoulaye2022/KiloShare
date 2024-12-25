@@ -161,7 +161,6 @@ if(strlen($_POST['title']) > 60) {
 
 $fileName = "";
 if (isset($_FILES['photo'])) {
-        
     // Récupère les informations du fichier
     $file = $_FILES['photo'];
     
@@ -187,13 +186,41 @@ if (isset($_FILES['photo'])) {
 
     // Spécifie le chemin final pour enregistrer le fichier
     $destination = $uploadDirectory . basename($fileName);
-    
+
+    // Liste des types MIME autorisés
+    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+
+    // Vérifie si le fichier a un type autorisé
+    if (!in_array($fileType, $allowedTypes)) {
+        $error = [
+            "success" => false,
+            "status" => 400,
+            "message" => "Invalid file type. Only JPG, PNG, and GIF images are allowed."
+        ];
+        http_response_code(400);
+        header('Content-Type: application/json');
+        echo json_encode($error);
+        exit();
+    }
+
+    // Vérifie si la taille du fichier est inférieure à 3 Mo (3 Mo = 3 * 1024 * 1024 octets)
+    if ($fileSize > 3 * 1024 * 1024) {
+        $error = [
+            "success" => false,
+            "status" => 400,
+            "message" => "File size exceeds 3MB."
+        ];
+        http_response_code(400);
+        header('Content-Type: application/json');
+        echo json_encode($error);
+        exit();
+    }
+
     // Vérifie si le fichier a bien été téléchargé sans erreur
     if ($file['error'] === UPLOAD_ERR_OK) {
-
         // Déplace le fichier du répertoire temporaire vers le répertoire d'upload
         if (move_uploaded_file($tmpFilePath, $destination)) {
-            
+            // Le fichier a été déplacé avec succès
         } else {
             $error = [
                 "success" => false,
@@ -216,8 +243,7 @@ if (isset($_FILES['photo'])) {
         echo json_encode($error);
         exit();
     }
-} 
-
+}
 
 $title = $helper->validateString($_POST['title']);
 $description = $helper->validateString($_POST['description']);

@@ -6,16 +6,15 @@ import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import { userActions } from "@/app/lib/redux/actions/users.actions";
-import { LockOutlined } from "@ant-design/icons";
 
 const { Title, Paragraph } = Typography;
 
 const Signin = () => {
   const open = useAppSelector((state) => state.modal.isOpenSigninForm);
   const dispatch = useAppDispatch();
+  const t = useTranslations("SignInPage");
 
   const router = useRouter();
-  const t = useTranslations("LoginPage");
   const [defLanguage, setDefLanguage] = useState("fr");
   const [form] = Form.useForm();
 
@@ -84,7 +83,7 @@ const Signin = () => {
               }}
             >
               <Title level={5} style={{ color: "#4096ff" }}>
-              Sign-In Portal 
+                {t("title")}
               </Title>
             </Divider>
             <div
@@ -124,11 +123,11 @@ const Signin = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter your firstname",
+                    message: t("firstnameRequired"),
                   },
                 ]}
               >
-                <Input placeholder="Firstname" size="large" />
+                <Input placeholder={t("firstname")} size="large" />
               </Form.Item>
               <Form.Item
                 style={{ width: "100%" }}
@@ -137,11 +136,11 @@ const Signin = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter your lastname",
+                    message: t("lastnameRequired"),
                   },
                 ]}
               >
-                <Input placeholder="Lastname" size="large" />
+                <Input placeholder={t("lastname")} size="large" />
               </Form.Item>
               <Form.Item
                 style={{ width: "100%" }}
@@ -150,7 +149,11 @@ const Signin = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter your email",
+                    message: t("emailRequired"),
+                  },
+                  {
+                    type: "email",
+                    message: t("emailInvalid"),
                   },
                 ]}
               >
@@ -164,18 +167,18 @@ const Signin = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please input your password!",
+                    message: t("passwordRequired"),
                   },
                 ]}
               >
-                <Input.Password placeholder="Password" size="large" />
+                <Input.Password placeholder={t("password")} size="large" />
               </Form.Item>
 
               <Form.Item
                 name="confirmPassword"
                 dependencies={["newPassword"]}
                 rules={[
-                  { required: true, message: "Please confirm your password!" },
+                  { required: true, message: t("valideConfirmPassword") },
                   ({ getFieldValue }) => ({
                     validator(_, value) {
                       if (!value || getFieldValue("password") === value) {
@@ -186,7 +189,10 @@ const Signin = () => {
                   }),
                 ]}
               >
-                <Input.Password size="large" placeholder="Confirm Password" />
+                <Input.Password
+                  size="large"
+                  placeholder={t("confirmPassword")}
+                />
               </Form.Item>
 
               <Form.Item>
@@ -196,13 +202,13 @@ const Signin = () => {
                   style={{ width: "100%" }}
                   size="large"
                 >
-                  {t("login")}
+                  {t("signUp")}
                 </Button>
               </Form.Item>
 
               <Form.Item>
                 <p>
-                  Already have an account?{" "}
+                  {t("alreadyHaveAnAccount")}{" "}
                   <span
                     style={{
                       color: "#4096ff",
@@ -216,7 +222,7 @@ const Signin = () => {
                       form.resetFields();
                     }}
                   >
-                    Log in
+                    {t("login")}
                   </span>
                 </p>
               </Form.Item>

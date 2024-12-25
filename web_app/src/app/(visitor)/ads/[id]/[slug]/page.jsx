@@ -11,15 +11,25 @@ import {
   Tag,
   Space,
   Form,
+  Spin,
+  Alert,
+  Divider,
 } from "antd";
 import { MailOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import { redirect, useRouter } from "next/navigation";
 import { adActions } from "@/app/lib/redux/actions/ads.actions";
 import Image from "next/image";
+import { useTranslations } from "next-intl";
+import { getStatusTag } from "@/app/utils/utils";
 
 function AdsDetail({ params, rejected }) {
   const ad = useAppSelector((state) => state.ad.item);
+  const loading = useAppSelector((state) => state.ad.loading);
+  const user = useAppSelector((state) => state.user.user);
+  const authenticated = useAppSelector((state) => state.user.authenticated);
+  const messageSent = useAppSelector((state) => state.ad.messageSent);
+  const t = useTranslations("AdDetailPage");
 
   const {
     id,
@@ -36,10 +46,12 @@ function AdsDetail({ params, rejected }) {
     collection_date,
     status_id,
     status_name,
+    category_name,
     photo,
     author,
     email,
     phone,
+    user_id,
   } = ad;
 
   const dispatch = useAppDispatch();
@@ -47,31 +59,19 @@ function AdsDetail({ params, rejected }) {
 
   const [userMessage, setUserMessage] = useState("");
 
-  if(Object.keys(ad).length === 0 && ad.constructor === Object) {
-    window.href = "/"
+  if (Object.keys(ad).length === 0 && ad.constructor === Object) {
+    window.href = "/";
   }
 
   useEffect(() => {
     if (id && params && params.id != id) {
       redirect("/not-found");
     }
-  }, [id, dispatch]);
+  }, [params, dispatch]);
 
-  const sendMessage = () => {
-    setUserMessage("");
-    alert("Your message has been sent to the advertiser.");
-  };
-
-  const getStatusTag = (statusId, statusName) => {
-    switch (statusId) {
-      case 1:
-        return <Tag color="warning">{statusName}</Tag>;
-      case 2:
-        return <Tag color="green">{statusName}</Tag>;
-      case 3:
-        return <Tag color="red">{statusName}</Tag>;
-      default:
-        return <Tag color="orange">{statusName}</Tag>;
+  const handleSendingMessage = (values) => {
+    if (userMessage && user && id) {
+      dispatch(adActions.messageAd(user.id, id, values.message));
     }
   };
 
@@ -89,10 +89,10 @@ function AdsDetail({ params, rejected }) {
         {rejected === true ? (
           <>
             <Typography.Title level={4} style={{ marginTop: "30px" }}>
-              Reason for rejection
+              {t("reasonForRejection")}
             </Typography.Title>
             <Form
-              name="login"
+              name="email_rejection"
               initialValues={{
                 rejection_reason: "",
               }}
@@ -108,13 +108,13 @@ function AdsDetail({ params, rejected }) {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter your email",
+                    message: t("messageRequired"),
                   },
                 ]}
               >
                 <Input.TextArea
                   rows={4}
-                  placeholder="Write your message here..."
+                  placeholder={t("writeYourMessageHere")}
                   value={userMessage}
                   onChange={(e) => setUserMessage(e.target.value)}
                 />
@@ -130,7 +130,7 @@ function AdsDetail({ params, rejected }) {
                     boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
                   }}
                 >
-                  Send Message
+                  {t("sendMessage")}
                 </Button>
               </Form.Item>
             </Form>
@@ -155,8 +155,6 @@ function AdsDetail({ params, rejected }) {
                     ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/uploads/images/${photo}`
                     : `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/img/valise.png`
                 }
-                // height={400}
-                // width={400}
                 layout="fill"
                 objectFit="cover"
                 style={{
@@ -170,87 +168,149 @@ function AdsDetail({ params, rejected }) {
                 }}
               />
             </div>
-            <Typography.Title level={2} style={{ marginTop: "20px" }}>
+            <Typography.Title level={5} style={{ marginTop: "20px" }}>
               {title}
             </Typography.Title>
+            <Row gutter={[16, 16]}>
+              <Col xs={24} sm={24}>
+                <Divider style={{ margin: "10px 0px"}} />
+              </Col>
+            </Row>
             <Typography.Paragraph>{description}</Typography.Paragraph>
-
+            <Row gutter={[16, 16]}>
+              <Col xs={24} sm={24}>
+                <Divider style={{ margin: "10px 0px"}} />
+              </Col>
+            </Row>
             <Row gutter={[16, 16]}>
               <Col xs={24} sm={12}>
-                <strong>Space Available:</strong>{" "}
+                <strong>{t("spaceAvailable")}:</strong>{" "}
                 {space_available ? `${space_available} Kg` : "N/A"}
               </Col>
               <Col xs={24} sm={12}>
-                <strong>Price per Kilo:</strong>{" "}
+                <strong>{t("price")}:</strong>{" "}
                 {price_kilo ? `$ ${price_kilo}` : "N/A"}
               </Col>
               <Col xs={24} sm={12}>
-                <strong>Departure Country:</strong> {departure_country}
+                <strong>{t("departureCountry")}:</strong> {departure_country}
               </Col>
               <Col xs={24} sm={12}>
-                <strong>Arrival Country:</strong> {arrival_country}
+                <strong>{t("arrivalCountry")}:</strong> {arrival_country}
               </Col>
               <Col xs={24} sm={12}>
-                <strong>Departure City:</strong> {departure_city}
+                <strong>{t("departureCity")}:</strong> {departure_city}
               </Col>
               <Col xs={24} sm={12}>
-                <strong>Arrival City:</strong> {arrival_city}
+                <strong>{t("arrivalCity")}:</strong> {arrival_city}
               </Col>
               <Col xs={24} sm={12}>
-                <strong>Departure Date:</strong> {departure_date}
+                <strong>{t("departureDate")}:</strong> {departure_date}
               </Col>
               <Col xs={24} sm={12}>
-                <strong>Arrival Date:</strong> {arrival_date}
+                <strong>{t("arrivalDate")}:</strong> {arrival_date}
               </Col>
               <Col xs={24} sm={12}>
-                <strong>Collection Date:</strong> {collection_date}
+                <strong>{t("pickUpDate")}:</strong> {collection_date}
               </Col>
               <Col xs={24} sm={12}>
-                <strong>Status:</strong> {getStatusTag(status_id, status_name)}
+                <strong>{t("status")}:</strong>{" "}
+                {getStatusTag(status_id, status_name)}
+              </Col>
+              <Col xs={24} sm={12}>
+                <strong>{t("category")}:</strong> {category_name}
               </Col>
             </Row>
-
-            <Typography.Title level={4} style={{ marginTop: "30px" }}>
-              Advertiser Information
+            <Row gutter={[16, 16]}>
+              <Col xs={24} sm={24}>
+                <Divider style={{ margin: "10px 0px"}} />
+              </Col>
+            </Row>
+            <Typography.Title level={4}>
+              {t("advertiserInformation")}
             </Typography.Title>
             <Row gutter={[16, 16]}>
               <Col xs={24} sm={8}>
-                <strong>Name:</strong> {author}
+                <strong>{t("name")}:</strong> {author}
               </Col>
               <Col xs={24} sm={8}>
-                <strong>Email:</strong> {email}
+                <strong>E-mail:</strong> {email}
               </Col>
               <Col xs={24} sm={8}>
-                <strong>Phone:</strong> {phone}
+                <strong>{t("phone")}:</strong> {phone}
               </Col>
             </Row>
-
-            {params && params.id ? (
+            {params &&
+            params.id &&
+            user &&
+            authenticated &&
+            user.isVerified == 1 &&
+            user.id !== user_id ? (
               <>
-                <Typography.Title level={4} style={{ marginTop: "30px" }}>
-                  Send a Message to the Advertiser
-                </Typography.Title>
-                <Input.TextArea
-                  rows={4}
-                  placeholder="Write your message here..."
-                  value={userMessage}
-                  onChange={(e) => setUserMessage(e.target.value)}
-                  style={{ marginBottom: "20px" }}
-                />
-                <Space>
-                  <Button
-                    type="primary"
-                    icon={<MailOutlined />}
-                    onClick={sendMessage}
-                    disabled={!userMessage}
-                    style={{
-                      borderRadius: "8px",
-                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                    }}
-                  >
-                    Send Message
-                  </Button>
-                </Space>
+                {messageSent === false ? (
+                  <>
+                    <Typography.Title level={4} style={{ marginTop: "30px" }}>
+                      {t("advertiserInformation")}
+                    </Typography.Title>
+                    <Form
+                      name="email_ad"
+                      initialValues={{
+                        rejection_reason: "",
+                      }}
+                      onFinish={handleSendingMessage}
+                      layout="vertical"
+                    >
+                      <Form.Item
+                        style={{ width: "100%" }}
+                        name="message"
+                        validateTrigger="onBlur"
+                        rules={[
+                          {
+                            required: true,
+                            message: "Please enter your message",
+                          },
+                        ]}
+                      >
+                        <Spin spinning={loading}>
+                          <Input.TextArea
+                            rows={4}
+                            size="large"
+                            placeholder="Write your message here..."
+                            value={userMessage}
+                            onChange={(e) => setUserMessage(e.target.value)}
+                          />
+                        </Spin>
+                      </Form.Item>
+                      <Form.Item>
+                        <Space>
+                          <Button
+                            size="large"
+                            type="primary"
+                            htmlType="submit"
+                            icon={<MailOutlined />}
+                            disabled={!userMessage}
+                            loading={loading}
+                            style={{
+                              borderRadius: "8px",
+                              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                            }}
+                          >
+                            {t("sendMessage")}
+                          </Button>
+                        </Space>
+                      </Form.Item>
+                    </Form>
+                  </>
+                ) : (
+                  <>
+                    <br />
+                    <Alert
+                      message="Message sent"
+                      type="success"
+                      showIcon
+                      closable
+                    />
+                  </>
+                )}
               </>
             ) : null}
           </>

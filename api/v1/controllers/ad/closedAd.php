@@ -3,7 +3,7 @@ require_once("controllers/Controller.php");
 
 if ($_SERVER['REQUEST_METHOD'] != 'PUT') {
     header('HTTP/1.1 405 Method Not Allowed');
-    header('Allow: POST');
+    header('Allow: PUT');
     
     $error = [
         "success" => false,
@@ -21,7 +21,7 @@ include("utils/check_token.php");
 $input = file_get_contents('php://input');
 $data = json_decode($input, true);
 
-if(!isset($data['firstname']) || !isset($data['lastname']) || empty($data['firstname']) || empty($data['lastname'])) {
+if(!isset($params['id']) || empty($params['id'])) {
 	$error = [
         "success" => false,
         "status" => 400,
@@ -33,24 +33,10 @@ if(!isset($data['firstname']) || !isset($data['lastname']) || empty($data['first
     exit();
 }
 
-if(isset($data['phone']) && !empty($data['email']) && !$helper->validatePhoneNumber($data['phone'])) {
-	$error = [
-        "success" => false,
-        "status" => 400,
-        "message" => $errorHandler::getMessage('invalid_phone')
-    ];
-    http_response_code(400);
-    header('Content-Type: application/json');
-    echo json_encode($error);
-    exit();
-}
+$id = $helper->validateInteger($params['id']);
 
-$firstname = $helper->validateString($data['firstname']);
-$lastname = $helper->validateString($data['lastname']);
-$phone = $helper->validateString($data['phone']);
-
-$user_id = $userModel->updateUserProfil($auth_id, $firstname, $lastname, $phone);
-if($user_id == false) {
+$closed = $adModel->closed($id);
+if($closed == false) {
 	$error = [
         "success" => false,
         "status" => 400,
@@ -62,8 +48,8 @@ if($user_id == false) {
     exit();
 }
 
-$userFetch = $userModel->getOne($auth_id);
-if($userFetch == false) {
+$adFetch = $adModel->getOne($id);
+if($adFetch == false) {
 	$error = [
         "success" => false,
         "status" => 400,
@@ -75,16 +61,18 @@ if($userFetch == false) {
     exit();
 }
 
-$user = $userFetch->fetch(PDO::FETCH_ASSOC);
+$ad = $adFetch->fetch(PDO::FETCH_ASSOC);
+
 $result = array(
     "success" => true,
     "status" => 200,
     "message" => "Request successful.",
-    "data" => $user,
+    "data" => $ad,
 );
 
 http_response_code(200);
 header('Content-Type: application/json');
 echo json_encode($result);
 exit();
+
 ?>

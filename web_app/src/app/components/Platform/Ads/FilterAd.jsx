@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  DatePicker,
-  Select,
-  Button,
-  Row,
-  Col,
-  Typography,
-  Form,
-} from "antd";
+import { DatePicker, Select, Button, Row, Col, Typography, Form } from "antd";
 import { RedoOutlined, SearchOutlined } from "@ant-design/icons";
 import moment from "moment";
 import { getNames } from "country-list";
@@ -15,6 +7,7 @@ import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import { adActions } from "@/app/lib/redux/actions/ads.actions";
 import { convertToMySQLFormat } from "@/app/utils/utils";
 import { modalActions } from "@/app/lib/redux/actions/modals.actions";
+import { useTranslations } from "next-intl";
 
 const { Title } = Typography;
 
@@ -23,6 +16,7 @@ function FilterAd() {
   const [form] = Form.useForm();
   const categories = useAppSelector((state) => state.category.items);
   const isFiltered = useAppSelector((state) => state.ad.isFiltered);
+  const t = useTranslations("FilterAdsPage");
   const dispatch = useAppDispatch();
 
   const [isMobile, setIsMobile] = useState(false);
@@ -70,7 +64,7 @@ function FilterAd() {
     <>
       <Row gutter={[16, 16]}>
         <Col span={24}>
-          <Title level={4}>Filter Ads</Title>
+          <Title level={4}>{t("title")}</Title>
         </Col>
       </Row>
       <Form
@@ -94,7 +88,7 @@ function FilterAd() {
                 format="YYYY-MM-DD"
                 size="large"
                 style={{ width: "100%" }}
-                placeholder="Departure Date"
+                placeholder={t("departureDate")}
               />
             </Form.Item>
           </Col>
@@ -104,7 +98,7 @@ function FilterAd() {
                 format="YYYY-MM-DD"
                 size="large"
                 style={{ width: "100%" }}
-                placeholder="Arrival Date"
+                placeholder={t("arrivalDate")}
               />
             </Form.Item>
           </Col>
@@ -113,9 +107,9 @@ function FilterAd() {
               <Select
                 showSearch
                 size="large"
-                placeholder="Select departure country"
+                placeholder={t("departureCountry")}
                 options={[
-                  { value: "", label: "All Countries" },
+                  { value: "", label: t("allCountries") },
                   ...countries.map((country) => ({
                     value: country,
                     label: country,
@@ -132,9 +126,9 @@ function FilterAd() {
               <Select
                 showSearch
                 size="large"
-                placeholder="Select arrival country"
+                placeholder={t("arrivalcountry")}
                 options={[
-                  { value: "", label: "All Countries" },
+                  { value: "", label: t("allCountries") },
                   ...countries.map((country) => ({
                     value: country,
                     label: country,
@@ -151,9 +145,9 @@ function FilterAd() {
               <Select
                 showSearch
                 size="large"
-                placeholder="Select category"
+                placeholder={t("category")}
                 options={[
-                  { value: "", label: "All Categories" },
+                  { value: "", label: t("allCategories") },
                   ...(categories.length > 0
                     ? categories.map((p) => ({
                         value: p.id,
@@ -178,7 +172,7 @@ function FilterAd() {
                 size="large"
                 shape="circle"
                 htmlType="submit"
-                onClick={() => { 
+                onClick={() => {
                   dispatch(adActions.resetFilter());
                   dispatch(modalActions.closeMobileFilterAds());
                   form.resetFields();

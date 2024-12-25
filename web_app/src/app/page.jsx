@@ -27,6 +27,9 @@ import { modalActions } from "./lib/redux/actions/modals.actions";
 import { adActions } from "./lib/redux/actions/ads.actions";
 import { categoryActions } from "./lib/redux/actions/categories.actions";
 import VerifiedEmail from "./components/Platform/Layouts/VerifiedEmail";
+import { ConfigProvider } from "antd";
+import frFR from "antd/locale/fr_FR";
+import en_US from "antd/locale/en_US";
 
 const { Content } = Layout;
 
@@ -95,92 +98,103 @@ function Home() {
   }, []);
 
   return (
-    <Layout style={{ minHeight: "calc(100vh)" }}>
-      <Affix offsetTop={0}>
-        <Navbar />
-      </Affix>
-      <Spin spinning={loadingLogout}>
-        <Content style={{ marginTop: 15 }}>
-          <Row
-            justify="center"
-            style={{
-              maxWidth: "95%",
-              margin: "auto",
-            }}
-          >
-            <Col offset={isMobile ? 0 : 2} span={20}>
-              {isMobile ? (
-                <>
-                  <Button
-                    type={isFiltered ? "primary" : "default"}
-                    size="large"
-                    style={{
-                      width: "100%",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      transition: "all 0.3s",
-                    }}
-                    onClick={() => dispatch(modalActions.openMobileFilterAds())}
-                  >
-                    <Tooltip
-                      title={isFiltered ? "Filters applied" : "Apply filters"}
+    <ConfigProvider
+      theme={{ cssVar: true }}
+      locale={
+        (navigator.language || navigator.languages[0]).split("-")[0] === "fr"
+          ? frFR
+          : en_US
+      }
+    >
+      <Layout style={{ minHeight: "calc(100vh)" }}>
+        <Affix offsetTop={0}>
+          <Navbar />
+        </Affix>
+        <Spin spinning={loadingLogout}>
+          <Content style={{ marginTop: 15, minHeight: "calc(90vh)" }}>
+            <Row
+              justify="center"
+              style={{
+                maxWidth: "95%",
+                margin: "auto",
+              }}
+            >
+              <Col offset={isMobile ? 0 : 2} span={20}>
+                {isMobile ? (
+                  <>
+                    <Button
+                      type={isFiltered ? "primary" : "default"}
+                      size="large"
+                      style={{
+                        width: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "8px",
+                        transition: "all 0.3s",
+                      }}
+                      onClick={() =>
+                        dispatch(modalActions.openMobileFilterAds())
+                      }
                     >
-                      <FilterOutlined
-                        spin={isFiltered}
-                        style={{
-                          color: isFiltered ? "#1890ff" : "#8c8c8c",
-                        }}
-                      />
-                    </Tooltip>
-                    {isFiltered ? "Filtered" : "Filter"}
-                  </Button>
-                </>
+                      <Tooltip
+                        title={isFiltered ? "Filters applied" : "Apply filters"}
+                      >
+                        <FilterOutlined
+                          spin={isFiltered}
+                          style={{
+                            color: isFiltered ? "#1890ff" : "#8c8c8c",
+                          }}
+                        />
+                      </Tooltip>
+                      {isFiltered ? "Filtered" : "Filter"}
+                    </Button>
+                  </>
+                ) : (
+                  <FilterAd />
+                )}
+              </Col>
+            </Row>
+
+            <Row>
+              <Col span={24}>
+                <Divider style={{ marginTop: isMobile ? 17 : null }} />
+              </Col>
+            </Row>
+
+            <Row
+              gutter={[16, 16]}
+              justify="start"
+              style={{
+                maxWidth: "95%",
+                margin: "auto",
+                paddingBottom: 20,
+              }}
+            >
+              {loading || loadingCategory ? (
+                [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((p, index) => (
+                  <Col xs={24} sm={12} md={8} lg={6} key={index}>
+                    <Skeleton active paragraph={{ rows: 5 }} />
+                  </Col>
+                ))
               ) : (
-                <FilterAd />
+                <AdsList />
               )}
-            </Col>
-          </Row>
+            </Row>
+          </Content>
+        </Spin>
 
-          <Row>
-            <Col span={24}>
-              <Divider style={{ marginTop: isMobile ? 17 : null }} />
-            </Col>
-          </Row>
+        <Affix offsetBottom={0}>
+          <Footer />
+        </Affix>
 
-          <Row
-            gutter={[16, 16]}
-            justify="start"
-            style={{
-              maxWidth: "95%",
-              margin: "auto",
-              paddingBottom: 20,
-            }}
-          >
-            {loading || loadingCategory ? (
-              [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12].map((p, index) => (
-                <Col xs={24} sm={12} md={8} lg={6} key={index}>
-                  <Skeleton active paragraph={{ rows: 5 }} />
-                </Col>
-              ))
-            ) : (
-              <AdsList />
-            )}
-          </Row>
-        </Content>
-      </Spin>
-
-      <Affix offsetBottom={0}>
-        <Footer />
-      </Affix>
-
-      {openLogin && <Login />}
-      {openSignin && <Signin />}
-      {openRequestResetPassword && <RequestResetPassword />}
-      {openMobileFilterAds && <MobileFilterAds />}
-      {openVerifiedEmail && <VerifiedEmail />}
-    </Layout>
+        {openLogin && <Login />}
+        {openSignin && <Signin />}
+        {openRequestResetPassword && <RequestResetPassword />}
+        {openMobileFilterAds && <MobileFilterAds />}
+        {openVerifiedEmail && <VerifiedEmail />}
+      </Layout>
+    </ConfigProvider>
   );
 }
 

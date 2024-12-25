@@ -4,6 +4,7 @@ import AdsDrawer from "@/app/components/Dashboard/Ads/AdsDrawer";
 import { adActions } from "@/app/lib/redux/actions/ads.actions";
 import { drawerActions } from "@/app/lib/redux/actions/drawers.actions";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
+import { getStatusTag } from "@/app/utils/utils";
 import {
   DeleteOutlined,
   EditOutlined,
@@ -17,11 +18,11 @@ import { useEffect, useState } from "react";
 function Ads() {
   const dispatch = useAppDispatch();
   const loading = useAppSelector((state) => state.ad.loading);
-  const ads = useAppSelector((state) => state.ad.items);
+  const ads = useAppSelector((state) => state.ad.adminAds);
   const [selectedRow, setSelectedRow] = useState(0);
 
   useEffect(() => {
-    dispatch(adActions.getAll());
+    dispatch(adActions.adminAds());
   }, []);
 
   const columns = [
@@ -55,20 +56,9 @@ function Ads() {
       dataIndex: "status_name",
       key: "status_name",
       render: (text, record) => {
-        const getStatusTag = (statusId, statusName) => {
-          switch (statusId) {
-            case 1:
-              return <Tag color="warning">{statusName}</Tag>;
-            case 2:
-              return <Tag color="green">{statusName}</Tag>;
-            case 3:
-              return <Tag color="red">{statusName}</Tag>;
-            default:
-              return <Tag color="orange">{statusName}</Tag>;
-          }
-        };
-        
-        return <span>{getStatusTag(record.status_id, record.status_name)}</span>;
+        return (
+          <span>{getStatusTag(record.status_id, record.status_name)}</span>
+        );
       },
     },
     {
@@ -114,7 +104,7 @@ function Ads() {
               price_kilo: p.price_kilo,
               departure_date: p.departure_date,
               status_name: p.status_name,
-              status_id: p.status_id
+              status_id: p.status_id,
             })),
           ]}
           onRow={(record, rowIndex) => {
@@ -125,12 +115,12 @@ function Ads() {
               },
               onClick: (event) => {
                 setSelectedRow(record.id);
-                dispatch(adActions.selectedAd(record.id));
+                dispatch(adActions.selectedAdminAd(record.id));
                 dispatch(drawerActions.openOpenAdsDrawer());
               },
               onMouseOver: () => {
                 setSelectedRow(0);
-              }
+              },
             };
           }}
           columns={columns}

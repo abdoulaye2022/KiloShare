@@ -92,7 +92,8 @@ if($user_id == false) {
     exit();
 }
 
-$userFetch = $userModel->getOne($user_id);
+
+$userFetch = $userModel->getOneNewUser($user_id);
 if($userFetch == false) {
 	$error = [
         "success" => false,

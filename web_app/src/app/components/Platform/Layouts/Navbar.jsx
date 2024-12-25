@@ -18,6 +18,7 @@ import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import { modalActions } from "@/app/lib/redux/actions/modals.actions";
 import { setLanguage } from "../../../actions/others/setLanguage";
 import { userActions } from "@/app/lib/redux/actions/users.actions";
+import { useTranslations } from "next-intl";
 
 const { Header } = Layout;
 
@@ -26,6 +27,7 @@ function Navbar() {
   const dispatch = useAppDispatch();
   const authenticated = useAppSelector((state) => state.user.authenticated);
   const user = useAppSelector((state) => state.user.user);
+  const t = useTranslations("NavbarPage");
 
   const pathname = usePathname();
 
@@ -52,17 +54,25 @@ function Navbar() {
   const items1 = [
     {
       key: "1",
+      style: {
+        fontSize: 16,
+        lineHeight: "30px"
+      },
       label: (
         <>
-          <LoginOutlined /> Log In
+          <LoginOutlined /> {t("login")}
         </>
       ),
     },
     {
       key: "2",
+      style: {
+        fontSize: 16,
+        lineHeight: "30px"
+      },
       label: (
         <>
-          <UserAddOutlined /> Sign Up
+          <UserAddOutlined /> {t("signUp")}
         </>
       ),
     },
@@ -71,36 +81,64 @@ function Navbar() {
     },
     {
       key: "4",
+      style: {
+        fontSize: 16,
+        lineHeight: "30px"
+      },
       label: (
         <>
-          <InfoCircleOutlined /> About us
+          <InfoCircleOutlined /> {t("aboutUs")}
         </>
       ),
     },
     {
       key: "5",
+      style: {
+        fontSize: 16,
+        lineHeight: "30px"
+      },
       label: (
         <>
-          <SettingOutlined /> Settings
+          <SettingOutlined /> {t("settings")}
         </>
       ),
     },
+    // {
+    //   key: "8",
+    //   style: {
+    //     fontSize: 16,
+    //     lineHeight: "30px"
+    //   },
+    //   label: (
+    //     <>
+    //       Francais
+    //     </>
+    //   ),
+    // },
   ];
 
   const items = [
     {
       key: "3",
+      style: {
+        fontSize: 16,
+        lineHeight: "30px"
+      },
       label: (
         <>
-          <UserOutlined /> My Profil
+          <UserOutlined /> {t("myProfil")}
         </>
       ),
     },
     {
       key: "4",
+      style: {
+        fontSize: 16,
+        lineHeight: "30px"
+      },
       label: (
         <>
-          <UnorderedListOutlined /> My Ads
+          <UnorderedListOutlined /> {t("myAds")}
         </>
       ),
     },
@@ -109,25 +147,52 @@ function Navbar() {
     },
     {
       key: "5",
+      style: {
+        fontSize: 16,
+        lineHeight: "30px"
+      },
       label: (
         <>
-          <InfoCircleOutlined /> About us
+          <InfoCircleOutlined /> {t("aboutUs")}
         </>
       ),
     },
     {
       key: "6",
+      style: {
+        fontSize: 16,
+        lineHeight: "30px"
+      },
       label: (
         <>
-          <SettingOutlined /> Settings
+          <SettingOutlined /> {t("settings")}
         </>
       ),
     },
+    // {
+    //   key: "8",
+    //   style: {
+    //     fontSize: 16,
+    //     lineHeight: "30px"
+    //   },
+    //   label: (
+    //     <>
+    //       Francais
+    //     </>
+    //   ),
+    // },
     {
       key: "7",
+      style: {
+        fontSize: 16,
+        lineHeight: "30px",
+        backgroundColor: "red",
+        color: "white",
+        fontWeight: "bold"
+      },
       label: (
         <>
-          <LogoutOutlined /> Logout
+          <LogoutOutlined /> {t("logout")}
         </>
       ),
     },
@@ -156,10 +221,8 @@ function Navbar() {
         }
         break;
       case "7":
-        if(pathname === '/')
-          dispatch(userActions.logout());
-        else
-          dispatch(userActions.logout(() => router.replace("/")));
+        if (pathname === "/") dispatch(userActions.logout());
+        else dispatch(userActions.logout(() => router.replace("/")));
         break;
       default:
         break;
@@ -167,7 +230,13 @@ function Navbar() {
   };
 
   return (
-    <Header style={{ display: "flex", justifyContent: "space-between" }}>
+    <Header
+      style={{
+        display: "flex",
+        padding: isMobile ? "0px 15px" : null,
+        justifyContent: "space-between",
+      }}
+    >
       <div
         className="demo-logo"
         style={{ minWidth: isMobile ? 100 : 180, cursor: "pointer" }}
@@ -180,15 +249,30 @@ function Navbar() {
             fontSize: isMobile ? 14 : 24,
           }}
         >
-          KILO-SHARE
-          {/* <Image
-            src={isMobile ? "/logo_mobile.png" : "/logo.png"}
-            width={isMobile ? 105 : 200}
-            height={isMobile ? 35 : 50}
-            alt="Logo"
-            style={{ cursor: "pointer" }}
-            onClick={() => router.push("/")}
-          /> */}
+          <div
+            style={{
+              position: "relative",
+              width: isMobile ? "40px" : "90px",
+              height: "24px",
+              margin: "20px 0px",
+            }}
+          >
+            <Image
+              alt="Logo"
+              src={isMobile ? `/logo_mobile.png` : `/logo.png`}
+              layout="fill"
+              // objectFit="cover"
+              style={{
+                transition: "transform 0.3s ease",
+              }}
+              onMouseOver={(e) => {
+                e.currentTarget.style.transform = "scale(1.05)";
+              }}
+              onMouseOut={(e) => {
+                e.currentTarget.style.transform = "scale(1)";
+              }}
+            />
+          </div>
         </h3>
       </div>
       <div
@@ -234,24 +318,30 @@ function Navbar() {
             }
           }}
         >
-          Create an Ad
+          {t("createAnAd")}
         </Button>
 
         <Dropdown
           menu={{
             items: authenticated ? items : items1,
             onClick: (value) => handleHeaderDropdown(value.key),
+            style: {
+              width: 200, // Largeur du dropdown
+              maxHeight: 300, // Limite de hauteur (avec scroll automatique)
+              overflowY: "auto", // Scroll vertical si contenu dépasse
+            },
           }}
           trigger={["click"]}
+          size="large"
         >
           <div
             onClick={(e) => e.preventDefault()}
-            style={{ cursor: "pointer" }}
+            style={{ cursor: "pointer", fontSize:  16 }}
           >
             <Avatar
               size="large"
               icon={authenticated ? null : <UserOutlined />}
-              style={{ color: "black", backgroundColor: "white" }}
+              style={{ color: "white", backgroundColor: "#1677ff" }}
             >
               {authenticated
                 ? `${user.firstname[0]}.${user.lastname[0]}`
