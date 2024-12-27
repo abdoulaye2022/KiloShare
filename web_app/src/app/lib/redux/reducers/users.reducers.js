@@ -82,6 +82,19 @@ const userSlice = createSlice({
       state.error = action.payload;
     },
 
+    // Get All actions
+    requestRefreshToken(state) {
+      state.loading = true;
+      state.error = "";
+    },
+    successRefreshToken(state, action) {
+      state.loading = false;
+    },
+    failureRefreshToken(state, action) {
+      state.loading = false;
+      state.error = action.payload;
+    },
+
     // Add user actions
     requestAdd(state) {
       state.loading = true;
@@ -349,6 +362,9 @@ export const {
   successVerifiedEmail,
   failureVerifiedEmail,
   stopLoadingLogOut,
+  requestRefreshToken,
+  successRefreshToken,
+  failureRefreshToken
 } = userSlice.actions;
 
 export const userReducer = userSlice.reducer;

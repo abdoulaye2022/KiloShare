@@ -45,7 +45,9 @@
     "arrivalcountry": "Arrival country",
     "allCountries": "All Countries",
     "category": "Category",
-    "allCategories": "All Categories"
+    "allCategories": "All Categories",
+    "status": "Status",
+    "allStatus":"All status"
   },
   "AdCardPage": {
     "viewDetails": "View details",
@@ -130,5 +132,13 @@
     "collectionDateTooltip":"Select the date when you will arrive at your destination. From this date, senders can send their family members or friends to pick up the items.",
     "arrivalDateTooltip":"Select the date when you will arrive at your destination. This will let senders know when the item will be available for pickup.",
     "categoryTooltip":"Select the category that matches the items you can transport. This will help senders know what type of items can be sent with you."
+  },
+  "SessionExpiredPage": {
+    "title": "Session Expired",
+    "goToHome": "Go to Homepage",
+    "textSessionExpired":"Your session has expired. Please log in again to continue."
+  },
+  "MyprofilPage": {
+    "title": "My profile"
   }
 }

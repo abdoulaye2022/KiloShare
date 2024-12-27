@@ -30,7 +30,7 @@ $payload = [
     'aud' => 'kiloshare',
     'iat' => time(),
     'nbf' => time(),
-    'exp' => time() + 3600,
+    'exp' => time() + 60, // dans une minute 3600,
     'id' => 12345,
     'rand' => uniqid(),
 ];

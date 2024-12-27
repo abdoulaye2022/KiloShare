@@ -9,6 +9,7 @@ const initialState = {
   isOpenResetPassword: false,
   isOpenMobileFilterAds: false,
   isOpenVerifiedEmail: false,
+  isOpenSessionExpired: false
 };
 
 export const modalSlice = createSlice({
@@ -66,6 +67,12 @@ export const modalSlice = createSlice({
     closeVerifiedEmail: (state) => {
       state.isOpenVerifiedEmail = false;
     },
+    openSessionExpired: (state) => {
+      state.isOpenSessionExpired = true;
+    },
+    closeSessionExpired: (state) => {
+      state.isOpenSessionExpired = false;
+    },
   },
 });
 
@@ -87,6 +94,8 @@ export const {
   closeMobileFilterAds,
   openVerifiedEmail,
   closeVerifiedEmail,
+  openSessionExpired,
+  closeSessionExpired
 } = modalSlice.actions;
 
 // Export du réducteur

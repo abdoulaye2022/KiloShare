@@ -554,9 +554,9 @@ function AdsForm() {
                 <Form.Item>
                   <Button
                     size="large"
-                    style={{ marginRight: 16 }}
+                    style={{ marginRight: 10 }}
                     htmlType="reset"
-                    icon={<ReloadOutlined />}
+                    // icon={<ReloadOutlined />}
                   >
                     {t("reset")}
                   </Button>
@@ -564,7 +564,7 @@ function AdsForm() {
                     size="large"
                     type="primary"
                     htmlType="submit"
-                    icon={<CheckOutlined />}
+                    // icon={<CheckOutlined />}
                   >
                     {t("publishAd")}
                   </Button>

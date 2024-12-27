@@ -92,6 +92,9 @@ function Home() {
       dispatch(categoryActions.getAll());
     }
 
+    dispatch(adActions.resetFilter());
+    dispatch(modalActions.closeMobileFilterAds());
+
     return () => {
       mediaQuery.removeEventListener("change", handleMobileChange);
     };

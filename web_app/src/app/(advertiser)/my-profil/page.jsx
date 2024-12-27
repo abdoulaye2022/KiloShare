@@ -22,6 +22,7 @@ import {
 } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import { userActions } from "@/app/lib/redux/actions/users.actions";
+import { useTranslations } from "next-intl";
 
 const { TabPane } = Tabs;
 
@@ -32,6 +33,7 @@ function MyProfil() {
   const user = useAppSelector((state) => state.user.user);
   const authenticated = useAppSelector((state) => state.user.authenticated);
   const loading = useAppSelector((state) => state.user.loading);
+  const t = useTranslations("MyprofilPage");
   const dispatch = useAppDispatch();
 
   const handleSubmitProfile = (values) => {
@@ -59,7 +61,7 @@ function MyProfil() {
       <Col xs={24} sm={24} md={16} style={{ padding: 10 }}>
         <div style={{ margin: "0 auto" }}>
           <Card
-            title="My Profil"
+            title={t("title")}
             extra={
               <Button
                 type="primary"

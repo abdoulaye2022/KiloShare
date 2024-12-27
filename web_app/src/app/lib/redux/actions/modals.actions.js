@@ -14,7 +14,9 @@ import {
   openMobileFilterAds,
   closeMobileFilterAds,
   openVerifiedEmail,
-  closeVerifiedEmail
+  closeVerifiedEmail,
+  openSessionExpired,
+  closeSessionExpired
 } from "../reducers/modals.reducers";
 
 export const modalActions = {
@@ -33,5 +35,7 @@ export const modalActions = {
   openMobileFilterAds,
   closeMobileFilterAds,
   openVerifiedEmail,
-  closeVerifiedEmail
+  closeVerifiedEmail,
+  openSessionExpired,
+  closeSessionExpired
 };

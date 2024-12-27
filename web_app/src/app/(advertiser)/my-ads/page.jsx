@@ -1,8 +1,11 @@
 "use client";
 
 import FilterAd from "@/app/components/Platform/Ads/FilterAd";
+import MobileFilterAds from "@/app/components/Platform/Ads/MobileFilterAds";
 import AdsList from "@/app/components/Platform/Home/AdsList ";
 import { adActions } from "@/app/lib/redux/actions/ads.actions";
+import { modalActions } from "@/app/lib/redux/actions/modals.actions";
+import { statusActions } from "@/app/lib/redux/actions/status.actions";
 import { useAppSelector } from "@/app/lib/redux/hooks";
 import { FilterOutlined } from "@ant-design/icons";
 import { Button, Col, Divider, Row, Skeleton, Tooltip } from "antd";
@@ -13,8 +16,19 @@ function MyAds() {
   const [isMobile, setIsMobile] = useState(false);
   const isFiltered = useAppSelector((state) => state.ad.isFiltered);
   const loading = useAppSelector((state) => state.ad.loading);
-  const user = useAppSelector(state => state.user.user);
-  const userAds = useAppSelector(state => state.ad.userAds);
+  const user = useAppSelector((state) => state.user.user);
+  const userAds = useAppSelector((state) => state.ad.userAds);
+  const status = useAppSelector((state) => state.status.items);
+  const authenticated = useAppSelector(state => state.user.authenticated)
+  const lastFetchedStatusTime = useAppSelector(
+    (state) => state.status.lastFetchedStatusTime
+  );
+  const isOpenMobileFilterAds = useAppSelector(
+    (state) => state.modal.isOpenMobileFilterAds
+  );
+  const lastFetchedMyAdTime = useAppSelector(
+    (state) => state.ad.lastFetchedMyAdTime
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -28,7 +42,22 @@ function MyAds() {
 
     handleMobileChange(mediaQuery);
 
-    dispatch(adActions.userAds(user.id));
+    const currentTime = Date.now();
+    if (
+      userAds.length === 0 ||
+      (lastFetchedMyAdTime && currentTime - lastFetchedMyAdTime > 5 * 60 * 1000 && authenticated)
+    ) {
+      dispatch(adActions.userAds(user.id));
+    }
+    if (
+      status.length === 0 ||
+      (lastFetchedStatusTime &&
+        currentTime - lastFetchedStatusTime > 5 * 60 * 1000)
+    ) {
+      dispatch(statusActions.getAll());
+    }
+    dispatch(adActions.resetFilter());
+    dispatch(modalActions.closeMobileFilterAds());
   }, []);
 
   return (
@@ -97,6 +126,7 @@ function MyAds() {
           <AdsList />
         )}
       </Row>
+      {isOpenMobileFilterAds && <MobileFilterAds />}
     </>
   );
 }

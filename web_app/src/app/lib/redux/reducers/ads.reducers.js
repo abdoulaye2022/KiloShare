@@ -10,6 +10,7 @@ const initialState = {
   isFiltered: false,
   filteredItems: [],
   lastFetchedAdTime: null,
+  lastFetchedMyAdTime: null,
   messageSent: false,
   error: "",
 };
@@ -24,7 +25,8 @@ export const adSlice = createSlice({
     },
     successAdd: (state, action) => {
       state.loading = false;
-      state.items.push(action.payload);
+      state.lastFetchedMyAdTime = Date.now();
+      state.userAds.push(action.payload);
     },
     failureAdd: (state, action) => {
       state.loading = false;
@@ -45,6 +47,7 @@ export const adSlice = createSlice({
     },
     // Filtered Ads
     filteredAds: (state, action) => {
+      console.log(action.payload.status_id);
       (state.isFiltered = true),
         (state.filteredItems = [
           ...state.items
@@ -97,19 +100,99 @@ export const adSlice = createSlice({
               } else {
                 return p;
               }
+            })
+            .filter((p) => {
+              if (
+                action.payload.status_id != "" &&
+                action.payload.status_id != undefined
+              ) {
+                return p.status_id === action.payload.status_id;
+              } else {
+                return p;
+              }
             }),
         ]);
     },
     resetFilter: (state) => {
       (state.isFiltered = false), (state.filteredItems = []);
     },
+    // Filter my ads
+    filteredMyAds: (state, action) => {
+      (state.isFiltered = true),
+        (state.filteredItems = [
+          ...state.userAds
+            .filter((p) => {
+              if (
+                action.payload.departure_date != "" &&
+                action.payload.departure_date != undefined
+              ) {
+                return p.departure_date === action.payload.departure_date;
+              } else {
+                return p;
+              }
+            })
+            .filter((p) => {
+              if (
+                action.payload.arrival_date != "" &&
+                action.payload.arrival_date != undefined
+              ) {
+                return p.arrival_date === action.payload.arrival_date;
+              } else {
+                return p;
+              }
+            })
+            .filter((p) => {
+              if (
+                action.payload.departure_country != "" &&
+                action.payload.departure_country != undefined
+              ) {
+                return p.departure_country === action.payload.departure_country;
+              } else {
+                return p;
+              }
+            })
+            .filter((p) => {
+              if (
+                action.payload.arrival_country != "" &&
+                action.payload.arrival_country != undefined
+              ) {
+                return p.arrival_country === action.payload.arrival_country;
+              } else {
+                return p;
+              }
+            })
+            .filter((p) => {
+              if (
+                action.payload.category_id != "" &&
+                action.payload.category_id != undefined
+              ) {
+                return p.category_id === action.payload.category_id;
+              } else {
+                return p;
+              }
+            })
+            .filter((p) => {
+              if (
+                action.payload.status_id != "" &&
+                action.payload.status_id != undefined
+              ) {
+                return p.status_id === action.payload.status_id;
+              } else {
+                return p;
+              }
+            }),
+        ]);
+    },
+    resetFilterMyAds: (state) => {
+      (state.isFiltered = false), (state.filteredItems = []);
+    },
     selectedAdminAd: (state, action) => {
       state.item = state.adminAds.find((item) => item.id === action.payload);
-      state.messageSent = false
+      state.messageSent = false;
     },
     selectedAd: (state, action) => {
       state.item = state.items.find((item) => item.id === action.payload);
-      state.messageSent = false
+      state.messageSent = false;
     },
     selectedMyAd: (state, action) => {
       state.item = state.userAds.find((item) => item.id === action.payload);
@@ -199,13 +282,13 @@ export const adSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
-     // Admin ads
-     requestAdminAds: (state) => {
+    // Admin ads
+    requestAdminAds: (state) => {
       state.loading = true;
     },
     successAdminAds: (state, action) => {
       state.loading = false;
-      state.adminAds = action.payload
+      state.adminAds = action.payload;
     },
     failureAdminAds: (state, action) => {
       state.loading = false;
@@ -270,7 +353,9 @@ export const {
   selectedAdminAd,
   requestClosedAd,
   successClosedAd,
-  failureClosedAd
+  failureClosedAd,
+  filteredMyAds,
+  resetFilterMyAds
 } = adSlice.actions;
 
 export const adReducer = adSlice.reducer;

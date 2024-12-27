@@ -18,7 +18,14 @@ function getAll() {
     dispatch(requestGetAll());
     getAll_profiles()
       .then((res) => {
-        dispatch(successGetAll(res.data));
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
+        if (res.data) {
+          dispatch(successGetAll(res.data));
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
       })
       .catch((err) => {
         try {
@@ -41,6 +48,9 @@ function add(firstname, lastname, phone, email, profile_id, password) {
     profileServices
       .api_add(firstname, lastname, phone, email, profile_id, password)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successAdd(res.data));
         } else {

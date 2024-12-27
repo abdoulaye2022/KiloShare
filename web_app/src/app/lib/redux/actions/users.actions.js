@@ -52,6 +52,9 @@ import {
   successVerifiedEmail,
   failureVerifiedEmail,
   stopLoadingLogOut,
+  requestRefreshToken,
+  successRefreshToken,
+  failureRefreshToken
 } from "../reducers/users.reducers";
 import { modalActions } from "./modals.actions";
 import { add_user } from "@/app/actions/users/add";
@@ -95,7 +98,8 @@ export const userActions = {
   resetPassword,
   verifiedEmail,
   stopLoadingLogOut,
-  successLogOut
+  successLogOut,
+  refreshToken
 };
 
 function login(email, password) {
@@ -181,11 +185,38 @@ function logout(cb = null) {
   };
 }
 
+function refreshToken() {
+  return function (dispatch) {
+    dispatch(requestRefreshToken());
+    logout_user()
+      .then((res) => {
+        if (res) {  
+            dispatch(successRefreshToken());          
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureRefreshToken(parsedError.message));
+          }
+        } catch {
+          dispatch(failureRefreshToken("An unexpected error occurred."));
+        }
+      });
+  };
+}
+
 function getAll() {
   return function (dispatch) {
     dispatch(requestGetAll());
     getAll_users()
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successGetAll(res.data));
         } else {
@@ -212,6 +243,9 @@ function add(firstname, lastname, phone, email, profile_id, password) {
     );
     add_user(firstname, lastname, phone, email, profile_id, password)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successAdd(res.data));
           dispatch(modalActions.closeUserForm());
@@ -237,6 +271,9 @@ function update(id, firstname, lastname, email, profile_id) {
     dispatch(requestUpdate());
     update_user(id, firstname, lastname, email, profile_id)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successUpdate(res.data));
           dispatch(modalActions.closeUserForm());
@@ -262,8 +299,9 @@ function updateUserProfil(firstname, lastname, phone) {
     dispatch(requestUpdateUserProfil());
     updateUserProfil_user(firstname, lastname, phone)
       .then((res) => {
-        console.log("TTres important");
-        console.log(res);
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successUpdateUserProfil(res.data));
           message.success("Profile updated successfully");
@@ -290,6 +328,9 @@ function remove(id) {
     dispatch(requestRemove());
     remove_user(id)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successRemove(id));
           dispatch(modalActions.closeUserForm());
@@ -315,6 +356,9 @@ function suspend(id) {
     dispatch(requestSuspend());
     suspend_user(id)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successSuspend(id));
         } else {
@@ -339,6 +383,9 @@ function unsuspend(id) {
     dispatch(requestUnsuspend());
     unsuspend_user(id)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successUnsuspend(id));
         } else {
@@ -375,6 +422,9 @@ function isValidJwt(cb) {
     dispatch(requestIsValidJwt());
     isValidJwt_user()
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.success) {
           dispatch(successIsValidJwt());
         } else {
@@ -401,6 +451,9 @@ function confirmEmail(token) {
     dispatch(requestConfirmEmail());
     confirmEmail_user(token)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.success) {
           dispatch(successConfirmEmail(res.data));
         } else {
@@ -425,6 +478,9 @@ function changePassword(oldPassword, newPassword) {
     dispatch(requestChangePassword());
     changePassword_user(oldPassword, newPassword)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.success) {
           dispatch(successChangePassword(res.data));
           message.success("Password updated successfully");
@@ -451,6 +507,9 @@ function requestResetPassword(email) {
     dispatch(requestRequestResetPassword());
     requestResetPassword_user(email)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.success) {
           dispatch(successRequestResetPassword(res.data));
           dispatch(modalActions.closeRequestResetPassword());
@@ -482,6 +541,9 @@ function resetPassword(password, token, cb) {
     dispatch(requestResetPasswordReducer());
     resetPassword_user(password, token)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successResetPassword(res.data));
           dispatch(modalActions.closeResetPassword());
@@ -510,6 +572,9 @@ function verifiedEmail(email) {
     dispatch(requestVerifiedEmail());
     verifiedEmail_user(email)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successVerifiedEmail(res.data));
           dispatch(modalActions.closeVerifiedEmail());

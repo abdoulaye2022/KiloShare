@@ -26,6 +26,7 @@ const MobileFilterAds = ({ token }) => {
         centered={true}
         afterClose={() => {
         }}
+        style={{ top: 50 }}
       >
         <FilterAd />
       </Modal>
