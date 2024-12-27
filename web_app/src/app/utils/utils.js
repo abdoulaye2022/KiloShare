@@ -27,6 +27,6 @@ export const getStatusTag = (statusId, statusName) => {
     case 5:
       return <Tag style={{ backgroundColor: "red", color: "white" }}>{statusName}</Tag>;
     default:
-      return <Tag color="orange">{statusName}</Tag>;
+      return <Tag>{statusName}</Tag>;
   }
 };

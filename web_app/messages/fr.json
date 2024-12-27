@@ -35,7 +35,10 @@
     "settings": "Paramètres",
     "myProfil": "Mon profil",
     "myAds": "Mes annonces",
-    "logout": "Se déconnecter"
+    "logout": "Se déconnecter",
+    "SessionExpiredPage": {
+      "viewDetails": "View details"
+    }
   },
   "FilterAdsPage": {
     "title": "Filtrer les annonces",
@@ -45,7 +48,9 @@
     "arrivalcountry": "Pays d'arrivée",
     "allCountries": "Tous les pays",
     "category": "Catégorie",
-    "allCategories": "Toutes les catégories"
+    "allCategories": "Toutes les catégories",
+    "status": "Statut",
+    "allStatus":"Tous les statuts"
   },
   "AdCardPage": {
     "viewDetails": "Voir les détails",
@@ -130,5 +135,13 @@
     "collectionDateTooltip":"Sélectionnez la date à laquelle vous serez à destination. À partir de cette date, les expéditeurs pourront envoyer des membres de leur famille ou des amis pour récupérer les colis.",
     "arrivalDateTooltip":"Sélectionnez la date à laquelle vous arriverez à destination. Les expéditeurs sauront ainsi quand l'article pourra être récupéré.",
     "categoryTooltip":"Sélectionnez la catégorie correspondant aux articles que vous pouvez transporter. Cela aidera les expéditeurs à savoir quel type d'objets peuvent être envoyés avec vous."
+  },
+  "SessionExpiredPage": {
+    "title": "Session expirée",
+    "goToHome": "Retour à l'accueil",
+    "textSessionExpired":"Votre session a expiré. Veuillez vous reconnecter pour continuer."
+  },
+  "MyprofilPage": {
+    "title": "Mon profil"
   }
 }

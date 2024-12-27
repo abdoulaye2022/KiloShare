@@ -8,6 +8,7 @@ import { adActions } from "@/app/lib/redux/actions/ads.actions";
 import { convertToMySQLFormat } from "@/app/utils/utils";
 import { modalActions } from "@/app/lib/redux/actions/modals.actions";
 import { useTranslations } from "next-intl";
+import { usePathname } from "next/navigation";
 
 const { Title } = Typography;
 
@@ -18,6 +19,8 @@ function FilterAd() {
   const isFiltered = useAppSelector((state) => state.ad.isFiltered);
   const t = useTranslations("FilterAdsPage");
   const dispatch = useAppDispatch();
+  const pathname = usePathname();
+  const status = useAppSelector(state => state.status.items);
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -40,19 +43,37 @@ function FilterAd() {
   }, []);
 
   const onFinish = (values) => {
-    dispatch(
-      adActions.filteredAds({
-        departure_date: values.departure_date
-          ? convertToMySQLFormat(values.departure_date)
-          : "",
-        arrival_date: values.arrival_date
-          ? convertToMySQLFormat(values.arrival_date)
-          : "",
-        departure_country: values.departure_country,
-        arrival_country: values.arrival_country,
-        category_id: values.category_id,
-      })
-    );
+    if(pathname === "/my-ads") {
+      dispatch(
+        adActions.filteredMyAds({
+          departure_date: values.departure_date
+            ? convertToMySQLFormat(values.departure_date)
+            : "",
+          arrival_date: values.arrival_date
+            ? convertToMySQLFormat(values.arrival_date)
+            : "",
+          departure_country: values.departure_country,
+          arrival_country: values.arrival_country,
+          category_id: values.category_id,
+          status_id: values.status_id ? values.status_id : ""
+        })
+      );
+    } else {
+      dispatch(
+        adActions.filteredAds({
+          departure_date: values.departure_date
+            ? convertToMySQLFormat(values.departure_date)
+            : "",
+          arrival_date: values.arrival_date
+            ? convertToMySQLFormat(values.arrival_date)
+            : "",
+          departure_country: values.departure_country,
+          arrival_country: values.arrival_country,
+          category_id: values.category_id,
+          status_id: values.status_id ? values.status_id : ""
+        })
+      );
+    }
     dispatch(modalActions.closeMobileFilterAds());
   };
 
@@ -75,8 +96,13 @@ function FilterAd() {
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
         initialValues={{
-          title: "",
-          description: "",
+          departure_country: "",
+          arrival_country: "",
+          departure_date: "",
+          arrival_date: "",
+          category_id: "",
+          category_id: "",
+          status_id: ""
         }}
         form={form}
         className="custom-form"
@@ -158,7 +184,29 @@ function FilterAd() {
               />
             </Form.Item>
           </Col>
-          <Col xs={24} sm={12} lg={1} style={{ display: "flex" }}>
+          <Col xs={24} sm={12} lg={4} style={{ display: "flex" }}>
+            {pathname === "/my-ads" ? (
+              <>
+                <Form.Item name="status_id">
+                  <Select
+                    showSearch
+                    size="large"
+                    placeholder={t("status")}
+                    style={{ width: 150 }}
+                    options={[
+                      { value: "", label: t("allStatus") },
+                      ...(status.length > 0
+                        ? status.map((p) => ({
+                            value: p.id,
+                            label: p.name,
+                          }))
+                        : []),
+                    ]}
+                  />
+                </Form.Item>
+                &nbsp;&nbsp;&nbsp;
+              </>
+            ) : null}
             <Button
               type="primary"
               size="large"

@@ -31,7 +31,9 @@ import {
   selectedAdminAd,
   requestClosedAd,
   successClosedAd,
-  failureClosedAd
+  failureClosedAd,
+  filteredMyAds,
+  resetFilterMyAds
 } from "../reducers/ads.reducers";
 import { modalActions } from "./modals.actions";
 import { add_ad } from "@/app/actions/ads/add";
@@ -60,7 +62,9 @@ export const adActions = {
   adminAds,
   messageAd,
   closedAd,
-  selectedAdminAd
+  selectedAdminAd,
+  filteredMyAds,
+  resetFilterMyAds
 };
 
 function getAll() {
@@ -68,6 +72,9 @@ function getAll() {
     dispatch(requestGetAll());
     getAll_ads()
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successGetAll(res.data));
         } else {
@@ -92,8 +99,15 @@ function add(data) {
     dispatch(requestAdd());
     add_ad(data)
       .then((res) => {
-        dispatch(successAdd(res.data));
-        dispatch(modalActions.openAdApprovalNotice());
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
+        if (res.data) {
+          dispatch(successAdd(res.data));
+          dispatch(modalActions.openAdApprovalNotice());
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
       })
       .catch((err) => {
         try {
@@ -113,6 +127,9 @@ function reject(id, reason) {
     dispatch(requestReject());
     reject_ad(id, reason)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successReject(res.data));
           dispatch(drawerActions.closeOpenAdsDrawer());
@@ -140,6 +157,9 @@ function approve(id) {
     dispatch(requestApprove());
     approve_ad(id)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successApprove(res.data));
           dispatch(drawerActions.closeOpenAdsDrawer());
@@ -167,6 +187,9 @@ function userAds(id) {
     dispatch(requestUserAds());
     userAds_ads(id)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successUserAds(res.data));
         } else {
@@ -192,6 +215,9 @@ function update(id, data, cb) {
     dispatch(requestUpdate());
     update_ad(id, data)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successUpdate(res.data));
           message.success("Ad updated successfully");
@@ -219,6 +245,9 @@ function adminAds() {
     dispatch(requestAdminAds());
     adminAds_ads()
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successAdminAds(res.data));
         } else {
@@ -243,6 +272,9 @@ function messageAd(user_id, ad_id, message) {
     dispatch(requestMessageAd());
     messageAd_ad(user_id, ad_id, message)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successMessageAd(res.data));
           message.success("Message sent successfully");
@@ -269,6 +301,9 @@ function closedAd(ad_id) {
     dispatch(requestClosedAd());
     closeAd_ad(ad_id)
       .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
         if (res.data) {
           dispatch(successClosedAd(res.data));
           message.success("Ad closed successfully");

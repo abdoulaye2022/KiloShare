@@ -1,18 +1,21 @@
-import { getAll_categories } from "@/app/actions/categories/getApp";
+import { getAll_status } from "@/app/actions/status/getAll";
 import {
   failureGetAll,
   requestGetAll,
   successGetAll,
-} from "../reducers/categories.reducers";
+} from "../reducers/status.reducers";
+import { message } from "antd";
+import { modalActions } from "./modals.actions";
+import { userActions } from "./users.actions";
 
-export const categoryActions = {
-  getAll,
+export const statusActions = {
+  getAll
 };
 
 function getAll() {
   return function (dispatch) {
     dispatch(requestGetAll());
-    getAll_categories()
+    getAll_status()
       .then((res) => {
         if(res.status === 401) {
           dispatch(modalActions.openSessionExpired());

@@ -10,6 +10,7 @@ import Signin from "../components/Platform/Layouts/Signin";
 import { userActions } from "../lib/redux/actions/users.actions";
 import { useRouter } from "next/navigation";
 import ResetPassword from "../components/Platform/Layouts/RequestResetPassword";
+import SessionExpired from "../components/Platform/Layouts/SessionExpired";
 
 const { Content } = Layout;
 
@@ -19,6 +20,7 @@ function PlatformLayout({ children }) {
   const openResetPassword = useAppSelector(
     (state) => state.modal.isOpenRequestResetPassword
   );
+  const openSessionExpired = useAppSelector(state => state.modal.isOpenSessionExpired)
   const dispatch = useAppDispatch();
   const router = useRouter();
   const lastJwtTime = useAppSelector((state) => state.user.lastJwtTime);
@@ -49,6 +51,7 @@ function PlatformLayout({ children }) {
         {openLogin && <Login />}
         {openSignin && <Signin />}
         {openResetPassword && <ResetPassword />}
+        {openSessionExpired && <SessionExpired />}
       </Layout>
     </>
   );
