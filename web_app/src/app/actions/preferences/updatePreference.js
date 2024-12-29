@@ -3,51 +3,31 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-export async function login_user(email, password) {
+export async function updatePreference_preferences(key, value) {
   try {
-    const response = await axios.post(
-      "/api/v1/login",
+    const cookieStore = cookies();
+
+    const jwtToken = cookieStore.get(
+      process.env.NEXT_PUBLIC_COOKIE_NAME
+    )?.value;
+
+    const response = await axios.put(
+      "/api/v1/preferences/update",
       {
-        email: email,
-        password: password,
+        key: key,
+        value: value,
       },
       {
         headers: {
-          "Content-Type": "application/json",
+          Authorization: `Bearer ${jwtToken}`,
         },
       }
     );
 
     if (response) {
-      const now = new Date();
-      const offset = now.getTimezoneOffset();
-      const localDate = new Date(Date.now() + offset * 60 * 1000 + 60 * 60 * 1000);
-      
-      cookies().set({
-        name: process.env.NEXT_PUBLIC_COOKIE_NAME,
-        value: response.data.access_token,
-        httpOnly: true,
-        secure: true,
-        sameSite: "Strict",
-        path: "/",
-        maxAge: 60 * 60
-      });
-
-      cookies().set({
-        name: process.env.NEXT_PUBLIC_ROLE,
-        value: response.data.data.profile_id,
-        httpOnly: true,
-        secure: true,
-        sameSite: "Strict",
-        path: "/",
-        maxAge: 60 * 60,
-      });
-
       return response.data;
     } else {
-      throw new Error(
-        JSON.stringify({ status: 400, message: "No data received" })
-      );
+      throw new Error("No data received");
     }
   } catch (error) {
     if (error.response) {
@@ -55,7 +35,7 @@ export async function login_user(email, password) {
       const message =
         error.response.data.message ||
         {
-          400: "Invalid email or password. Please check your credentials and try again.",
+          400: "Bad Request: The server could not understand the request.",
           401: "Unauthorized: Authentication is required or has failed.",
           403: "Forbidden: You do not have permission to access this resource.",
           404: "Not Found: The requested resource could not be found.",

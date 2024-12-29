@@ -54,6 +54,11 @@ $routes = [
     // Category
     '/api/v1/categories/getAll' => 'controllers/category/getAll.php',
 
+    // Preferences
+    '/api/v1/preferences/getAll' => 'controllers/preferences/getAll.php',
+    '/api/v1/preferences/defaultPreference' => 'controllers/preferences/defaultPreference.php',
+    '/api/v1/preferences/update' => 'controllers/preferences/update.php',
+
 ];
 
 $uri = $_SERVER['REQUEST_URI'];

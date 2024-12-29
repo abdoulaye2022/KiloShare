@@ -12,6 +12,7 @@ import {
   Row,
   Col,
   Spin,
+  Checkbox,
 } from "antd";
 import {
   UserOutlined,
@@ -23,6 +24,7 @@ import {
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import { userActions } from "@/app/lib/redux/actions/users.actions";
 import { useTranslations } from "next-intl";
+import { preferenceActions } from "@/app/lib/redux/actions/preferences.actions";
 
 const { TabPane } = Tabs;
 
@@ -33,6 +35,7 @@ function MyProfil() {
   const user = useAppSelector((state) => state.user.user);
   const authenticated = useAppSelector((state) => state.user.authenticated);
   const loading = useAppSelector((state) => state.user.loading);
+  const preference = useAppSelector((state) => state.preference.item);
   const t = useTranslations("MyprofilPage");
   const dispatch = useAppDispatch();
 
@@ -46,6 +49,10 @@ function MyProfil() {
     );
     setIsEditing(false);
     // message.success("Profile updated successfully");
+  };
+
+  const onChange = (e) => {
+    console.log(`checked = ${e.target.checked}`);
   };
 
   const handleSubmitPassword = (values) => {
@@ -68,7 +75,7 @@ function MyProfil() {
                 icon={<EditOutlined />}
                 onClick={() => setIsEditing(!isEditing)}
               >
-                {isEditing ? "Annuler" : "Modifier"}
+                {isEditing ? t("cancel") : t("update")}
               </Button>
             }
             bordered={false}
@@ -96,7 +103,7 @@ function MyProfil() {
             </div>
 
             <Tabs defaultActiveKey="1">
-              <Tabs.TabPane tab="About" key="1">
+              <Tabs.TabPane tab={t("about")} key="1">
                 {isEditing ? (
                   <Form
                     form={form}
@@ -114,11 +121,11 @@ function MyProfil() {
                       rules={[
                         {
                           required: true,
-                          message: "Please input your firstname!",
+                          message: t("firstnameRequired"),
                         },
                       ]}
                     >
-                      <Input />
+                      <Input size="large" />
                     </Form.Item>
 
                     <Form.Item
@@ -127,11 +134,11 @@ function MyProfil() {
                       rules={[
                         {
                           required: true,
-                          message: "Please input your lastname!",
+                          message: t("lastnameRequired"),
                         },
                       ]}
                     >
-                      <Input />
+                      <Input size="large" />
                     </Form.Item>
 
                     <Form.Item
@@ -140,20 +147,20 @@ function MyProfil() {
                       rules={[
                         {
                           required: true,
-                          message: "Please enter your phone number",
+                          message: t("phoneRequired"),
                         },
                         {
                           pattern: /^\+?[0-9]{5,15}$/,
-                          message: "Please enter a valid 10-digit phone number",
+                          message: t("phoneValid"),
                         },
                       ]}
                     >
-                      <Input />
+                      <Input size="large" />
                     </Form.Item>
 
                     <Form.Item>
-                      <Button type="primary" htmlType="submit">
-                        Sauvegarder
+                      <Button type="primary" size="large" htmlType="submit">
+                        {t("updateButton")}
                       </Button>
                     </Form.Item>
                   </Form>
@@ -175,7 +182,7 @@ function MyProfil() {
                 )}
               </Tabs.TabPane>
 
-              <Tabs.TabPane tab="Change Password" key="2">
+              <Tabs.TabPane tab={t("changePassword")} key="2">
                 <Spin spinning={loading}>
                   <Form
                     onFinish={handleSubmitPassword}
@@ -183,12 +190,12 @@ function MyProfil() {
                     form={formPassword}
                   >
                     <Form.Item
-                      label="Old Password"
+                      label={t("oldPassword")}
                       name="oldPassword"
                       rules={[
                         {
                           required: true,
-                          message: "Old password is required!",
+                          message: t("oldPasswordRequired"),
                         },
                       ]}
                     >
@@ -196,12 +203,12 @@ function MyProfil() {
                     </Form.Item>
 
                     <Form.Item
-                      label="New Password"
+                      label={t("newPassword")}
                       name="newPassword"
                       rules={[
                         {
                           required: true,
-                          message: "New password is required!",
+                          message: t("newPasswordRequired"),
                         },
                         ({ getFieldValue }) => ({
                           validator(_, value) {
@@ -211,9 +218,7 @@ function MyProfil() {
                             ) {
                               return Promise.resolve();
                             }
-                            return Promise.reject(
-                              "The new password must be different from the current password. Please choose a unique password."
-                            );
+                            return Promise.reject(t("oldDifferentNewPassword"));
                           },
                         }),
                       ]}
@@ -222,13 +227,13 @@ function MyProfil() {
                     </Form.Item>
 
                     <Form.Item
-                      label="Confirm New Password"
+                      label={t("confirmPassword")}
                       name="confirmPassword"
                       dependencies={["newPassword"]}
                       rules={[
                         {
                           required: true,
-                          message: "Please confirm your password!",
+                          message: t("confirmPasswordRequired"),
                         },
                         ({ getFieldValue }) => ({
                           validator(_, value) {
@@ -238,7 +243,7 @@ function MyProfil() {
                             ) {
                               return Promise.resolve();
                             }
-                            return Promise.reject("Passwords do not match!");
+                            return Promise.reject(t("passwordNotMatch"));
                           },
                         }),
                       ]}
@@ -248,17 +253,66 @@ function MyProfil() {
 
                     <Form.Item>
                       <Button type="primary" htmlType="submit">
-                        Update Password
+                        {t("updateButton")}
                       </Button>
                     </Form.Item>
                   </Form>
                 </Spin>
               </Tabs.TabPane>
 
-              <Tabs.TabPane tab="Préférences" key="3">
-                <div>
-                  {/* <h4>Notifications</h4>
-              <p>Paramètres de notification: Activer/Désactiver</p> */}
+              <Tabs.TabPane tab={t("preferences")} key="3">
+                <div style={{ padding: "20px" }}>
+                  <h4 style={{ marginBottom: "10px", fontWeight: "bold" }}>
+                    Préférences sur l'annonce
+                  </h4>
+
+                  <div style={{ marginBottom: "20px", display: "flex" }}>
+                    <p style={{ marginBottom: "5px" }}>Afficher le nom et le prénom</p>
+                    <Checkbox checked={preference.fullname === 1} onChange={(e) => {
+                        if (e.target.checked)
+                          dispatch(preferenceActions.update("fullname", 1));
+                        else dispatch(preferenceActions.update("fullname", 0));
+                      }} style={{ marginLeft: 10 }} />
+                  </div>
+
+                  <div style={{ marginBottom: "10px", display: "flex" }}>
+                    <p style={{ marginBottom: "5px" }}>
+                      Afficher le numéro de téléphone
+                    </p>
+                    <Checkbox
+                      onChange={(e) => {
+                        if (e.target.checked)
+                          dispatch(preferenceActions.update("phone", 1));
+                        else dispatch(preferenceActions.update("phone", 0));
+                      }}
+                      style={{ marginLeft: 10 }}
+                    />
+                  </div>
+
+                  <div style={{ marginBottom: "20px", display: "flex" }}>
+                    <p style={{ marginBottom: "5px" }}>Afficher l'email</p>
+                    <Checkbox onChange={(e) => {
+                        if (e.target.checked)
+                          dispatch(preferenceActions.update("email", 1));
+                        else dispatch(preferenceActions.update("email", 0));
+                      }} style={{ marginLeft: 10 }} />
+                  </div>
+
+                  <h4 style={{ marginBottom: "10px", fontWeight: "bold" }}>
+                    Préférences de notification
+                  </h4>
+
+                  <div style={{ display: "flex" }}>
+                    <p style={{ marginBottom: "5px" }}>
+                      Recevoir des notifications par email pour les nouvelles
+                      annonces
+                    </p>
+                    <Checkbox onChange={(e) => {
+                        if (e.target.checked)
+                          dispatch(preferenceActions.update("newsletter", 1));
+                        else dispatch(preferenceActions.update("newsletter", 0));
+                      }} style={{ marginLeft: 10 }} />
+                  </div>
                 </div>
               </Tabs.TabPane>
             </Tabs>

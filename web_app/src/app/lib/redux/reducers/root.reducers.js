@@ -10,6 +10,7 @@ import { adReducer } from "./ads.reducers";
 import CryptoJS from "crypto-js";
 import { drawerReducer } from "./drawers.reducers";
 import { statusReducer } from "./status.reducers";
+import { preferenceReducer } from "./preferences.reducers";
 
 const encryptTransform = createTransform(
   (inboundState) => {
@@ -40,7 +41,7 @@ const encryptTransform = createTransform(
         : null,
     };
   },
-  { whitelist: ["user", "profile", "ad"] }
+  { whitelist: ["user", "profile", "ad", "preference"] }
 );
 
 const persistConfig = {
@@ -57,7 +58,8 @@ const appReducers = combineReducers({
   category: categoryReducer,
   ad: adReducer,
   drawer: drawerReducer,
-  status: statusReducer
+  status: statusReducer,
+  preference: preferenceReducer
 });
 
 const rootReducer = (state, action) => {
