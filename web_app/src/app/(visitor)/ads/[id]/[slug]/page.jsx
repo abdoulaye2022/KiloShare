@@ -52,6 +52,10 @@ function AdsDetail({ params, rejected }) {
     email,
     phone,
     user_id,
+    p_email,
+    p_fullname,
+    p_newsletter,
+    p_phone
   } = ad;
 
   const dispatch = useAppDispatch();

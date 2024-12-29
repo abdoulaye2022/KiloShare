@@ -30,7 +30,7 @@ $payload = [
     'aud' => 'kiloshare',
     'iat' => time(),
     'nbf' => time(),
-    'exp' => time() + 60, // dans une minute 3600,
+    'exp' => time() + 3600,
     'id' => 12345,
     'rand' => uniqid(),
 ];
@@ -49,7 +49,7 @@ require_once __DIR__ . "/../models/Status.php";
 require_once __DIR__ . "/../models/DocumentType.php";
 require_once __DIR__ . "/../models/Category.php";
 require_once __DIR__ . "/../models/Message.php";
-
+require_once __DIR__ . "/../models/Preference.php";
 
 $db = new DB($_ENV['DB_HOST'], $_ENV['DB_USERNAME'], $_ENV['DB_PASSWORD'], $_ENV['DB_NAME']);
 $cn = $db->getConnection();
@@ -69,4 +69,5 @@ $documentTypeModel = new DocumentType($cn);
 $categoryModel = new Category($cn);
 $mailSender = new MailSender();
 $mailMessage = new Message($cn);
+$preferenceModel = new Preference($cn);
 ?>

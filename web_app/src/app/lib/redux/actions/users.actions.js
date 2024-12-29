@@ -76,6 +76,7 @@ import { requestResetPassword_user } from "@/app/actions/auth/requestResetPasswo
 import { resetPassword_user } from "@/app/actions/auth/resetPassword";
 import { getJwt_user } from "@/app/actions/auth/getJwt";
 import { verifiedEmail_user } from "@/app/actions/auth/verifiedEmail";
+import { preferenceActions } from "./preferences.actions";
 
 export const userActions = {
   login,
@@ -111,6 +112,7 @@ function login(email, password) {
           dispatch(successLogin(res.data));
           dispatch(modalActions.closeLoginForm());
           dispatch(adActions.getAll());
+          dispatch(preferenceActions.addDefaultPreference());
         } else {
           throw new Error(JSON.stringify(res));
         }

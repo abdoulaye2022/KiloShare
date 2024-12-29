@@ -14,7 +14,7 @@ const RequestResetPassword = () => {
   const dispatch = useAppDispatch();
 
   const router = useRouter();
-  const t = useTranslations("LoginPage");
+  const t = useTranslations("ResetPasswordPage");
   const [defLanguage, setDefLanguage] = useState("fr");
   const [form] = Form.useForm();
 
@@ -72,7 +72,7 @@ const RequestResetPassword = () => {
               }}
             >
               <Title level={5} style={{ color: "#4096ff" }}>
-              Password Reset Portal
+              {t("title")}
               </Title>
             </Divider>
             <div
@@ -94,8 +94,7 @@ const RequestResetPassword = () => {
             <Form
               name="login"
               initialValues={{
-                email: "",
-                password: "",
+                email: ""
               }}
               onFinish={onFinish}
               onFinishFailed={onFinishFailed}
@@ -110,11 +109,11 @@ const RequestResetPassword = () => {
                 rules={[
                   {
                     required: true,
-                    message: "Please enter your email",
+                    message: t("emailRequired"),
                   },
                   {
                     type: "email",
-                    message: "The input is not a valid email",
+                    message: t("emailInvalid"),
                   },
                 ]}
               >
@@ -128,13 +127,13 @@ const RequestResetPassword = () => {
                   style={{ width: "100%" }}
                   size="large"
                 >
-                  Send password reset link
+                  {t("sendResetLink")}
                 </Button>
               </Form.Item>
 
               <Form.Item>
                 <p>
-                  Already have an account?{" "}
+                  {t("alreadyHaveAnAccount")}{" "}
                   <span
                     style={{
                       color: "#4096ff",
@@ -148,7 +147,7 @@ const RequestResetPassword = () => {
                       form.resetFields();
                     }}
                   >
-                    Log in
+                    {t("login")}
                   </span>
                 </p>
               </Form.Item>

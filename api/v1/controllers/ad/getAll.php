@@ -20,11 +20,26 @@ if ($_SERVER['REQUEST_METHOD'] != 'GET') {
 
 $ads = $adModel->getAll();
 
+$tabs = [];
+
+foreach($ads->fetchAll(PDO::FETCH_ASSOC) as $value) {
+    if(!$value['p_fullname']) {
+        $value['author'] = "*************";
+    }
+    if(!$value['p_email']) {
+        $value['email'] = "*************";
+    }
+    if(!$value['p_phone']) {
+        $value['phone'] = "*************";
+    }
+    $tabs[] = $value;
+}
+
 $result = array(
     "success" => true,
     "status" => 200,
     "message" => "Request successful.",
-    "data" => $ads->fetchAll(PDO::FETCH_ASSOC),
+    "data" => $tabs,
 );
 
 http_response_code(200);
