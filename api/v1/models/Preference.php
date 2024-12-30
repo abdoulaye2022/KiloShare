@@ -10,7 +10,7 @@ class Preference
 
     public function getOne($id)
     {
-        $stmt = $this->_cn->prepare("SELECT `id`, `user_id`, `email`, `phone`, `fullname`, `newsletter` FROM preferences WHERE user_id = :user_id AND is_deleted = 0");
+        $stmt = $this->_cn->prepare("SELECT `id`, `user_id`, `email`, `phone`, `fullname`, `newsletter`, `user_language` FROM preferences WHERE user_id = :user_id AND is_deleted = 0");
         $stmt->bindParam(':user_id', $id, PDO::PARAM_INT);
         if ($stmt->execute()) {
             return $stmt;
@@ -20,19 +20,20 @@ class Preference
 
     public function getAll()
     {
-        $stmt = $this->_cn->query("SELECT `id`, `user_id`, `email`, `phone`, `fullname`, `newsletter` FROM preferences WHERE is_deleted = 0");
+        $stmt = $this->_cn->query("SELECT `id`, `user_id`, `email`, `phone`, `fullname`, `newsletter`, `user_language` FROM preferences WHERE is_deleted = 0");
         return $stmt;
     }
 
-    public function create($user_id, $email, $phone, $fullname, $newsletter, $created_at)
+    public function create($user_id, $email, $phone, $fullname, $newsletter, $user_language, $created_at)
     {
-        $stmt = $this->_cn->prepare("INSERT INTO preferences (`user_id`, `email`, `phone`, `fullname`, `newsletter`, created_at, created_at) VALUES (:user_id, :email, :phone, :fullname, :newsletter, :create_by,  NOW())");
+        $stmt = $this->_cn->prepare("INSERT INTO preferences (`user_id`, `email`, `phone`, `fullname`, `newsletter`, `user_language` created_at, created_at) VALUES (:user_id, :email, :phone, :fullname, :newsletter, :user_language, :create_by,  NOW())");
 
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->bindParam(':email', $email, PDO::PARAM_INT);
         $stmt->bindParam(':phone', $phone, PDO::PARAM_INT);
         $stmt->bindParam(':fullname', $fullname, PDO::PARAM_INT);
         $stmt->bindParam(':newsletter', $newsletter, PDO::PARAM_INT);
+        $stmt->bindParam(':user_language', $user_language, PDO::PARAM_STR);
         $stmt->bindParam(':created_by', $created_by, PDO::PARAM_INT);
 
         if ($stmt->execute()) {
@@ -55,7 +56,7 @@ class Preference
 
     public function defaultPreference($user_id, $created_by)
     {
-        $stmt = $this->_cn->prepare("INSERT INTO preferences (`user_id`, `email`, `phone`, `fullname`, `newsletter`, created_by, created_at) VALUES (:user_id, 0, 0, 0, 0, :created_by,  NOW())");
+        $stmt = $this->_cn->prepare("INSERT INTO preferences (`user_id`, `email`, `phone`, `fullname`, `newsletter`, `user_language`, created_by, created_at) VALUES (:user_id, 0, 0, 0, 0, 'fr', :created_by,  NOW())");
 
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->bindParam(':created_by', $created_by, PDO::PARAM_INT);
@@ -70,7 +71,11 @@ class Preference
     {
         $stmt = $this->_cn->prepare("UPDATE preferences SET ".$key." = :".$key.", updated_by = :updated_by, updated_at = NOW() WHERE user_id = :user_id ");
 
-        $stmt->bindParam(':'.$key, $value, PDO::PARAM_INT);
+        if($key != 'user_language') {
+            $stmt->bindParam(':'.$key, $value, PDO::PARAM_INT);
+        } else {
+            $stmt->bindParam(':'.$key, $value, PDO::PARAM_STR);
+        }
         $stmt->bindParam(':updated_by', $user_id, PDO::PARAM_INT);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
 

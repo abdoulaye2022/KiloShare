@@ -13,10 +13,14 @@ export async function setLanguage(value) {
             httpOnly: true,
             name: "langue",
             value: value,
-            secure: true, // Assure que le cookie est envoyé uniquement via HTTPS
-            sameSite: "Strict", // Protège contre les attaques CSRF
-            maxAge: 60 * 60 * 24 * 365, // Durée de vie : 1 an
-            expires: new Date(Date.now() + 60 * 60 * 24 * 365 * 1000), // Expire dans 1 an
+            secure: true,
+            sameSite: "Strict",
+            maxAge: 60 * 60 * 24 * 365,
+            expires: new Date(Date.now() + 60 * 60 * 24 * 365 * 1000)
         });
+
+        return value;
     }
+
+    return langue;
 }

@@ -13,6 +13,7 @@ import {
   Col,
   Spin,
   Checkbox,
+  Select,
 } from "antd";
 import {
   UserOutlined,
@@ -25,6 +26,7 @@ import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import { userActions } from "@/app/lib/redux/actions/users.actions";
 import { useTranslations } from "next-intl";
 import { preferenceActions } from "@/app/lib/redux/actions/preferences.actions";
+import { setLanguage } from "@/app/actions/others/setLanguage";
 
 const { TabPane } = Tabs;
 
@@ -49,10 +51,6 @@ function MyProfil() {
     );
     setIsEditing(false);
     // message.success("Profile updated successfully");
-  };
-
-  const onChange = (e) => {
-    console.log(`checked = ${e.target.checked}`);
   };
 
   const handleSubmitPassword = (values) => {
@@ -263,22 +261,26 @@ function MyProfil() {
               <Tabs.TabPane tab={t("preferences")} key="3">
                 <div style={{ padding: "20px" }}>
                   <h4 style={{ marginBottom: "10px", fontWeight: "bold" }}>
-                    Préférences sur l'annonce
+                    {t("preferenceAds")}
                   </h4>
 
                   <div style={{ marginBottom: "20px", display: "flex" }}>
-                    <p style={{ marginBottom: "5px" }}>Afficher le nom et le prénom</p>
-                    <Checkbox checked={preference.fullname === 1} onChange={(e) => {
+                    <p style={{ marginBottom: "5px" }}>
+                      {t("displayFullname")}
+                    </p>
+                    <Checkbox
+                      checked={preference.fullname === 1}
+                      onChange={(e) => {
                         if (e.target.checked)
                           dispatch(preferenceActions.update("fullname", 1));
                         else dispatch(preferenceActions.update("fullname", 0));
-                      }} style={{ marginLeft: 10 }} />
+                      }}
+                      style={{ marginLeft: 10 }}
+                    />
                   </div>
 
                   <div style={{ marginBottom: "10px", display: "flex" }}>
-                    <p style={{ marginBottom: "5px" }}>
-                      Afficher le numéro de téléphone
-                    </p>
+                    <p style={{ marginBottom: "5px" }}>{t("displayPhone")}</p>
                     <Checkbox
                       onChange={(e) => {
                         if (e.target.checked)
@@ -290,28 +292,58 @@ function MyProfil() {
                   </div>
 
                   <div style={{ marginBottom: "20px", display: "flex" }}>
-                    <p style={{ marginBottom: "5px" }}>Afficher l'email</p>
-                    <Checkbox onChange={(e) => {
+                    <p style={{ marginBottom: "5px" }}>{t("displayEmail")}</p>
+                    <Checkbox
+                      onChange={(e) => {
                         if (e.target.checked)
                           dispatch(preferenceActions.update("email", 1));
                         else dispatch(preferenceActions.update("email", 0));
-                      }} style={{ marginLeft: 10 }} />
+                      }}
+                      style={{ marginLeft: 10 }}
+                    />
                   </div>
 
                   <h4 style={{ marginBottom: "10px", fontWeight: "bold" }}>
-                    Préférences de notification
+                    {t("preferenceNotify")}
                   </h4>
 
                   <div style={{ display: "flex" }}>
                     <p style={{ marginBottom: "5px" }}>
-                      Recevoir des notifications par email pour les nouvelles
-                      annonces
+                      {t("getNewsletterEmail")}
                     </p>
-                    <Checkbox onChange={(e) => {
+                    <Checkbox
+                      onChange={(e) => {
                         if (e.target.checked)
                           dispatch(preferenceActions.update("newsletter", 1));
-                        else dispatch(preferenceActions.update("newsletter", 0));
-                      }} style={{ marginLeft: 10 }} />
+                        else
+                          dispatch(preferenceActions.update("newsletter", 0));
+                      }}
+                      style={{ marginLeft: 10 }}
+                    />
+                  </div>
+
+                  <h4 style={{ marginBottom: "10px", fontWeight: "bold" }}>
+                    {t("preferenceLangue")}
+                  </h4>
+
+                  <div style={{ display: "flex" }}>
+                    <p style={{ marginBottom: "5px" }}>
+                      {t("selectedLanguage")}
+                    </p>
+                    <Select
+                      defaultValue="fr"
+                      onChange={(value) => {
+                        const language = (
+                          navigator.language || navigator.languages[0]
+                        ).split("-")[0];
+                        dispatch(preferenceActions.update('user_language', value != language ? value : language))
+                      }}
+                      options={[
+                        { value: "en", label: "Englais" },
+                        { value: "fr", label: "Francais" },
+                      ]}
+                      style={{ marginLeft: 20, width: 100 }}
+                    />
                   </div>
                 </div>
               </Tabs.TabPane>

@@ -57,7 +57,8 @@
     "departure": "Départ",
     "arrival": "Arrivée",
     "updateAd": "Mettre à jour l'annonce",
-    "closed": "Fermé"
+    "closed": "Fermé",
+    "available":"disponible"
   },
   "AdDetailPage": {
     "reasonForRejection": "Raison du rejet",
@@ -160,7 +161,15 @@
     "confirmPassword": "Confirmer le nouveau mot de passe",
     "confirmPasswordRequired": "Veuillez confirmer votre mot de passe",
     "passwordNotMatch":"Les mots de passe ne correspondent pas",
-    "preferences":"Préférences"
+    "preferences":"Préférences",
+    "preferenceAds":"Préférences sur l'annonce",
+    "displayPhone":"Afficher le numéro de téléphone",
+    "preferenceNotify":"Préférences de notification",
+    "getNewsletterEmail":"Recevoir des notifications par email pour les nouvelles annonces",
+    "displayFullname":"Afficher le nom et le prénom",
+    "displayEmail":"Afficher l'email",
+    "preferenceLangue":"Préférences linguistiques",
+    "selectedLanguage":"Sélectionnez votre langue préférée"
   },
   "ResetPasswordPage": {
     "title": "Portail de réinitialisation de mot de passe",

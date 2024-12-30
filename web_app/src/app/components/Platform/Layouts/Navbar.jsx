@@ -19,6 +19,8 @@ import { modalActions } from "@/app/lib/redux/actions/modals.actions";
 import { setLanguage } from "../../../actions/others/setLanguage";
 import { userActions } from "@/app/lib/redux/actions/users.actions";
 import { useTranslations } from "next-intl";
+import { getLanguage } from "@/app/actions/others/getLanguage";
+import { preferenceActions } from "@/app/lib/redux/actions/preferences.actions";
 
 const { Header } = Layout;
 
@@ -31,7 +33,8 @@ function Navbar() {
 
   const pathname = usePathname();
 
-  const [defLanguage, setDefLanguage] = useState("fr");
+  const item = useAppSelector(state => state.preference.item);
+  const languageDef = useAppSelector(state => state.preference.language);
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -56,7 +59,7 @@ function Navbar() {
       key: "1",
       style: {
         fontSize: 16,
-        lineHeight: "30px"
+        lineHeight: "30px",
       },
       label: (
         <>
@@ -68,7 +71,7 @@ function Navbar() {
       key: "2",
       style: {
         fontSize: 16,
-        lineHeight: "30px"
+        lineHeight: "30px",
       },
       label: (
         <>
@@ -83,7 +86,7 @@ function Navbar() {
       key: "4",
       style: {
         fontSize: 16,
-        lineHeight: "30px"
+        lineHeight: "30px",
       },
       label: (
         <>
@@ -95,7 +98,7 @@ function Navbar() {
       key: "5",
       style: {
         fontSize: 16,
-        lineHeight: "30px"
+        lineHeight: "30px",
       },
       label: (
         <>
@@ -122,7 +125,7 @@ function Navbar() {
       key: "3",
       style: {
         fontSize: 16,
-        lineHeight: "30px"
+        lineHeight: "30px",
       },
       label: (
         <>
@@ -134,7 +137,7 @@ function Navbar() {
       key: "4",
       style: {
         fontSize: 16,
-        lineHeight: "30px"
+        lineHeight: "30px",
       },
       label: (
         <>
@@ -149,7 +152,7 @@ function Navbar() {
       key: "5",
       style: {
         fontSize: 16,
-        lineHeight: "30px"
+        lineHeight: "30px",
       },
       label: (
         <>
@@ -161,7 +164,7 @@ function Navbar() {
       key: "6",
       style: {
         fontSize: 16,
-        lineHeight: "30px"
+        lineHeight: "30px",
       },
       label: (
         <>
@@ -188,7 +191,7 @@ function Navbar() {
         lineHeight: "30px",
         backgroundColor: "red",
         color: "white",
-        fontWeight: "bold"
+        fontWeight: "bold",
       },
       label: (
         <>
@@ -286,12 +289,12 @@ function Navbar() {
         {isMobile === false ? (
           <>
             <Select
-              defaultValue={defLanguage}
+              defaultValue={item.user_language ? item.user_language : languageDef}
               onChange={(value) => {
                 const language = (
                   navigator.language || navigator.languages[0]
                 ).split("-")[0];
-                setLanguage(value != language ? value : language);
+                dispatch(preferenceActions.changeLangage(value != language ? value : language))
               }}
               options={[
                 { value: "en", label: "Englais" },
@@ -336,7 +339,7 @@ function Navbar() {
         >
           <div
             onClick={(e) => e.preventDefault()}
-            style={{ cursor: "pointer", fontSize:  16 }}
+            style={{ cursor: "pointer", fontSize: 16 }}
           >
             <Avatar
               size="large"

@@ -8,15 +8,25 @@ import {
   failureAddDefault,
   requestUpdateDefault,
   successUpdateDefault,
-  failureUpdateDefault
+  failureUpdateDefault,
+  requestLanguage,
+  successLanguage,
+  failureLanguage,
+  requestLanguageUser,
+  successLanguageUser,
+  failureLanguageUser
 } from "../reducers/preferences.reducers";
 import { getAll_preferences } from "@/app/actions/preferences/getAll";
 import { updatePreference_preferences } from "@/app/actions/preferences/updatePreference";
+import { setLanguage } from "@/app/actions/others/setLanguage";
+import { getLanguage } from "@/app/actions/others/getLanguage";
 
 export const preferenceActions = {
   getAll,
   addDefaultPreference,
-  update
+  update,
+  changeLangage,
+  currentLanguage
 };
 
 function getAll() {
@@ -56,6 +66,7 @@ function addDefaultPreference() {
         }
         if (res.data) {
           dispatch(successAddDefault(res.data));
+          dispatch(changeLangage(res.data.user_language))
         } else {
           throw new Error(JSON.stringify(res));
         }
@@ -95,6 +106,54 @@ function update(key, value) {
           }
         } catch {
           dispatch(failureUpdateDefault("An unexpected error occurred."));
+        }
+      });
+  };
+}
+
+function changeLangage(langue) {
+  return function (dispatch) {
+    dispatch(requestLanguage());
+    setLanguage(langue)
+      .then((res) => {
+        if (res) {
+          dispatch(successLanguage(res));
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureLanguage(parsedError.message));
+          }
+        } catch {
+          dispatch(failureLanguage("An unexpected error occurred."));
+        }
+      });
+  };
+}
+
+function currentLanguage() {
+  return function (dispatch) {
+    dispatch(requestLanguageUser());
+    getLanguage()
+      .then((res) => {
+        if (res) {
+          dispatch(successLanguageUser(res));
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureLanguageUser(parsedError.message));
+          }
+        } catch {
+          dispatch(failureLanguageUser("An unexpected error occurred."));
         }
       });
   };

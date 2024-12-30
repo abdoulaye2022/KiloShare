@@ -101,7 +101,7 @@ function AdCard({ ad }) {
       >
         <Text
           style={{ color: "#fff", fontSize: 14, fontWeight: "bold" }}
-        >{`${space_available} kg available`}</Text>
+        >{`${space_available} kg ${t("available")}`}</Text>
       </div>
       <Space
         direction="vertical"
