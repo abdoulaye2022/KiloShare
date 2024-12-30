@@ -36,11 +36,15 @@ if(!isset($data['key']) || !isset($data['value']) || empty($data['key'])) {
 $key = $helper->validateString($data['key']);
 $value = $helper->validateString($data['value']);
 
-$valid_keys = ['email', 'phone', 'fullname', 'newsletter'];
+$valid_keys = ['email', 'phone', 'fullname', 'newsletter', 'user_language'];
 $updates = [];
 
 if (in_array($key, $valid_keys)) {
-    $updates[$key] = (int) $value;
+    if($key != 'user_language') {
+        $updates[$key] = (int) $value;
+    } else {
+        $updates[$key] = $value;
+    }
 } else {
     $error = [
         "success" => false,

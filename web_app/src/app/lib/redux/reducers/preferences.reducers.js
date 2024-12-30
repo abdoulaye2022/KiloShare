@@ -4,6 +4,7 @@ const initialState = {
   loading: false,
   item: {},
   items: [],
+  language: "fr",
   lastFetchedPreferenceTime: null,
   error: null,
 };
@@ -44,11 +45,36 @@ export const preferenceSlice = createSlice({
     successUpdateDefault: (state, action) => {
       state.loading = false;
       state.item = action.payload;
+      state.language = action.payload.user_language;
     },
     failureUpdateDefault: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
+    // Change language
+    requestLanguage: (state) => {
+      state.loading = true;
+    },
+    successLanguage: (state, action) => {
+      state.loading = false;
+      state.language = action.payload
+    },
+    failureLanguage: (state, action) => {
+      state.loading = false;
+      state.error = action.payload
+    },
+    // Set language
+    requestLanguageUser: (state) => {
+      state.loading = true;
+    },
+    successLanguageUser: (state, action) => {
+      state.loading = false;
+      state.language = action.payload
+    },
+    failureLanguageUser: (state, action) => {
+      state.loading = false;
+      state.error = action.payload
+    }
   },
 });
 
@@ -61,6 +87,12 @@ export const {
   failureAddDefault,
   requestUpdateDefault,
   successUpdateDefault,
-  failureUpdateDefault
+  failureUpdateDefault,
+  requestLanguage,
+  successLanguage,
+  failureLanguage,
+  requestLanguageUser,
+  successLanguageUser,
+  failureLanguageUser
 } = preferenceSlice.actions;
 export const preferenceReducer = preferenceSlice.reducer;

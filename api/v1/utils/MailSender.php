@@ -25,7 +25,9 @@ class MailSender
         $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', $_ENV['BREVO_API_KEY']);
 
         $apiInstance = new TransactionalEmailsApi(
-            new Client(),
+            new Client([
+                'verify' => false, // Désactive la vérification SSL (à utiliser uniquement pour le débogage)
+            ]),
             $config
         );
 
@@ -45,6 +47,7 @@ class MailSender
             'to' => $to,
             'htmlContent' => $body,
             'params' => ['bodyMessage' => 'made just for you!'],
+            "textContent" => "test"
         ]);
 
         try {

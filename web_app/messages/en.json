@@ -54,7 +54,8 @@
     "departure": "Departure",
     "arrival": "Arrival",
     "updateAd": "Update ad",
-    "closed": "Closed"
+    "closed": "Closed",
+    "available": "available"
   },
   "AdDetailPage": {
     "reasonForRejection": "Reason for rejection",
@@ -157,7 +158,15 @@
     "confirmPassword":"Confirm New Password",
     "confirmPasswordRequired":"Please confirm your password",
     "passwordNotMatch":"Passwords do not match",
-    "preferences":"Preferences"
+    "preferences":"Preferences",
+    "preferenceAds":"Preferences on the ad",
+    "displayPhone":"Show the phone number",
+    "preferenceNotify":"Notification preferences",
+    "getNewsletterEmail":"Receive email notifications for new ads",
+    "displayFullname":"Display the first name and last name",
+    "displayEmail":"Display the email",
+    "preferenceLangue":"Language preferences",
+    "selectedLanguage":"Select your preferred language"
   },
   "ResetPasswordPage": {
     "title": "Password Reset Portal",

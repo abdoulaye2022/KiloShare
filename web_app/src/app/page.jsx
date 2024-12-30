@@ -30,6 +30,7 @@ import VerifiedEmail from "./components/Platform/Layouts/VerifiedEmail";
 import { ConfigProvider } from "antd";
 import frFR from "antd/locale/fr_FR";
 import en_US from "antd/locale/en_US";
+import { preferenceActions } from "./lib/redux/actions/preferences.actions";
 
 const { Content } = Layout;
 
@@ -58,6 +59,8 @@ function Home() {
     (state) => state.category.lastFetchedCategoryTime
   );
   const dispatch = useAppDispatch();
+   const item = useAppSelector(state => state.preference.item);
+   const language = useAppSelector(state => state.preference.language);
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -94,6 +97,10 @@ function Home() {
 
     dispatch(adActions.resetFilter());
     dispatch(modalActions.closeMobileFilterAds());
+
+    if(Object.keys(item).length > 0 && item.user_language !== language) {
+      dispatch(preferenceActions.changeLangage(item.user_language))
+    }
 
     return () => {
       mediaQuery.removeEventListener("change", handleMobileChange);
