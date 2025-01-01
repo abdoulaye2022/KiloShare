@@ -33,7 +33,10 @@ import {
   successClosedAd,
   failureClosedAd,
   filteredMyAds,
-  resetFilterMyAds
+  resetFilterMyAds,
+  requestGetOne,
+  successGetOne,
+  failureGetOne
 } from "../reducers/ads.reducers";
 import { modalActions } from "./modals.actions";
 import { add_ad } from "@/app/actions/ads/add";
@@ -47,6 +50,7 @@ import { adminAds_ads } from "@/app/actions/ads/adminAds";
 import { messageAd_ad } from "@/app/actions/ads/messageAd";
 import { userActions } from "./users.actions";
 import { closeAd_ad } from "@/app/actions/ads/closedAd";
+import { getOne_ads } from "@/app/actions/ads/getOne";
 
 export const adActions = {
   add,
@@ -64,7 +68,8 @@ export const adActions = {
   closedAd,
   selectedAdminAd,
   filteredMyAds,
-  resetFilterMyAds
+  resetFilterMyAds,
+  getOne
 };
 
 function getAll() {
@@ -89,6 +94,33 @@ function getAll() {
           }
         } catch {
           dispatch(failureGetAll("An unexpected error occurred."));
+        }
+      });
+  };
+}
+
+function getOne(id, slug) {
+  return function (dispatch) {
+    dispatch(requestGetOne());
+    getOne_ads(id, slug)
+      .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
+        if (res.data) {
+          dispatch(successGetOne(res.data));
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureGetOne(parsedError.message));
+          }
+        } catch {
+          dispatch(failureGetOne("An unexpected error occurred."));
         }
       });
   };

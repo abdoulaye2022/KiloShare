@@ -40,6 +40,7 @@ function MyProfil() {
   const preference = useAppSelector((state) => state.preference.item);
   const t = useTranslations("MyprofilPage");
   const dispatch = useAppDispatch();
+  const language = (navigator.language || navigator.languages[0]).split("-")[0];
 
   const handleSubmitProfile = (values) => {
     dispatch(
@@ -331,12 +332,18 @@ function MyProfil() {
                       {t("selectedLanguage")}
                     </p>
                     <Select
-                      defaultValue="fr"
+                      defaultValue={
+                        preference.user_language
+                          ? preference.user_language
+                          : language
+                      }
                       onChange={(value) => {
-                        const language = (
-                          navigator.language || navigator.languages[0]
-                        ).split("-")[0];
-                        dispatch(preferenceActions.update('user_language', value != language ? value : language))
+                        dispatch(
+                          preferenceActions.update(
+                            "user_language",
+                            value != language ? value : language
+                          )
+                        );
                       }}
                       options={[
                         { value: "en", label: "Englais" },

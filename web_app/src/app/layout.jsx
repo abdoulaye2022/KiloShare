@@ -47,6 +47,7 @@ export default async function RootLayout({ children }) {
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon.png" />
         <link rel="apple-touch-icon" href="/favicon.png" />
         <meta name="theme-color" content="#ffffff" />
+        <title>Kilo-Share</title>
       </head>
       <body>
         <NextIntlClientProvider messages={messages}>

@@ -138,6 +138,7 @@ function signin(firstname, lastname, email, password) {
         if (res.data) {
           dispatch(successSignin(res.data));
           dispatch(modalActions.closeSigninForm());
+          dispatch(preferenceActions.addDefaultPreference());
         } else {
           throw new Error(JSON.stringify(res));
         }

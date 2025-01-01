@@ -86,11 +86,13 @@ $payload [] = $userinfo;
 
 $jwt_email = JWT::encode($payload, $key, 'HS256');
 
-$subject = "Welcome to Kiloshare! Confirm your email to get started";
 $to = [
     ['email' => $user['email'], 'name' => $user['firstname'] . " " . $user['lastname']]
 ];
-$body = '<!DOCTYPE html>
+
+if($user['user_language'] == "en") {
+    $subject = "Welcome to Kiloshare! Confirm your email to get started.";
+    $body = '<!DOCTYPE html>
         <html>
             <head>
                 <meta charset="UTF-8">
@@ -178,6 +180,97 @@ $body = '<!DOCTYPE html>
                 </div>
             </body>
         </html>';
+} else {
+    $subject = "Bienvenue sur Kiloshare ! Confirmez votre adresse e-mail pour commencer.";
+    $body = '<!DOCTYPE html>
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Confirmez votre adresse e-mail</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f4f4f4;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    .email-container {
+                        max-width: 600px;
+                        margin: 20px auto;
+                        background-color: #ffffff;
+                        border-radius: 8px;
+                        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                        overflow: hidden;
+                    }
+                    .email-header {
+                        background-color: #0078D7;
+                        color: #ffffff;
+                        padding: 20px;
+                        text-align: center;
+                    }
+                    .email-header h1 {
+                        margin: 0;
+                        font-size: 24px;
+                    }
+                    .email-body {
+                        padding: 20px;
+                        color: #333333;
+                    }
+                    .email-body p {
+                        line-height: 1.6;
+                        font-size: 16px;
+                    }
+                    .email-button {
+                        display: block;
+                        text-align: center;
+                        margin: 20px 0;
+                    }
+                    .email-button a {
+                        background-color: #0078D7;
+                        color: #ffffff;
+                        padding: 10px 20px;
+                        text-decoration: none;
+                        border-radius: 4px;
+                        font-size: 16px;
+                    }
+                    .email-button a:hover {
+                        background-color: #0056a3;
+                    }
+                    .email-footer {
+                        background-color: #f4f4f4;
+                        padding: 10px;
+                        text-align: center;
+                        font-size: 12px;
+                        color: #666666;
+                    }
+                    .email-footer a {
+                        color: #0078D7;
+                        text-decoration: none;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="email-container">
+                    <div class="email-header">
+                        <h1>Confirmez votre adresse e-mail</h1>
+                    </div>
+                    <div class="email-body">
+                        <p>Bonjour,</p>
+                        <p>Merci de vous être inscrit sur notre plateforme Kilo-Share. Avant de commencer, veuillez confirmer votre adresse e-mail en cliquant sur le bouton ci-dessous.</p>
+                        <div class="email-button">
+                            <a href="'.BASE_URL.'/confirm-email/'.$jwt_email.'" target="_blank">Confirmer mon e-mail</a>
+                        </div>
+                        <p>Si vous n\'avez pas créé de compte, vous pouvez ignorer cet e-mail.</p>
+                    </div>
+                    <div class="email-footer">
+                        <p>Kilo-Share © ' . date('Y') . ' Créé par <a href="https://m2atech.com" target="_blank">M2ATech</a>. Tous droits réservés.</p>
+                    </div>
+                </div>
+                </div>
+            </body>
+        </html>';
+}
 
 if ($mailSender->send_mail($subject, $to, $body)) {
     $result = array(

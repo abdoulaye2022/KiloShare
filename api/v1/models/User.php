@@ -11,9 +11,10 @@ class User
     public function getOne($id)
     {
         $stmt = $this->_cn->prepare("SELECT u.id, u.firstname, u.lastname, u.phone, u.email, u.status, u.password, u.profile_id, p.name as profile_name,
-                                    u.isVerified 
+                                    u.isVerified, pref.user_language
                                     FROM users u
-                                    INNER JOIN profiles p ON p.id = u.profile_id 
+                                    INNER JOIN profiles p ON p.id = u.profile_id
+                                    LEFT JOIN preferences pref ON pref.user_id = u.id
                                     WHERE u.id = :id AND u.is_deleted = 0 AND isVerified = 1 AND status = 1");
         $stmt->bindParam(':id', $id, PDO::PARAM_INT);
         

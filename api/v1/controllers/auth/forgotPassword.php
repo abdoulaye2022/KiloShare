@@ -1,6 +1,9 @@
 <?php
 require_once("controllers/Controller.php");
 
+use \Mailjet\Resources;
+use \Mailjet\Client;
+
 if ($_SERVER['REQUEST_METHOD'] != 'POST') {
     header('HTTP/1.1 405 Method Not Allowed');
     header('Allow: POST');
@@ -90,6 +93,7 @@ $subject = "Reset Your Password";
 $to = [
     ['email' => $email, 'name' => $user['firstname'] . " " . $user['lastname']]
 ];
+
 $body = '<!DOCTYPE html>
         <html>
             <head>

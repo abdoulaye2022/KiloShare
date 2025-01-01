@@ -63,11 +63,16 @@ if($adFetch == false) {
 
 $ad = $adFetch->fetch(PDO::FETCH_ASSOC);
 
-$subject = "Your Ad Has Been Approved on Kiloshare";
 $to = [
     ['email' => $ad['email'], 'name' => $ad['author']]
 ];
-$body = '<!DOCTYPE html>
+
+$userFetch = $userModel->getOne($ad['user_id']);
+$u = $userFetch->fetch(PDO::FETCH_ASSOC);
+
+if($u['user_language'] == "en") {
+    $subject = "Your Ad Has Been Approved on Kiloshare";
+    $body = '<!DOCTYPE html>
         <html>
             <head>
                 <meta charset="UTF-8">
@@ -137,6 +142,80 @@ $body = '<!DOCTYPE html>
                 </div>
             </body>
         </html>';
+} else {
+    $subject = "Votre annonce a été approuvée sur Kiloshare";
+    $body = '<!DOCTYPE html>
+        <html>
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Notification d\'approbation d\'annonce</title>
+                <style>
+                    body {
+                        font-family: Arial, sans-serif;
+                        background-color: #f4f4f4;
+                        margin: 0;
+                        padding: 0;
+                    }
+                    .email-container {
+                        max-width: 600px;
+                        margin: 20px auto;
+                        background-color: #ffffff;
+                        border-radius: 8px;
+                        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                        overflow: hidden;
+                    }
+                    .email-header {
+                        background-color: #4CAF50;
+                        color: #ffffff;
+                        padding: 20px;
+                        text-align: center;
+                    }
+                    .email-header h1 {
+                        margin: 0;
+                        font-size: 24px;
+                    }
+                    .email-body {
+                        padding: 20px;
+                        color: #333333;
+                    }
+                    .email-body p {
+                        line-height: 1.6;
+                        font-size: 16px;
+                    }
+                    .email-footer {
+                        background-color: #f4f4f4;
+                        padding: 10px;
+                        text-align: center;
+                        font-size: 12px;
+                        color: #666666;
+                    }
+                    .email-footer a {
+                        color: #0078D7;
+                        text-decoration: none;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class="email-container">
+                    <div class="email-header">
+                        <h1>Votre annonce a été approuvée !</h1>
+                    </div>
+                    <div class="email-body">
+                        <p>Bonjour,</p>
+                        <p>Nous sommes heureux de vous informer que votre annonce sur Kiloshare a été approuvée et est désormais en ligne sur la plateforme.</p>
+                        <p>Merci d\'utiliser Kiloshare, et nous espérons continuer à vous compter parmi nos utilisateurs.</p>
+                        <p>Cordialement,</p>
+                        <p>L\'équipe Kiloshare</p>
+                    </div>
+                    <div class="email-footer">
+                        <p>Kilo-Share © ' . date('Y') . ' Créé par <a href="https://m2atech.com" target="_blank">M2ATech</a>. Tous droits réservés.</p>
+                    </div>
+                </div>
+            </body>
+        </html>';
+
+}
 
 if ($mailSender->send_mail($subject, $to, $body)) {
     $result = array(

@@ -9,9 +9,11 @@ class Auth {
     // Exemple de m�thode pour obtenir tous les utilisateurs
     public function login($email) {
         $stmt = $this->_cn->prepare("SELECT u.id, u.firstname, u.lastname, u.phone, u.email, u.status, u.password, u.profile_id, p.name as profile_name,
-                                    u.isVerified 
+                                    u.isVerified, pref.user_language
                                     FROM users u
-                                    INNER JOIN profiles p ON p.id = u.profile_id WHERE u.email = :email");
+                                    INNER JOIN profiles p ON p.id = u.profile_id 
+                                    LEFT JOIN preferences pref ON pref.user_id = u.id
+                                    WHERE u.email = :email");
         $stmt->bindParam(':email', $email, PDO::PARAM_STR);
         $stmt->execute();
         return $stmt;
