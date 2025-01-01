@@ -45,6 +45,18 @@ export const adSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    // GETONE
+    requestGetOne: (state) => {
+      state.loading = true;
+    },
+    successGetOne: (state, action) => {
+      state.loading = false;
+      state.item = action.payload;
+    },
+    failureGetOne: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
     // Filtered Ads
     filteredAds: (state, action) => {
       console.log(action.payload.status_id);
@@ -355,7 +367,10 @@ export const {
   successClosedAd,
   failureClosedAd,
   filteredMyAds,
-  resetFilterMyAds
+  resetFilterMyAds,
+  requestGetOne,
+  successGetOne,
+  failureGetOne
 } = adSlice.actions;
 
 export const adReducer = adSlice.reducer;

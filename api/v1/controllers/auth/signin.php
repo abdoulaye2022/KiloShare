@@ -123,16 +123,17 @@ $jwt_email = JWT::encode($payload, $key, 'HS256');
 
 unset($user['password']);
 
-$subject = "Welcome to Kiloshare! Confirm your email to get started";
+$subject = "Bienvenue sur Kiloshare ! Confirmez votre adresse e-mail pour commencer.";
 $to = [
     ['email' => $email, 'name' => $firstname . " " . $lastname]
 ];
+
 $body = '<!DOCTYPE html>
         <html>
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Confirm Your Email Address</title>
+                <title>Confirmez votre adresse e-mail</title>
                 <style>
                     body {
                         font-family: Arial, sans-serif;
@@ -198,23 +199,24 @@ $body = '<!DOCTYPE html>
             <body>
                 <div class="email-container">
                     <div class="email-header">
-                        <h1>Confirm Your Email Address</h1>
+                        <h1>Confirmez votre adresse e-mail</h1>
                     </div>
                     <div class="email-body">
-                        <p>Hello,</p>
-                        <p>Thank you for signing up on our Kilo-Share platform. Before getting started, please confirm your email address by clicking the button below.</p>
+                        <p>Bonjour,</p>
+                        <p>Merci de vous être inscrit sur notre plateforme Kilo-Share. Avant de commencer, veuillez confirmer votre adresse e-mail en cliquant sur le bouton ci-dessous.</p>
                         <div class="email-button">
-                            <a href="'.BASE_URL.'/confirm-email/'.$jwt_email.'" target="_blank">Confirm My Email</a>
+                            <a href="'.BASE_URL.'/confirm-email/'.$jwt_email.'" target="_blank">Confirmer mon e-mail</a>
                         </div>
-                        <p>If you did not create an account, you can ignore this email.</p>
+                        <p>Si vous n\'avez pas créé de compte, vous pouvez ignorer cet e-mail.</p>
                     </div>
                     <div class="email-footer">
-                        <p>Kilo-Share © ' . date('Y') . ' Created by <a href="https://m2atech.com" target="_blank">M2ATech</a>. All rights reserved.</p>
+                        <p>Kilo-Share © ' . date('Y') . ' Créé par <a href="https://m2atech.com" target="_blank">M2ATech</a>. Tous droits réservés.</p>
                     </div>
                 </div>
                 </div>
             </body>
         </html>';
+
 
 if ($mailSender->send_mail($subject, $to, $body)) {
     $result = array(

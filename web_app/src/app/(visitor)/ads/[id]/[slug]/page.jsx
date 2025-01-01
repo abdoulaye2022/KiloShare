@@ -52,10 +52,6 @@ function AdsDetail({ params, rejected }) {
     email,
     phone,
     user_id,
-    p_email,
-    p_fullname,
-    p_newsletter,
-    p_phone
   } = ad;
 
   const dispatch = useAppDispatch();
@@ -68,6 +64,9 @@ function AdsDetail({ params, rejected }) {
   }
 
   useEffect(() => {
+    if (Object.keys(ad).length == 0) {
+      dispatch(adActions.getOne(params.id, params.slug));
+    }
     if (id && params && params.id != id) {
       redirect("/not-found");
     }
@@ -141,182 +140,184 @@ function AdsDetail({ params, rejected }) {
           </>
         ) : (
           <>
-            <div
-              style={{
-                padding: 10,
-                height: 400,
-                borderRadius: "8px",
-                marginBottom: "20px",
-                backgroundColor: "#f0f2f5",
-                position: "relative",
-                width: "100%",
-              }}
-            >
-              <Image
-                alt={title}
-                src={
-                  photo
-                    ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/uploads/images/${photo}`
-                    : `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/img/valise.png`
-                }
-                layout="fill"
-                objectFit="cover"
+            <Spin spinning={loading}>
+              <div
                 style={{
-                  transition: "transform 0.3s ease",
+                  padding: 10,
+                  height: 400,
+                  borderRadius: "8px",
+                  marginBottom: "20px",
+                  backgroundColor: "#f0f2f5",
+                  position: "relative",
+                  width: "100%",
                 }}
-                onMouseOver={(e) => {
-                  e.currentTarget.style.transform = "scale(1.05)";
-                }}
-                onMouseOut={(e) => {
-                  e.currentTarget.style.transform = "scale(1)";
-                }}
-              />
-            </div>
-            <Typography.Title level={5} style={{ marginTop: "20px" }}>
-              {title}
-            </Typography.Title>
-            <Row gutter={[16, 16]}>
-              <Col xs={24} sm={24}>
-                <Divider style={{ margin: "10px 0px"}} />
-              </Col>
-            </Row>
-            <Typography.Paragraph>{description}</Typography.Paragraph>
-            <Row gutter={[16, 16]}>
-              <Col xs={24} sm={24}>
-                <Divider style={{ margin: "10px 0px"}} />
-              </Col>
-            </Row>
-            <Row gutter={[16, 16]}>
-              <Col xs={24} sm={12}>
-                <strong>{t("spaceAvailable")}:</strong>{" "}
-                {space_available ? `${space_available} Kg` : "N/A"}
-              </Col>
-              <Col xs={24} sm={12}>
-                <strong>{t("price")}:</strong>{" "}
-                {price_kilo ? `$ ${price_kilo}` : "N/A"}
-              </Col>
-              <Col xs={24} sm={12}>
-                <strong>{t("departureCountry")}:</strong> {departure_country}
-              </Col>
-              <Col xs={24} sm={12}>
-                <strong>{t("arrivalCountry")}:</strong> {arrival_country}
-              </Col>
-              <Col xs={24} sm={12}>
-                <strong>{t("departureCity")}:</strong> {departure_city}
-              </Col>
-              <Col xs={24} sm={12}>
-                <strong>{t("arrivalCity")}:</strong> {arrival_city}
-              </Col>
-              <Col xs={24} sm={12}>
-                <strong>{t("departureDate")}:</strong> {departure_date}
-              </Col>
-              <Col xs={24} sm={12}>
-                <strong>{t("arrivalDate")}:</strong> {arrival_date}
-              </Col>
-              <Col xs={24} sm={12}>
-                <strong>{t("pickUpDate")}:</strong> {collection_date}
-              </Col>
-              <Col xs={24} sm={12}>
-                <strong>{t("status")}:</strong>{" "}
-                {getStatusTag(status_id, status_name)}
-              </Col>
-              <Col xs={24} sm={12}>
-                <strong>{t("category")}:</strong> {category_name}
-              </Col>
-            </Row>
-            <Row gutter={[16, 16]}>
-              <Col xs={24} sm={24}>
-                <Divider style={{ margin: "10px 0px"}} />
-              </Col>
-            </Row>
-            <Typography.Title level={4}>
-              {t("advertiserInformation")}
-            </Typography.Title>
-            <Row gutter={[16, 16]}>
-              <Col xs={24} sm={8}>
-                <strong>{t("name")}:</strong> {author}
-              </Col>
-              <Col xs={24} sm={8}>
-                <strong>E-mail:</strong> {email}
-              </Col>
-              <Col xs={24} sm={8}>
-                <strong>{t("phone")}:</strong> {phone}
-              </Col>
-            </Row>
-            {params &&
-            params.id &&
-            user &&
-            authenticated &&
-            user.isVerified == 1 &&
-            user.id !== user_id ? (
-              <>
-                {messageSent === false ? (
-                  <>
-                    <Typography.Title level={4} style={{ marginTop: "30px" }}>
-                      {t("advertiserInformation")}
-                    </Typography.Title>
-                    <Form
-                      name="email_ad"
-                      initialValues={{
-                        rejection_reason: "",
-                      }}
-                      onFinish={handleSendingMessage}
-                      layout="vertical"
-                    >
-                      <Form.Item
-                        style={{ width: "100%" }}
-                        name="message"
-                        validateTrigger="onBlur"
-                        rules={[
-                          {
-                            required: true,
-                            message: "Please enter your message",
-                          },
-                        ]}
+              >
+                <Image
+                  alt={title}
+                  src={
+                    photo
+                      ? `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/uploads/images/${photo}`
+                      : `${process.env.NEXT_PUBLIC_BASE_URL}/api/v1/public/img/valise.png`
+                  }
+                  layout="fill"
+                  objectFit="cover"
+                  style={{
+                    transition: "transform 0.3s ease",
+                  }}
+                  onMouseOver={(e) => {
+                    e.currentTarget.style.transform = "scale(1.05)";
+                  }}
+                  onMouseOut={(e) => {
+                    e.currentTarget.style.transform = "scale(1)";
+                  }}
+                />
+              </div>
+              <Typography.Title level={5} style={{ marginTop: "20px" }}>
+                {title}
+              </Typography.Title>
+              <Row gutter={[16, 16]}>
+                <Col xs={24} sm={24}>
+                  <Divider style={{ margin: "10px 0px" }} />
+                </Col>
+              </Row>
+              <Typography.Paragraph>{description}</Typography.Paragraph>
+              <Row gutter={[16, 16]}>
+                <Col xs={24} sm={24}>
+                  <Divider style={{ margin: "10px 0px" }} />
+                </Col>
+              </Row>
+              <Row gutter={[16, 16]}>
+                <Col xs={24} sm={12}>
+                  <strong>{t("spaceAvailable")}:</strong>{" "}
+                  {space_available ? `${space_available} Kg` : "N/A"}
+                </Col>
+                <Col xs={24} sm={12}>
+                  <strong>{t("price")}:</strong>{" "}
+                  {price_kilo ? `$ ${price_kilo}` : "N/A"}
+                </Col>
+                <Col xs={24} sm={12}>
+                  <strong>{t("departureCountry")}:</strong> {departure_country}
+                </Col>
+                <Col xs={24} sm={12}>
+                  <strong>{t("arrivalCountry")}:</strong> {arrival_country}
+                </Col>
+                <Col xs={24} sm={12}>
+                  <strong>{t("departureCity")}:</strong> {departure_city}
+                </Col>
+                <Col xs={24} sm={12}>
+                  <strong>{t("arrivalCity")}:</strong> {arrival_city}
+                </Col>
+                <Col xs={24} sm={12}>
+                  <strong>{t("departureDate")}:</strong> {departure_date}
+                </Col>
+                <Col xs={24} sm={12}>
+                  <strong>{t("arrivalDate")}:</strong> {arrival_date}
+                </Col>
+                <Col xs={24} sm={12}>
+                  <strong>{t("pickUpDate")}:</strong> {collection_date}
+                </Col>
+                <Col xs={24} sm={12}>
+                  <strong>{t("status")}:</strong>{" "}
+                  {getStatusTag(status_id, status_name)}
+                </Col>
+                <Col xs={24} sm={12}>
+                  <strong>{t("category")}:</strong> {category_name}
+                </Col>
+              </Row>
+              <Row gutter={[16, 16]}>
+                <Col xs={24} sm={24}>
+                  <Divider style={{ margin: "10px 0px" }} />
+                </Col>
+              </Row>
+              <Typography.Title level={4}>
+                {t("advertiserInformation")}
+              </Typography.Title>
+              <Row gutter={[16, 16]}>
+                <Col xs={24} sm={8}>
+                  <strong>{t("name")}:</strong> {author}
+                </Col>
+                <Col xs={24} sm={8}>
+                  <strong>E-mail:</strong> {email}
+                </Col>
+                <Col xs={24} sm={8}>
+                  <strong>{t("phone")}:</strong> {phone}
+                </Col>
+              </Row>
+              {params &&
+              params.id &&
+              user &&
+              authenticated &&
+              user.isVerified == 1 &&
+              user.id !== user_id ? (
+                <>
+                  {messageSent === false ? (
+                    <>
+                      <Typography.Title level={4} style={{ marginTop: "30px" }}>
+                        {t("advertiserInformation")}
+                      </Typography.Title>
+                      <Form
+                        name="email_ad"
+                        initialValues={{
+                          rejection_reason: "",
+                        }}
+                        onFinish={handleSendingMessage}
+                        layout="vertical"
                       >
-                        <Spin spinning={loading}>
-                          <Input.TextArea
-                            rows={4}
-                            size="large"
-                            placeholder="Write your message here..."
-                            value={userMessage}
-                            onChange={(e) => setUserMessage(e.target.value)}
-                          />
-                        </Spin>
-                      </Form.Item>
-                      <Form.Item>
-                        <Space>
-                          <Button
-                            size="large"
-                            type="primary"
-                            htmlType="submit"
-                            icon={<MailOutlined />}
-                            disabled={!userMessage}
-                            loading={loading}
-                            style={{
-                              borderRadius: "8px",
-                              boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                            }}
-                          >
-                            {t("sendMessage")}
-                          </Button>
-                        </Space>
-                      </Form.Item>
-                    </Form>
-                  </>
-                ) : (
-                  <>
-                    <br />
-                    <Alert
-                      message="Message sent"
-                      type="success"
-                      showIcon
-                      closable
-                    />
-                  </>
-                )}
-              </>
-            ) : null}
+                        <Form.Item
+                          style={{ width: "100%" }}
+                          name="message"
+                          validateTrigger="onBlur"
+                          rules={[
+                            {
+                              required: true,
+                              message: "Please enter your message",
+                            },
+                          ]}
+                        >
+                          <Spin spinning={loading}>
+                            <Input.TextArea
+                              rows={4}
+                              size="large"
+                              placeholder="Write your message here..."
+                              value={userMessage}
+                              onChange={(e) => setUserMessage(e.target.value)}
+                            />
+                          </Spin>
+                        </Form.Item>
+                        <Form.Item>
+                          <Space>
+                            <Button
+                              size="large"
+                              type="primary"
+                              htmlType="submit"
+                              icon={<MailOutlined />}
+                              disabled={!userMessage}
+                              loading={loading}
+                              style={{
+                                borderRadius: "8px",
+                                boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                              }}
+                            >
+                              {t("sendMessage")}
+                            </Button>
+                          </Space>
+                        </Form.Item>
+                      </Form>
+                    </>
+                  ) : (
+                    <>
+                      <br />
+                      <Alert
+                        message="Message sent"
+                        type="success"
+                        showIcon
+                        closable
+                      />
+                    </>
+                  )}
+                </>
+              ) : null}
+            </Spin>
           </>
         )}
       </Card>

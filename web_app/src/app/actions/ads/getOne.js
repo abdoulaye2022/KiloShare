@@ -3,7 +3,7 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-export async function updatePreference_preferences(key, value) {
+export async function getOne_ads(id, slug) {
   try {
     const cookieStore = cookies();
 
@@ -11,39 +11,13 @@ export async function updatePreference_preferences(key, value) {
       process.env.NEXT_PUBLIC_COOKIE_NAME
     )?.value;
 
-    const response = await axios.put(
-      "/api/v1/preferences/update",
-      {
-        key: key,
-        value: value,
+    const response = await axios.get(`/api/v1/ads/getOne/${id}/${slug}`, {
+      headers: {
+        Authorization: `Bearer ${jwtToken}`,
       },
-      {
-        headers: {
-          Authorization: `Bearer ${jwtToken}`,
-        },
-      }
-    );
+    });
 
     if (response) {
-      if (key === "user_language") {
-        const langue = cookies().get("langue")?.value;
-        const { user_language } = response.data.data;
-
-        if (user_language != langue) {
-          cookies().delete("langue");
-          cookies().set({
-            path: "/",
-            httpOnly: true,
-            name: "langue",
-            value: user_language,
-            secure: true,
-            sameSite: "Strict",
-            maxAge: 60 * 60 * 24 * 365,
-            expires: new Date(Date.now() + 60 * 60 * 24 * 365 * 1000),
-          });
-        }
-      }
-
       return response.data;
     } else {
       throw new Error("No data received");

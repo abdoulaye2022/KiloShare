@@ -89,11 +89,16 @@ if($adFetch == false) {
 }
 $ad = $adFetch->fetch(PDO::FETCH_ASSOC);
 
-$subject = "You Have a New Message Regarding Your Kilo-Share Ad";
 $to = [
     ['email' => $ad['email'], 'name' => $ad['author']]
 ];
-$body = '<!DOCTYPE html>
+
+$userFetch = $userModel->getOne($ad['user_id']);
+$u = $userFetch->fetch(PDO::FETCH_ASSOC);
+
+if($u['user_language'] == "en") {
+    $subject = "You Have a New Message Regarding Your Kilo-Share Ad";
+    $body = '<!DOCTYPE html>
             <html>
                 <head>
                     <meta charset="UTF-8">
@@ -171,6 +176,88 @@ $body = '<!DOCTYPE html>
                 </body>
             </html>
             ';
+} else {
+    $subject = "Vous avez un nouveau message concernant votre annonce sur Kilo-Share";
+    $body = '<!DOCTYPE html>
+            <html>
+                <head>
+                    <meta charset="UTF-8">
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <title>Nouvelle demande concernant votre annonce</title>
+                    <style>
+                        body {
+                            font-family: Arial, sans-serif;
+                            background-color: #f4f4f4;
+                            margin: 0;
+                            padding: 0;
+                        }
+                        .email-container {
+                            max-width: 600px;
+                            margin: 20px auto;
+                            background-color: #ffffff;
+                            border-radius: 8px;
+                            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+                            overflow: hidden;
+                        }
+                        .email-header {
+                            background-color: #0078D7;
+                            color: #ffffff;
+                            padding: 20px;
+                            text-align: center;
+                        }
+                        .email-header h1 {
+                            margin: 0;
+                            font-size: 24px;
+                        }
+                        .email-body {
+                            padding: 20px;
+                            color: #333333;
+                        }
+                        .email-body p {
+                            line-height: 1.6;
+                            font-size: 16px;
+                        }
+                        .email-footer {
+                            background-color: #f4f4f4;
+                            padding: 10px;
+                            text-align: center;
+                            font-size: 12px;
+                            color: #666666;
+                        }
+                        .email-footer a {
+                            color: #0078D7;
+                            text-decoration: none;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div class="email-container">
+                        <div class="email-header">
+                            <h1>Nouvelle demande concernant votre annonce</h1>
+                        </div>
+                        <div class="email-body">
+                            <p>Bonjour '.$ad['author'].',</p>
+                            <p>Un utilisateur de la plateforme <strong>Kilo-Share</strong> est intéressé par votre annonce :</p>
+                            <p><strong>Titre de l\'annonce :</strong> '.$ad['title'].'</p>
+                            <p>Voici le message qu\'il vous a envoyé :</p>
+                            <p>
+                                '.$message.'
+                            </p>
+                            <p>Pour répondre ou en savoir plus, cliquez sur le bouton ci-dessous pour accéder à votre boîte de réception sur notre plateforme :</p>
+                            <div class="email-button" style="text-align: center; margin: 20px 0;">
+                                <a href="'.BASE_URL.'/ads/'.$ad['id'].'/'.$ad['slug'].'" style="background-color: #0078D7; color: #ffffff; padding: 10px 20px; text-decoration: none; border-radius: 4px; font-size: 16px;" target="_blank">Voir l\'annonce</a>
+                            </div>
+                            <p>Merci d\'utiliser Kilo-Share pour vos besoins d\'expédition.</p>
+                        </div>
+                        <div class="email-footer">
+                            <p>Kilo-Share © 2024 Créé par <a href="https://m2atech.com" target="_blank">M2ATech</a>. Tous droits réservés.</p>
+                        </div>
+                    </div>
+                </body>
+            </html>
+            ';
+
+}
 
 if ($mailSender->send_mail($subject, $to, $body)) {
 

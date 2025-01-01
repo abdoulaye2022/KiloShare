@@ -9,7 +9,7 @@ class MailSender
 {
     // Définitions des constantes pour éviter les répétitions
     private const SENDER_NAME = 'Kilo-Share';
-    private const SENDER_EMAIL = 'contact@m2acode.com';
+    private const SENDER_EMAIL = 'noreply@kilo-share.com';
 
     /**
      * Envoie un email via l'API Brevo
@@ -24,12 +24,7 @@ class MailSender
         // Configuration de l'API Brevo
         $config = Configuration::getDefaultConfiguration()->setApiKey('api-key', $_ENV['BREVO_API_KEY']);
 
-        $apiInstance = new TransactionalEmailsApi(
-            new Client([
-                'verify' => false, // Désactive la vérification SSL (à utiliser uniquement pour le débogage)
-            ]),
-            $config
-        );
+        $apiInstance = new TransactionalEmailsApi(null, $config);
 
         // Validation des destinataires
         if (empty($to) || !is_array($to)) {
@@ -46,8 +41,13 @@ class MailSender
             ],
             'to' => $to,
             'htmlContent' => $body,
+            'textContent' => strip_tags($body), // Version texte brut du contenu HTML
             'params' => ['bodyMessage' => 'made just for you!'],
-            "textContent" => "test"
+            'tracking' => [
+                'opens' => false,
+                'clicks' => false,
+                'unsubscribe' => false,
+            ],
         ]);
 
         try {
