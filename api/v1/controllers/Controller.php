@@ -1,6 +1,8 @@
 <?php
 session_start();
 
+date_default_timezone_set('UTC');
+
 require_once (__DIR__ . '/../vendor/autoload.php');
 
 header("Access-Control-Allow-Origin: *");

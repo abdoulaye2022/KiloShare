@@ -14,6 +14,7 @@ import {
   Spin,
   Alert,
   Divider,
+  Select,
 } from "antd";
 import { MailOutlined } from "@ant-design/icons";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
@@ -22,6 +23,9 @@ import { adActions } from "@/app/lib/redux/actions/ads.actions";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { getStatusTag } from "@/app/utils/utils";
+import MessageList from "@/app/components/Platform/Ads/MessageList";
+import { modalActions } from "@/app/lib/redux/actions/modals.actions";
+import { userActions } from "@/app/lib/redux/actions/users.actions";
 
 function AdsDetail({ params, rejected }) {
   const ad = useAppSelector((state) => state.ad.item);
@@ -29,6 +33,8 @@ function AdsDetail({ params, rejected }) {
   const user = useAppSelector((state) => state.user.user);
   const authenticated = useAppSelector((state) => state.user.authenticated);
   const messageSent = useAppSelector((state) => state.ad.messageSent);
+  const adMessages = useAppSelector((state) => state.ad.adMessages);
+  const [expeditor, setExpeditor] = useState(null);
   const t = useTranslations("AdDetailPage");
 
   const {
@@ -63,9 +69,33 @@ function AdsDetail({ params, rejected }) {
     window.href = "/";
   }
 
+  const uniqueMessages = () => {
+    const tab = [];
+
+    if (adMessages) {
+      adMessages.forEach((message) => {
+        if (
+          user &&
+          user.id !== message.user_id &&
+          !tab.some((item) => item.user_id === message.user_id)
+        ) {
+          tab.push({
+            user_id: message.user_id,
+            name: message.author,
+          });
+        }
+      });
+    }
+
+    return tab;
+  };
+
   useEffect(() => {
     if (Object.keys(ad).length == 0) {
       dispatch(adActions.getOne(params.id, params.slug));
+    }
+    if (params && params.id && user && authenticated && user.isVerified == 1) {
+      dispatch(adActions.getUserAdMessage(id));
     }
     if (id && params && params.id != id) {
       redirect("/not-found");
@@ -73,20 +103,33 @@ function AdsDetail({ params, rejected }) {
   }, [params, dispatch]);
 
   const handleSendingMessage = (values) => {
-    if (userMessage && user && id) {
-      dispatch(adActions.messageAd(user.id, id, values.message));
+    if (
+      params.id &&
+      user &&
+      authenticated &&
+      user.isVerified == 1 &&
+      user.id === user_id &&
+      expeditor
+    ) {
+      if (userMessage && user && id && expeditor) {
+        dispatch(adActions.responceAdMessage(expeditor, id, values.message));
+        setExpeditor(null);
+      }
+    } else {
+      if (userMessage && user && id) {
+        dispatch(adActions.messageAd(user.id, id, values.message));
+      }
     }
   };
 
   return (
-    <div style={{ padding: "10px 20px" }}>
+    <div style={{ padding: "5px 5px" }}>
       <Card
         bordered={false}
         style={{
           width: "100%",
           boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
           borderRadius: "8px",
-          // paddingBottom: 40,
         }}
       >
         {rejected === true ? (
@@ -96,6 +139,7 @@ function AdsDetail({ params, rejected }) {
             </Typography.Title>
             <Form
               name="email_rejection"
+              style={{ marginBottom: 10 }}
               initialValues={{
                 rejection_reason: "",
               }}
@@ -247,16 +291,88 @@ function AdsDetail({ params, rejected }) {
               params.id &&
               user &&
               authenticated &&
-              user.isVerified == 1 &&
-              user.id !== user_id ? (
+              user.isVerified == 1 ? (
+                <Row>
+                  <Col xs={24} sm={24}>
+                    <MessageList />
+                    {params &&
+                    params.id &&
+                    user &&
+                    authenticated &&
+                    user.isVerified == 1 &&
+                    user.id === user_id ? (
+                      messageSent === false ? (
+                        <>
+                          {" "}
+                          <Row gutter={[16, 16]}>
+                            <Col xs={24} sm={24}>
+                              <Divider
+                                style={{ marginTop: 0, marginBottom: "10px" }}
+                              />
+                            </Col>
+                          </Row>
+                          <Row gutter={[16, 16]}>
+                            <Col xs={24} sm={24}>
+                              <Select
+                                showSearch
+                                size="large"
+                                style={{ width: "100%", marginBottom: 10 }}
+                                placeholder={t("selectSender")}
+                                onChange={(value) => setExpeditor(value)}
+                                options={[
+                                  ...(uniqueMessages().length > 0
+                                    ? uniqueMessages().map((p) => ({
+                                        value: p.user_id,
+                                        label: p.name,
+                                      }))
+                                    : []),
+                                ]}
+                              />
+                            </Col>
+                          </Row>
+                        </>
+                      ) : null
+                    ) : null}
+                  </Col>
+                </Row>
+              ) : (
+                <>
+                  <Row gutter={[16, 16]}>
+                    <Col xs={24} sm={24}>
+                      <Divider style={{ margin: "10px 0px" }} />
+                    </Col>
+                  </Row>
+                  <Row>
+                    <Col xs={24} sm={24}>
+                      <Button
+                        type="primary"
+                        style={{ width: "100%" }}
+                        onClick={() => {
+                          if (authenticated && user && user.isVerified == 0) {
+                            dispatch(modalActions.openVerifiedEmail());
+                          } else {
+                            dispatch(modalActions.openLoginForm());
+                            dispatch(userActions.resetError());
+                          }
+                        }}
+                      >
+                        {t("viewMessage")}
+                      </Button>
+                    </Col>
+                  </Row>
+                </>
+              )}
+              {params &&
+              params.id &&
+              user &&
+              authenticated &&
+              user.isVerified == 1 ? (
                 <>
                   {messageSent === false ? (
                     <>
-                      <Typography.Title level={4} style={{ marginTop: "30px" }}>
-                        {t("advertiserInformation")}
-                      </Typography.Title>
                       <Form
                         name="email_ad"
+                        style={{ marginBottom: 10 }}
                         initialValues={{
                           rejection_reason: "",
                         }}
@@ -264,13 +380,13 @@ function AdsDetail({ params, rejected }) {
                         layout="vertical"
                       >
                         <Form.Item
-                          style={{ width: "100%" }}
+                          style={{ width: "100%", marginBottom: 10 }}
                           name="message"
                           validateTrigger="onBlur"
                           rules={[
                             {
                               required: true,
-                              message: "Please enter your message",
+                              message: t("messageRequired"),
                             },
                           ]}
                         >
@@ -278,20 +394,33 @@ function AdsDetail({ params, rejected }) {
                             <Input.TextArea
                               rows={4}
                               size="large"
-                              placeholder="Write your message here..."
+                              placeholder={t("writeYourMessageHere")}
                               value={userMessage}
                               onChange={(e) => setUserMessage(e.target.value)}
                             />
                           </Spin>
                         </Form.Item>
-                        <Form.Item>
+                        <Form.Item style={{ marginBottom: 0 }}>
                           <Space>
                             <Button
                               size="large"
                               type="primary"
                               htmlType="submit"
                               icon={<MailOutlined />}
-                              disabled={!userMessage}
+                              disabled={
+                                (!userMessage &&
+                                  user &&
+                                  authenticated &&
+                                  user.isVerified == 1 &&
+                                  user.id !== user_id) ||
+                                (params &&
+                                  params.id &&
+                                  user &&
+                                  authenticated &&
+                                  user.isVerified == 1 &&
+                                  user.id === user_id &&
+                                  !expeditor)
+                              }
                               loading={loading}
                               style={{
                                 borderRadius: "8px",

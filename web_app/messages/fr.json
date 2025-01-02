@@ -58,7 +58,7 @@
     "arrival": "Arrivée",
     "updateAd": "Mettre à jour l'annonce",
     "closed": "Fermé",
-    "available":"disponible"
+    "available": "disponible"
   },
   "AdDetailPage": {
     "reasonForRejection": "Raison du rejet",
@@ -79,7 +79,9 @@
     "advertiserInformation": "Informations sur l'annonceur",
     "name": "Nom",
     "phone": "Téléphone",
-    "SendMessageAdvertiser": "Envoyer un message à l'annonceur"
+    "SendMessageAdvertiser": "Envoyer un message à l'annonceur",
+    "viewMessage": "Voir les messages",
+    "selectSender": "Sélectionner un expéditeur"
   },
   "AdFormPage": {
     "titleForm": "Créer une Nouvelle Annonce",
@@ -160,23 +162,27 @@
     "newPassword": "Nouveau mot de passe",
     "confirmPassword": "Confirmer le nouveau mot de passe",
     "confirmPasswordRequired": "Veuillez confirmer votre mot de passe",
-    "passwordNotMatch":"Les mots de passe ne correspondent pas",
-    "preferences":"Préférences",
-    "preferenceAds":"Préférences sur l'annonce",
-    "displayPhone":"Afficher le numéro de téléphone",
-    "preferenceNotify":"Préférences de notification",
-    "getNewsletterEmail":"Recevoir des notifications par email pour les nouvelles annonces",
-    "displayFullname":"Afficher le nom et le prénom",
-    "displayEmail":"Afficher l'email",
-    "preferenceLangue":"Préférences linguistiques",
-    "selectedLanguage":"Sélectionnez votre langue préférée"
+    "passwordNotMatch": "Les mots de passe ne correspondent pas",
+    "preferences": "Préférences",
+    "preferenceAds": "Préférences sur l'annonce",
+    "displayPhone": "Afficher le numéro de téléphone",
+    "preferenceNotify": "Préférences de notification",
+    "getNewsletterEmail": "Recevoir des notifications par email pour les nouvelles annonces",
+    "displayFullname": "Afficher le nom et le prénom",
+    "displayEmail": "Afficher l'email",
+    "preferenceLangue": "Préférences linguistiques",
+    "selectedLanguage": "Sélectionnez votre langue préférée"
   },
   "ResetPasswordPage": {
     "title": "Portail de réinitialisation de mot de passe",
-    "emailRequired":"Veuillez saisir votre adresse e-mail",
-    "emailInvalid":"L'adresse e-mail saisie est invalide. Veuillez vérifier et réessayer",
-    "sendResetLink":"Envoyer le lien",
-    "alreadyHaveAnAccount":"Vous avez déjà un compte?",
-    "login":"Connexion"
+    "emailRequired": "Veuillez saisir votre adresse e-mail",
+    "emailInvalid": "L'adresse e-mail saisie est invalide. Veuillez vérifier et réessayer",
+    "sendResetLink": "Envoyer le lien",
+    "alreadyHaveAnAccount": "Vous avez déjà un compte?",
+    "login": "Connexion"
+  },
+  "MessagePage": {
+    "noMessages": "Aucune message",
+    "me":"Moi"
   }
 }

@@ -7,6 +7,7 @@ const initialState = {
   items: [],
   userAds: [],
   adminAds: [],
+  adMessages: [],
   isFiltered: false,
   filteredItems: [],
   lastFetchedAdTime: null,
@@ -330,6 +331,30 @@ export const adSlice = createSlice({
       state.loading = false;
       state.error = action.payload;
     },
+    // Ad Message
+    requestUserAdMessage: (state) => {
+      state.loading = true;
+    },
+    successUserAdMessage: (state, action) => {
+      state.loading = false;
+      state.adMessages = action.payload;
+    },
+    failureUserAdMessage: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // Response Ad Message
+    requestResponseAdMessage: (state) => {
+      state.loading = true;
+    },
+    successResponseAdMessage: (state, action) => {
+      state.loading = false;
+      state.messageSent = action.payload;
+    },
+    failureResponseAdMessage: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
   },
 });
 
@@ -370,7 +395,13 @@ export const {
   resetFilterMyAds,
   requestGetOne,
   successGetOne,
-  failureGetOne
+  failureGetOne,
+  requestUserAdMessage,
+  successUserAdMessage,
+  failureUserAdMessage,
+  requestResponseAdMessage,
+  successResponseAdMessage,
+  failureResponseAdMessage
 } = adSlice.actions;
 
 export const adReducer = adSlice.reducer;

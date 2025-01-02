@@ -31,7 +31,6 @@ $routes = [
     '/api/v1/ads/reject/{id}' => 'controllers/ad/reject.php',
     '/api/v1/ads/userAds/{user_id}' => 'controllers/ad/userAds.php',
     '/api/v1/ads/adminAds' => 'controllers/ad/adminAds.php',
-    '/api/v1/ads/messageAd' => 'controllers/ad/messageAd.php',
     '/api/v1/ads/closedAd/{id}' => 'controllers/ad/closedAd.php',
 
     // Profiles
@@ -58,7 +57,12 @@ $routes = [
     // Preferences
     '/api/v1/preferences/getAll' => 'controllers/preferences/getAll.php',
     '/api/v1/preferences/defaultPreference' => 'controllers/preferences/defaultPreference.php',
-    '/api/v1/preferences/update' => 'controllers/preferences/update.php'
+    '/api/v1/preferences/update' => 'controllers/preferences/update.php',
+
+    // Message
+    '/api/v1/messages/responseAdMessage' => 'controllers/message/responseAdMessage.php',
+    '/api/v1/messages/messageAd' => 'controllers/message/messageAd.php',
+    '/api/v1/messages/getUserAdMessage' => 'controllers/message/getUserAdMessage.php',
 ];
 
 $uri = $_SERVER['REQUEST_URI'];
