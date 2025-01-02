@@ -7,11 +7,11 @@ const cookieStore = cookies();
 
 const jwtToken = cookieStore.get(process.env.NEXT_PUBLIC_COOKIE_NAME)?.value;
 
-export async function messageAd_ad(user_id, ad_id, message) {
+export async function responceAdMessage_ad(to_user_id, ad_id, message) {
   try {
     const response = await axios.post(
-      "/api/v1/ads/messageAd",
-      { user_id: user_id, ad_id: ad_id, message: message },
+      "/api/v1/messages/responseAdMessage",
+      { to_user_id: to_user_id, ad_id: ad_id, message: message },
       {
         headers: {
           Authorization: `Bearer ${jwtToken}`,

@@ -230,4 +230,16 @@ class Ad
             return false;
         }
     }
+
+    public function isMyAd ($user_id, $ad_id) {
+        $stmt = $this->_cn->prepare("SELECT * FROM ads WHERE user_id = :user_id AND id = :ad_id");
+        $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindParam(':ad_id', $ad_id, PDO::PARAM_INT);
+
+        if ($stmt->execute()) {
+            return $stmt->rowCount();
+        } else {
+            return false;
+        }
+    }
 }

@@ -8,6 +8,8 @@ import { Affix, Col, Layout, Row, Spin } from "antd";
 import { useRouter } from "next/navigation";
 import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import Signin from "@/app/components/Platform/Layouts/Signin";
+import SessionExpired from "../components/Platform/Layouts/SessionExpired";
+import VerifiedEmail from "../components/Platform/Layouts/VerifiedEmail";
 
 const { Content } = Layout;
 
@@ -15,6 +17,12 @@ function PlatformLayout({ children }) {
   const openLogin = useAppSelector((state) => state.modal.isOpenLoginForm);
   const openSignin = useAppSelector((state) => state.modal.isOpenSigninForm);
   const loadingLogout = useAppSelector((state) => state.user.loadingLogout);
+  const openSessionExpired = useAppSelector(
+    (state) => state.modal.isOpenSessionExpired
+  );
+  const openVerifiedEmail = useAppSelector(
+    (state) => state.modal.isOpenVerifiedEmail
+  );
   const router = useRouter();
 
   const [isMobile, setIsMobile] = useState(false);
@@ -59,6 +67,9 @@ function PlatformLayout({ children }) {
 
         {openLogin && <Login />}
         {openSignin && <Signin />}
+        {openSessionExpired && <SessionExpired />}
+
+        {openVerifiedEmail && <VerifiedEmail />}
       </Layout>
     </>
   );

@@ -76,7 +76,9 @@
     "advertiserInformation": "Advertiser Information",
     "name": "Name",
     "phone": "Phone",
-    "SendMessageAdvertiser": "Send a Message to the Advertiser"
+    "SendMessageAdvertiser": "Send a Message to the Advertiser",
+    "viewMessage":"View message",
+    "selectSender":"Select a sender"
   },
   "AdFormPage": {
     "titleForm": "Create New Ad",
@@ -175,5 +177,9 @@
     "sendLink":"Send link",
     "alreadyHaveAnAccount":"Already have an account?",
     "login":"Login"
+  },
+  "MessagePage": {
+    "noMessages":"No messages",
+    "me":"Me"
   }
 }
