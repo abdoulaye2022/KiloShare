@@ -50,7 +50,19 @@
     "category": "Catégorie",
     "allCategories": "Toutes les catégories",
     "status": "Statut",
-    "allStatus": "Tous les statuts"
+    "allStatus": "Tous les statuts",
+    "Electronics": "Électronique",
+    "Clothing and Accessories": "Vêtements et accessoires",
+    "Documents and Papers": "Documents et papiers",
+    "Food": "Alimentation",
+    "Health and Beauty":"Santé et beauté",
+    "Other":"Autre",
+    "Pending Approval":"En attente d'approbation",
+    "Approved":"Approuvée",
+    "Rejected":"Rejetée",
+    "Expired":"Expirée",
+    "Closed":"Fermée",
+    "Archived":"Archivée"
   },
   "AdCardPage": {
     "viewDetails": "Voir les détails",
@@ -81,7 +93,13 @@
     "phone": "Téléphone",
     "SendMessageAdvertiser": "Envoyer un message à l'annonceur",
     "viewMessage": "Voir les messages",
-    "selectSender": "Sélectionner un expéditeur"
+    "selectSender": "Sélectionner un expéditeur",
+    "Pending Approval":"En attente d'approbation",
+    "Approved":"Approuvée",
+    "Rejected":"Rejetée",
+    "Expired":"Expirée",
+    "Closed":"Fermée",
+    "Archived":"Archivée"
   },
   "AdFormPage": {
     "titleForm": "Créer une Nouvelle Annonce",
@@ -137,7 +155,13 @@
     "departureDateTooltip": "Sélectionnez la date à laquelle vous commencerez votre voyage. Les personnes devront apporter leur colis avant cette date.",
     "collectionDateTooltip": "Sélectionnez la date à laquelle vous serez à destination. À partir de cette date, les expéditeurs pourront envoyer des membres de leur famille ou des amis pour récupérer les colis.",
     "arrivalDateTooltip": "Sélectionnez la date à laquelle vous arriverez à destination. Les expéditeurs sauront ainsi quand l'article pourra être récupéré.",
-    "categoryTooltip": "Sélectionnez la catégorie correspondant aux articles que vous pouvez transporter. Cela aidera les expéditeurs à savoir quel type d'objets peuvent être envoyés avec vous."
+    "categoryTooltip": "Sélectionnez la catégorie correspondant aux articles que vous pouvez transporter. Cela aidera les expéditeurs à savoir quel type d'objets peuvent être envoyés avec vous.",
+    "Electronics": "Électronique",
+    "Clothing and Accessories": "Vêtements et accessoires",
+    "Documents and Papers": "Documents et papiers",
+    "Food": "Alimentation",
+    "Health and Beauty":"Santé et beauté",
+    "Other":"Autre"
   },
   "SessionExpiredPage": {
     "title": "Session expirée",
@@ -183,6 +207,14 @@
   },
   "MessagePage": {
     "noMessages": "Aucune message",
-    "me":"Moi"
+    "me": "Moi"
+  },
+  "AccueilPage": {
+    "loadMore": "Charger plus d'annonces"
+  },
+  "AdNoticePage": {
+    "adSubmitted": "Annonce soumise",
+    "title": "Votre annonce a été soumise!",
+    "description": "Elle sera publiée sur le site après approbation par l'équipe. Nous vous tiendrons informé(e) de l'état de votre annonce."
   }
 }

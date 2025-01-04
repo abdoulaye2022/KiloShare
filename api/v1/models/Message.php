@@ -66,12 +66,13 @@ class Message
 
     public function getUserAdMessage($user_id, $ad_id)
     {
-        $stmt = $this->_cn->prepare("SELECT messages.id, messages.message, messages.sending_date, CONCAT(users.firstname, ' ', users.lastname) AS author 
+        $stmt = $this->_cn->prepare("SELECT messages.id, messages.user_id, messages.message, messages.sending_date, CONCAT(users.firstname, ' ', users.lastname) AS author 
                                 FROM messages
                                 INNER JOIN users ON messages.user_id = users.id
-                                WHERE ad_id = :ad_id AND user_id = :user_id");
+                                WHERE ad_id = :ad_id AND user_id = :user_id OR to_user_id = :to_user_id");
         $stmt->bindParam(':ad_id', $ad_id, PDO::PARAM_INT);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+        $stmt->bindParam(':to_user_id', $user_id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt;
     }

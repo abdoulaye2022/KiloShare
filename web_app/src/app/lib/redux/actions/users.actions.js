@@ -111,7 +111,7 @@ function login(email, password) {
         if (res.data) {
           dispatch(successLogin(res.data));
           dispatch(modalActions.closeLoginForm());
-          dispatch(adActions.getAll());
+          dispatch(adActions.getAll(1, 5));
           dispatch(preferenceActions.addDefaultPreference());
         } else {
           throw new Error(JSON.stringify(res));
@@ -167,7 +167,7 @@ function logout(cb = null) {
           } else {
             dispatch(successLogOut());
             dispatch(stopLoadingLogOut());
-            dispatch(adActions.getAll());
+            dispatch(adActions.getAll(1, 5));
             dispatch(categoryActions.getAll());
           }
           

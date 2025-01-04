@@ -47,7 +47,19 @@
     "category": "Category",
     "allCategories": "All Categories",
     "status": "Status",
-    "allStatus": "All status"
+    "allStatus": "All status",
+    "Electronics": "Electronics",
+    "Clothing and Accessories": "Clothing and Accessories",
+    "Documents and Papers": "Documents and Papers",
+    "Food": "Food",
+    "Health and Beauty":"Health and Beauty",
+    "Other":"Other",
+    "Pending Approval":"Pending Approval",
+    "Approved":"Approved",
+    "Rejected":"Rejected",
+    "Expired":"Expired",
+    "Closed":"Closed",
+    "Archived":"Archived"
   },
   "AdCardPage": {
     "viewDetails": "View details",
@@ -77,8 +89,14 @@
     "name": "Name",
     "phone": "Phone",
     "SendMessageAdvertiser": "Send a Message to the Advertiser",
-    "viewMessage":"View message",
-    "selectSender":"Select a sender"
+    "viewMessage": "View message",
+    "selectSender": "Select a sender",
+    "Pending Approval":"Pending Approval",
+    "Approved":"Approved",
+    "Rejected":"Rejected",
+    "Expired":"Expired",
+    "Closed":"Closed",
+    "Archived":"Archived"
   },
   "AdFormPage": {
     "titleForm": "Create New Ad",
@@ -134,7 +152,13 @@
     "departureDateTooltip": "Select the date when you will start your journey. People will need to bring their items before this date.",
     "collectionDateTooltip": "Select the date when you will arrive at your destination. From this date, senders can send their family members or friends to pick up the items.",
     "arrivalDateTooltip": "Select the date when you will arrive at your destination. This will let senders know when the item will be available for pickup.",
-    "categoryTooltip": "Select the category that matches the items you can transport. This will help senders know what type of items can be sent with you."
+    "categoryTooltip": "Select the category that matches the items you can transport. This will help senders know what type of items can be sent with you.",
+    "Electronics": "Electronics",
+    "Clothing and Accessories": "Clothing and Accessories",
+    "Documents and Papers": "Documents and Papers",
+    "Food": "Food",
+    "Health and Beauty":"Health and Beauty",
+    "Other":"Other"
   },
   "SessionExpiredPage": {
     "title": "Session Expired",
@@ -157,29 +181,37 @@
     "oldDifferentNewPassword": "The new password must be different from the current password. Please choose a unique password",
     "oldPassword": "Old Password",
     "newPassword": "New Password",
-    "confirmPassword":"Confirm New Password",
-    "confirmPasswordRequired":"Please confirm your password",
-    "passwordNotMatch":"Passwords do not match",
-    "preferences":"Preferences",
-    "preferenceAds":"Preferences on the ad",
-    "displayPhone":"Show the phone number",
-    "preferenceNotify":"Notification preferences",
-    "getNewsletterEmail":"Receive email notifications for new ads",
-    "displayFullname":"Display the first name and last name",
-    "displayEmail":"Display the email",
-    "preferenceLangue":"Language preferences",
-    "selectedLanguage":"Select your preferred language"
+    "confirmPassword": "Confirm New Password",
+    "confirmPasswordRequired": "Please confirm your password",
+    "passwordNotMatch": "Passwords do not match",
+    "preferences": "Preferences",
+    "preferenceAds": "Preferences on the ad",
+    "displayPhone": "Show the phone number",
+    "preferenceNotify": "Notification preferences",
+    "getNewsletterEmail": "Receive email notifications for new ads",
+    "displayFullname": "Display the first name and last name",
+    "displayEmail": "Display the email",
+    "preferenceLangue": "Language preferences",
+    "selectedLanguage": "Select your preferred language"
   },
   "ResetPasswordPage": {
     "title": "Password Reset Portal",
-    "emailRequired":"Please enter your email",
-    "emailInvalid":"The email address entered is invalid. Please check and try again",
-    "sendLink":"Send link",
-    "alreadyHaveAnAccount":"Already have an account?",
-    "login":"Login"
+    "emailRequired": "Please enter your email",
+    "emailInvalid": "The email address entered is invalid. Please check and try again",
+    "sendLink": "Send link",
+    "alreadyHaveAnAccount": "Already have an account?",
+    "login": "Login"
   },
   "MessagePage": {
-    "noMessages":"No messages",
-    "me":"Me"
+    "noMessages": "No messages",
+    "me": "Me"
+  },
+  "AccueilPage": {
+    "loadMore": "Load more ads"
+  },
+  "AdNoticePage": {
+    "adSubmitted": "Ad Submitted",
+    "title": "Your ad has been submitted!",
+    "description": "It will be published on the site after approval by the team. We will keep you informed about the status of your ad."
   }
 }

@@ -262,7 +262,7 @@ function AdsDetail({ params, rejected }) {
                 </Col>
                 <Col xs={24} sm={12}>
                   <strong>{t("status")}:</strong>{" "}
-                  {getStatusTag(status_id, status_name)}
+                  {getStatusTag(status_id, t(status_name))}
                 </Col>
                 <Col xs={24} sm={12}>
                   <strong>{t("category")}:</strong> {category_name}
