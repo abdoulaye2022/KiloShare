@@ -66,16 +66,23 @@ export const getDateMessageFr = (dateString, langue) => {
     const hours = Math.floor(diffInMinutes / 60);
     const minutes = Math.floor(diffInMinutes % 60);
 
+    // Convertir les heures en jours
+    const days = Math.floor(hours / 24);
+
     // Afficher le résultat
     if (diffInMinutes > 0) {
       if (langue === "fr") {
-        if (hours > 0) {
+        if (days > 0) {
+          return `Il y a ${days} jour${days > 1 ? 's' : ''}`;
+        } else if (hours > 0) {
           return `Il y a ${hours} heure${hours > 1 ? 's' : ''} et ${minutes} minute${minutes > 1 ? 's' : ''}`;
         } else {
           return `Il y a ${minutes} minute${minutes > 1 ? 's' : ''}`;
         }
       } else if (langue === "en") {
-        if (hours > 0) {
+        if (days > 0) {
+          return `${days} day${days > 1 ? 's' : ''} ago`;
+        } else if (hours > 0) {
           return `${hours} hour${hours > 1 ? 's' : ''} and ${minutes} minute${minutes > 1 ? 's' : ''} ago`;
         } else {
           return `${minutes} minute${minutes > 1 ? 's' : ''} ago`;

@@ -23,6 +23,7 @@ $routes = [
 
     // Ads
     '/api/v1/ads/getAll' => 'controllers/ad/getAll.php',
+    '/api/v1/ads/getAll/{page}/{limit}' => 'controllers/ad/getAllPaginate.php',
     '/api/v1/ads/getOne/{id}/{slug}' => 'controllers/ad/getOne.php',
     '/api/v1/ads/create' => 'controllers/ad/create.php',
     '/api/v1/ads/update/{id}' => 'controllers/ad/update.php',

@@ -177,7 +177,7 @@ function FilterAd() {
                   ...(categories.length > 0
                     ? categories.map((p) => ({
                         value: p.id,
-                        label: p.name,
+                        label: t(p.name),
                       }))
                     : []),
                 ]}
@@ -198,7 +198,7 @@ function FilterAd() {
                       ...(status.length > 0
                         ? status.map((p) => ({
                             value: p.id,
-                            label: p.name,
+                            label: t(p.name),
                           }))
                         : []),
                     ]}

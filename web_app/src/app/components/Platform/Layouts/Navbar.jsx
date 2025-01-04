@@ -289,7 +289,7 @@ function Navbar() {
         {isMobile === false ? (
           <>
             <Select
-              defaultValue={item.user_language ? item.user_language : languageDef}
+              value={item.user_language ? item.user_language : languageDef}
               onChange={(value) => {
                 const language = (
                   navigator.language || navigator.languages[0]
@@ -297,7 +297,7 @@ function Navbar() {
                 dispatch(preferenceActions.changeLangage(value != language ? value : language))
               }}
               options={[
-                { value: "en", label: "Englais" },
+                { value: "en", label: "English" },
                 { value: "fr", label: "Francais" },
               ]}
               style={{ marginRight: 20, width: 100 }}

@@ -13,6 +13,8 @@ const initialState = {
   lastFetchedAdTime: null,
   lastFetchedMyAdTime: null,
   messageSent: false,
+  page: 1,
+  hasMore: true,
   error: "",
 };
 
@@ -40,9 +42,26 @@ export const adSlice = createSlice({
     successGetAll: (state, action) => {
       state.loading = false;
       state.items = action.payload;
+      state.page += 1;
+      state.hasMore = action.payload.length > 0; 
       state.lastFetchedAdTime = Date.now();
     },
     failureGetAll: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // GETALLPAGINATE
+    requestGetAllPaginage: (state) => {
+      state.loading = true;
+    },
+    successGetAllPaginate: (state, action) => {
+      state.loading = false;
+      state.items = [...state.items, ...action.payload];
+      state.page += 1;
+      state.hasMore = action.payload.length > 0; 
+      state.lastFetchedAdTime = Date.now();
+    },
+    failureGetAllPaginate: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
@@ -401,7 +420,10 @@ export const {
   failureUserAdMessage,
   requestResponseAdMessage,
   successResponseAdMessage,
-  failureResponseAdMessage
+  failureResponseAdMessage,
+  requestGetAllPaginage,
+  successGetAllPaginate,
+  failureGetAllPaginate
 } = adSlice.actions;
 
 export const adReducer = adSlice.reducer;

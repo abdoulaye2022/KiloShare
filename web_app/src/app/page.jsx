@@ -31,6 +31,7 @@ import { ConfigProvider } from "antd";
 import frFR from "antd/locale/fr_FR";
 import en_US from "antd/locale/en_US";
 import { preferenceActions } from "./lib/redux/actions/preferences.actions";
+import { useTranslations } from "use-intl";
 
 const { Content } = Layout;
 
@@ -59,8 +60,11 @@ function Home() {
     (state) => state.category.lastFetchedCategoryTime
   );
   const dispatch = useAppDispatch();
-   const item = useAppSelector(state => state.preference.item);
-   const language = useAppSelector(state => state.preference.language);
+  const item = useAppSelector((state) => state.preference.item);
+  const language = useAppSelector((state) => state.preference.language);
+  const page = useAppSelector((state) => state.ad.page);
+  const hasMore = useAppSelector((state) => state.ad.hasMore);
+  const t = useTranslations("AccueilPage");
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -98,8 +102,8 @@ function Home() {
     dispatch(adActions.resetFilter());
     dispatch(modalActions.closeMobileFilterAds());
 
-    if(Object.keys(item).length > 0 && item.user_language !== language) {
-      dispatch(preferenceActions.changeLangage(item.user_language))
+    if (Object.keys(item).length > 0 && item.user_language !== language) {
+      dispatch(preferenceActions.changeLangage(item.user_language));
     }
 
     return () => {
@@ -191,6 +195,18 @@ function Home() {
                 <AdsList />
               )}
             </Row>
+            {hasMore === true && ads.length >= 10 ? (
+              <Row justify="center">
+                <Button
+                  style={{ width: "93%", marginBottom: 30 }}
+                  onClick={() =>
+                    dispatch(adActions.getAllPaginate(ads.length / 5 + 1, 10))
+                  }
+                >
+                  {t("loadMore")}
+                </Button>
+              </Row>
+            ) : null}
           </Content>
         </Spin>
 

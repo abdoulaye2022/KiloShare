@@ -496,7 +496,7 @@ function AdsForm() {
                       ...(categories.length > 0
                         ? categories.map((p) => ({
                             value: p.id,
-                            label: p.name,
+                            label: t(p.name),
                           }))
                         : []),
                     ]}

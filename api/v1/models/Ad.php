@@ -49,20 +49,87 @@ class Ad
 
     public function getAll()
     {
-        $stmt = $this->_cn->query("SELECT a.id, a.title, a.description, a.space_available, a.price_kilo, a.departure_country,
-                                    a.arrival_country, a.departure_city, a.arrival_city, a.departure_date, a.arrival_date, a.collection_date,
-                                    a.user_id, CONCAT(u.firstname, ' ', u.lastname) AS author, u.phone, u.email, a.status_id, s.name AS status_name,
-                                    a.category_id, c.name AS category_name, a.photo, a.slug, a.is_deleted, a.created_by, a.created_at, a.updated_by,
-                                    a.updated_at, p.email AS p_email, p.newsletter AS p_newsletter, p.fullname AS p_fullname, p.phone AS p_phone
-                                    FROM
-                                        ads a
-                                    INNER JOIN users u ON u.id = a.user_id 
-                                    INNER JOIN status s ON s.id = a.status_id
-                                    LEFT JOIN preferences p ON p.user_id = u.id
-                                    INNER JOIN categories c ON c.id = a.category_id 
-                                    WHERE a.is_deleted = 0 AND status_id = 2
-                                    ORDER BY a.created_at DESC");
-        return $stmt;
+        try {
+            // Préparation de la requête SQL
+            $stmt = $this->_cn->query("
+                SELECT 
+                    a.id, a.title, a.description, a.space_available, a.price_kilo, a.departure_country,
+                    a.arrival_country, a.departure_city, a.arrival_city, a.departure_date, a.arrival_date, a.collection_date,
+                    a.user_id, CONCAT(u.firstname, ' ', u.lastname) AS author, u.phone, u.email, a.status_id, s.name AS status_name,
+                    a.category_id, c.name AS category_name, a.photo, a.slug, a.is_deleted, a.created_by, a.created_at, a.updated_by,
+                    a.updated_at, p.email AS p_email, p.newsletter AS p_newsletter, p.fullname AS p_fullname, p.phone AS p_phone
+                FROM 
+                    ads a
+                INNER JOIN 
+                    users u ON u.id = a.user_id 
+                INNER JOIN 
+                    status s ON s.id = a.status_id
+                LEFT JOIN 
+                    preferences p ON p.user_id = u.id
+                INNER JOIN 
+                    categories c ON c.id = a.category_id 
+                WHERE 
+                    a.is_deleted = 0 AND a.status_id = 2
+                ORDER BY 
+                    a.updated_at DESC
+                LIMIT 10
+            ");
+
+            // Exécution de la requête
+            $stmt->execute();
+
+            // Retour des résultats sous forme de tableau associatif
+            return $stmt;
+        } catch (PDOException $e) {
+            // Gestion des erreurs PDO
+            error_log("Erreur lors de l'exécution de la requête : " . $e->getMessage());
+            return []; // Retourne un tableau vide en cas d'erreur
+        }
+    }
+
+    public function getAllPaginate($offsetAds, $limitAds)
+    {
+        try {
+            // Préparation de la requête SQL
+            $stmt = $this->_cn->prepare("
+                SELECT 
+                    a.id, a.title, a.description, a.space_available, a.price_kilo, a.departure_country,
+                    a.arrival_country, a.departure_city, a.arrival_city, a.departure_date, a.arrival_date, a.collection_date,
+                    a.user_id, CONCAT(u.firstname, ' ', u.lastname) AS author, u.phone, u.email, a.status_id, s.name AS status_name,
+                    a.category_id, c.name AS category_name, a.photo, a.slug, a.is_deleted, a.created_by, a.created_at, a.updated_by,
+                    a.updated_at, p.email AS p_email, p.newsletter AS p_newsletter, p.fullname AS p_fullname, p.phone AS p_phone
+                FROM 
+                    ads a
+                INNER JOIN 
+                    users u ON u.id = a.user_id 
+                INNER JOIN 
+                    status s ON s.id = a.status_id
+                LEFT JOIN 
+                    preferences p ON p.user_id = u.id
+                INNER JOIN 
+                    categories c ON c.id = a.category_id 
+                WHERE 
+                    a.is_deleted = 0 AND a.status_id = 2
+                ORDER BY 
+                    a.updated_at DESC
+                LIMIT 
+                    :offsetAds, :limitAds
+            ");
+
+            // Liaison des paramètres avec les bonnes valeurs et types
+            $stmt->bindParam(':offsetAds', $offsetAds, PDO::PARAM_INT);
+            $stmt->bindParam(':limitAds', $limitAds, PDO::PARAM_INT);
+
+            // Exécution de la requête
+            $stmt->execute();
+
+            // Retour des résultats sous forme de tableau associatif
+            return $stmt;
+        } catch (PDOException $e) {
+            // Gestion des erreurs PDO
+            error_log("Erreur lors de l'exécution de la requête : " . $e->getMessage());
+            return []; // Retourne un tableau vide en cas d'erreur
+        }
     }
     
     public function create($title, $description, $space_available, $price_kilo, $departure_country, $arrival_country, $departure_city, $arrival_city, 

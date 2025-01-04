@@ -3,7 +3,10 @@
 import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
-export async function getAll_ads() {
+export async function getAllPaginate_ads(page, limit) {
+    console.log("Mon erreur")
+    console.log(page)
+    console.log(limit)
   try {
     const cookieStore = cookies();
 
@@ -11,14 +14,11 @@ export async function getAll_ads() {
       process.env.NEXT_PUBLIC_COOKIE_NAME
     )?.value;
 
-    const response = await axios.get(`/api/v1/ads/getAll`, {
+    const response = await axios.get(`/api/v1/ads/getAll/${page}/${limit}`, {
       headers: {
         Authorization: `Bearer ${jwtToken}`,
       },
     });
-
-    console.log("Mon erreur")
-  console.log(response)
 
     if (response) {
       return response.data;
