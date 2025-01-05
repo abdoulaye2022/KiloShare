@@ -64,6 +64,7 @@ $routes = [
     '/api/v1/messages/responseAdMessage' => 'controllers/message/responseAdMessage.php',
     '/api/v1/messages/messageAd' => 'controllers/message/messageAd.php',
     '/api/v1/messages/getUserAdMessage' => 'controllers/message/getUserAdMessage.php',
+    '/api/v1/messages/getUserAdMessagePaginate/{page}/{limit}' => 'controllers/message/getUserAdMessagePaginate.php',
 ];
 
 $uri = $_SERVER['REQUEST_URI'];

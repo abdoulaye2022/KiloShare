@@ -112,8 +112,7 @@ class Ad
                     a.is_deleted = 0 AND a.status_id = 2
                 ORDER BY 
                     a.updated_at DESC
-                LIMIT 
-                    :offsetAds, :limitAds
+                LIMIT :limitAds OFFSET :offsetAds
             ");
 
             // Liaison des paramètres avec les bonnes valeurs et types

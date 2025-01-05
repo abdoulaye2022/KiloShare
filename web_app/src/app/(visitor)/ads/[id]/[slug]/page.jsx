@@ -34,6 +34,8 @@ function AdsDetail({ params, rejected }) {
   const authenticated = useAppSelector((state) => state.user.authenticated);
   const messageSent = useAppSelector((state) => state.ad.messageSent);
   const adMessages = useAppSelector((state) => state.ad.adMessages);
+  const pageMessage = useAppSelector((state) => state.ad.pageMessage);
+  const hasMoreMessage = useAppSelector((state) => state.ad.hasMoreMessage);
   const [expeditor, setExpeditor] = useState(null);
   const t = useTranslations("AdDetailPage");
 
@@ -295,6 +297,23 @@ function AdsDetail({ params, rejected }) {
                 <Row>
                   <Col xs={24} sm={24}>
                     <MessageList />
+                    {hasMoreMessage === true && adMessages.length >= 5 ? (
+                      <Button
+                        style={{ width: "100%" }}
+                        onClick={() =>
+                          dispatch(
+                            adActions.getUserAdMessagePaginate(
+                              id,
+                              pageMessage,
+                              5
+                            )
+                          )
+                        }
+                      >
+                        {t("loadMore")}
+                      </Button>
+                    ) : null}
+
                     {params &&
                     params.id &&
                     user &&

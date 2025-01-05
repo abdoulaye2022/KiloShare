@@ -45,7 +45,10 @@ import {
   failureResponseAdMessage,
   requestGetAllPaginage,
   successGetAllPaginate,
-  failureGetAllPaginate
+  failureGetAllPaginate,
+  requestUserAdMessagePaginate,
+  successUserAdMessagePaginate,
+  failureUserAdMessagePaginate
 } from "../reducers/ads.reducers";
 import { modalActions } from "./modals.actions";
 import { add_ad } from "@/app/actions/ads/add";
@@ -63,6 +66,7 @@ import { getOne_ads } from "@/app/actions/ads/getOne";
 import { getUserAdMessage_ads } from "@/app/actions/message/getUserAdMessage";
 import { responceAdMessage_ad } from "@/app/actions/message/responeAdMessage";
 import { getAllPaginate_ads } from "@/app/actions/ads/getAllPaginate";
+import { getUserAdMessagePaginate_ads } from "@/app/actions/message/getUserAdMessagePaginate";
 
 export const adActions = {
   add,
@@ -84,6 +88,7 @@ export const adActions = {
   resetFilterMyAds,
   getOne,
   getUserAdMessage,
+  getUserAdMessagePaginate,
   responceAdMessage
 };
 
@@ -418,6 +423,33 @@ function getUserAdMessage(ad_id) {
           }
         } catch {
           dispatch(failureUserAdMessage("An unexpected error occurred."));
+        }
+      });
+  };
+}
+
+function getUserAdMessagePaginate(ad_id, page, limit) {
+  return function (dispatch) {
+    dispatch(requestUserAdMessagePaginate());
+    getUserAdMessagePaginate_ads(ad_id, page, limit)
+      .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
+        if (res.data) {
+          dispatch(successUserAdMessagePaginate(res.data));
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureUserAdMessagePaginate(parsedError.message));
+          }
+        } catch {
+          dispatch(failureUserAdMessagePaginate("An unexpected error occurred."));
         }
       });
   };
