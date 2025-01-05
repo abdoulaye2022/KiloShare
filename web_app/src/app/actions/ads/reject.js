@@ -27,8 +27,6 @@ export async function reject_ad(id, rejection_reason) {
       throw new Error("No data received");
     }
   } catch (error) {
-    console.log("New Abdoulaye ********")
-    console.log(error)
     if (error.response) {
       const status = error.status || error.response.status;
       const message =

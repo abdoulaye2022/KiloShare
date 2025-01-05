@@ -32,6 +32,7 @@ import frFR from "antd/locale/fr_FR";
 import en_US from "antd/locale/en_US";
 import { preferenceActions } from "./lib/redux/actions/preferences.actions";
 import { useTranslations } from "use-intl";
+import Head from "next/head";
 
 const { Content } = Layout;
 
@@ -120,6 +121,9 @@ function Home() {
           : en_US
       }
     >
+      <Head>
+        <link rel="icon" href="/favicon.png" />
+      </Head>
       <Layout style={{ minHeight: "calc(100vh)" }}>
         <Affix offsetTop={0}>
           <Navbar />

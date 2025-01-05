@@ -35,7 +35,8 @@
     "settings": "Settings",
     "myProfil": "My Profil",
     "myAds": "My Ads",
-    "logout": "Logout"
+    "logout": "Logout",
+    "contact":"Contact us"
   },
   "FilterAdsPage": {
     "title": "Filter Ads",
@@ -96,7 +97,13 @@
     "Rejected":"Rejected",
     "Expired":"Expired",
     "Closed":"Closed",
-    "Archived":"Archived"
+    "Archived":"Archived",
+    "Electronics": "Electronics",
+    "Clothing and Accessories": "Clothing and Accessories",
+    "Documents and Papers": "Documents and Papers",
+    "Food": "Food",
+    "Health and Beauty":"Health and Beauty",
+    "Other":"Other"
   },
   "AdFormPage": {
     "titleForm": "Create New Ad",

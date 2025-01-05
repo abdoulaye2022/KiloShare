@@ -36,9 +36,7 @@
     "myProfil": "Mon profil",
     "myAds": "Mes annonces",
     "logout": "Se déconnecter",
-    "SessionExpiredPage": {
-      "viewDetails": "View details"
-    }
+    "contact":"Contactez-nous"
   },
   "FilterAdsPage": {
     "title": "Filtrer les annonces",
@@ -99,7 +97,13 @@
     "Rejected":"Rejetée",
     "Expired":"Expirée",
     "Closed":"Fermée",
-    "Archived":"Archivée"
+    "Archived":"Archivée",
+    "Electronics": "Électronique",
+    "Clothing and Accessories": "Vêtements et accessoires",
+    "Documents and Papers": "Documents et papiers",
+    "Food": "Alimentation",
+    "Health and Beauty":"Santé et beauté",
+    "Other":"Autre"
   },
   "AdFormPage": {
     "titleForm": "Créer une Nouvelle Annonce",

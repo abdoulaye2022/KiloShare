@@ -17,9 +17,6 @@ export async function getAll_ads() {
       },
     });
 
-    console.log("Mon erreur")
-  console.log(response)
-
     if (response) {
       return response.data;
     } else {

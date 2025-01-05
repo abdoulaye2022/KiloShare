@@ -7,7 +7,7 @@ import {
   PlusCircleOutlined,
   LogoutOutlined,
   InfoCircleOutlined,
-  SettingOutlined,
+  PhoneOutlined,
   UnorderedListOutlined,
   LoginOutlined,
   UserAddOutlined,
@@ -33,8 +33,8 @@ function Navbar() {
 
   const pathname = usePathname();
 
-  const item = useAppSelector(state => state.preference.item);
-  const languageDef = useAppSelector(state => state.preference.language);
+  const item = useAppSelector((state) => state.preference.item);
+  const languageDef = useAppSelector((state) => state.preference.language);
 
   const [isMobile, setIsMobile] = useState(false);
 
@@ -83,7 +83,7 @@ function Navbar() {
       type: "divider",
     },
     {
-      key: "4",
+      key: "5",
       style: {
         fontSize: 16,
         lineHeight: "30px",
@@ -95,14 +95,14 @@ function Navbar() {
       ),
     },
     {
-      key: "5",
+      key: "6",
       style: {
         fontSize: 16,
         lineHeight: "30px",
       },
       label: (
         <>
-          <SettingOutlined /> {t("settings")}
+          <PhoneOutlined /> {t("contact")}
         </>
       ),
     },
@@ -168,7 +168,7 @@ function Navbar() {
       },
       label: (
         <>
-          <SettingOutlined /> {t("settings")}
+          <PhoneOutlined /> {t("contact")}
         </>
       ),
     },
@@ -222,6 +222,12 @@ function Navbar() {
         } else {
           dispatch(modalActions.openVerifiedEmail());
         }
+        break;
+      case "5":
+        router.push("/about-us");
+        break;
+      case "6":
+        router.push("/contact-us");
         break;
       case "7":
         if (pathname === "/") dispatch(userActions.logout());
@@ -294,7 +300,11 @@ function Navbar() {
                 const language = (
                   navigator.language || navigator.languages[0]
                 ).split("-")[0];
-                dispatch(preferenceActions.changeLangage(value != language ? value : language))
+                dispatch(
+                  preferenceActions.changeLangage(
+                    value != language ? value : language
+                  )
+                );
               }}
               options={[
                 { value: "en", label: "English" },

@@ -265,7 +265,7 @@ function AdsDetail({ params, rejected }) {
                   {getStatusTag(status_id, t(status_name))}
                 </Col>
                 <Col xs={24} sm={12}>
-                  <strong>{t("category")}:</strong> {category_name}
+                  <strong>{t("category")}:</strong> {t(category_name)}
                 </Col>
               </Row>
               <Row gutter={[16, 16]}>
