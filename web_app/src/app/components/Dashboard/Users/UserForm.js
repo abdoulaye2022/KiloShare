@@ -28,10 +28,6 @@ function UserForm({ success }) {
   const loadingUsers = useAppSelector((state) => state.user.loading);
   const item = useAppSelector((state) => state.user.item);
 
-  useEffect(() => {
-    // console.log(profiles);
-  }, []);
-
   const onFinish = (values) => {
     if (Object.keys(item).length === 0) {
       dispatch(
@@ -62,7 +58,7 @@ function UserForm({ success }) {
   };
 
   const onFinishFailed = (errorInfo) => {
-    console.log("Failed:", errorInfo);
+    // console.log("Failed:", errorInfo);
   };
 
   const handleCancel = () => {

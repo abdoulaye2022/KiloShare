@@ -79,7 +79,6 @@ export const adSlice = createSlice({
     },
     // Filtered Ads
     filteredAds: (state, action) => {
-      console.log(action.payload.status_id);
       (state.isFiltered = true),
         (state.filteredItems = [
           ...state.items

@@ -10,6 +10,7 @@ import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
 import Signin from "@/app/components/Platform/Layouts/Signin";
 import SessionExpired from "../components/Platform/Layouts/SessionExpired";
 import VerifiedEmail from "../components/Platform/Layouts/VerifiedEmail";
+import Head from "next/head";
 
 const { Content } = Layout;
 
@@ -45,6 +46,9 @@ function PlatformLayout({ children }) {
 
   return (
     <>
+      <Head>
+        <link rel="icon" href="/favicon.png" />
+      </Head>
       <Layout style={{ minHeight: "calc(100vh)" }}>
         <Affix offsetTop={0}>
           <Navbar />

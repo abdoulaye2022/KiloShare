@@ -4,9 +4,6 @@ import axios from "../../utils/axiosConfig";
 import { cookies } from "next/headers";
 
 export async function getAllPaginate_ads(page, limit) {
-    console.log("Mon erreur")
-    console.log(page)
-    console.log(limit)
   try {
     const cookieStore = cookies();
 

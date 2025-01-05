@@ -11,6 +11,7 @@ import { userActions } from "../lib/redux/actions/users.actions";
 import { useRouter } from "next/navigation";
 import ResetPassword from "../components/Platform/Layouts/RequestResetPassword";
 import SessionExpired from "../components/Platform/Layouts/SessionExpired";
+import Head from "next/head";
 
 const { Content } = Layout;
 
@@ -20,7 +21,9 @@ function PlatformLayout({ children }) {
   const openResetPassword = useAppSelector(
     (state) => state.modal.isOpenRequestResetPassword
   );
-  const openSessionExpired = useAppSelector(state => state.modal.isOpenSessionExpired)
+  const openSessionExpired = useAppSelector(
+    (state) => state.modal.isOpenSessionExpired
+  );
   const dispatch = useAppDispatch();
   const router = useRouter();
   const lastJwtTime = useAppSelector((state) => state.user.lastJwtTime);
@@ -35,13 +38,18 @@ function PlatformLayout({ children }) {
 
   return (
     <>
+      <Head>
+        <link rel="icon" href="/favicon.png" />
+      </Head>
       <Layout style={{ minHeight: "calc(100vh)" }}>
         <Affix offsetTop={0}>
           <Navbar />
         </Affix>
 
         <Spin spinning={loadingLogout}>
-          <Content style={{ marginTop: 15, minHeight: "calc(90vh)" }}>{children}</Content>
+          <Content style={{ marginTop: 15, minHeight: "calc(90vh)" }}>
+            {children}
+          </Content>
         </Spin>
 
         <Affix offsetBottom={0}>
