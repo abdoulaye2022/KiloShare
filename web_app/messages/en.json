@@ -103,7 +103,8 @@
     "Documents and Papers": "Documents and Papers",
     "Food": "Food",
     "Health and Beauty":"Health and Beauty",
-    "Other":"Other"
+    "Other":"Other",
+    "loadMore":"Load more messages"
   },
   "AdFormPage": {
     "titleForm": "Create New Ad",

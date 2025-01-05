@@ -204,7 +204,7 @@ function Home() {
                 <Button
                   style={{ width: "93%", marginBottom: 30 }}
                   onClick={() =>
-                    dispatch(adActions.getAllPaginate(ads.length / 5 + 1, 10))
+                    dispatch(adActions.getAllPaginate(page, 10))
                   }
                 >
                   {t("loadMore")}

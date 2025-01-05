@@ -15,6 +15,8 @@ const initialState = {
   messageSent: false,
   page: 1,
   hasMore: true,
+  pageMessage: 1,
+  hasMoreMessage: true,
   error: "",
 };
 
@@ -42,8 +44,8 @@ export const adSlice = createSlice({
     successGetAll: (state, action) => {
       state.loading = false;
       state.items = action.payload;
-      state.page += 1;
-      state.hasMore = action.payload.length > 0; 
+      state.page = 1;
+      state.hasMore = action.payload.length > 0;
       state.lastFetchedAdTime = Date.now();
     },
     failureGetAll: (state, action) => {
@@ -58,7 +60,7 @@ export const adSlice = createSlice({
       state.loading = false;
       state.items = [...state.items, ...action.payload];
       state.page += 1;
-      state.hasMore = action.payload.length > 0; 
+      state.hasMore = action.payload.length > 0;
       state.lastFetchedAdTime = Date.now();
     },
     failureGetAllPaginate: (state, action) => {
@@ -355,9 +357,33 @@ export const adSlice = createSlice({
     },
     successUserAdMessage: (state, action) => {
       state.loading = false;
-      state.adMessages = action.payload;
+      state.pageMessage = 1;
+      state.hasMoreMessage = action.payload.length > 0;
+      state.adMessages = action.payload
+        .sort((a, b) => new Date(a.sending_date) - new Date(b.sending_date))
+        .filter(
+          (msg, index, self) => index === self.findIndex((m) => m.id === msg.id)
+        );
     },
     failureUserAdMessage: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
+    },
+    // Ad Paginate Message
+    requestUserAdMessagePaginate: (state) => {
+      state.loading = true;
+    },
+    successUserAdMessagePaginate: (state, action) => {
+      state.loading = false;
+      state.adMessages = [...state.adMessages, ...action.payload]
+        .sort((a, b) => new Date(a.sending_date) - new Date(b.sending_date))
+        .filter(
+          (msg, index, self) => index === self.findIndex((m) => m.id === msg.id)
+        );
+      state.pageMessage += 1;
+      state.hasMoreMessage = action.payload.length > 0;
+    },
+    failureUserAdMessagePaginate: (state, action) => {
       state.loading = false;
       state.error = action.payload;
     },
@@ -422,7 +448,10 @@ export const {
   failureResponseAdMessage,
   requestGetAllPaginage,
   successGetAllPaginate,
-  failureGetAllPaginate
+  failureGetAllPaginate,
+  requestUserAdMessagePaginate,
+  successUserAdMessagePaginate,
+  failureUserAdMessagePaginate,
 } = adSlice.actions;
 
 export const adReducer = adSlice.reducer;

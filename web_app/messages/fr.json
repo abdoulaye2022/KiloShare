@@ -103,7 +103,8 @@
     "Documents and Papers": "Documents et papiers",
     "Food": "Alimentation",
     "Health and Beauty":"Santé et beauté",
-    "Other":"Autre"
+    "Other":"Autre",
+    "loadMore":"Charger d'autres messages"
   },
   "AdFormPage": {
     "titleForm": "Créer une Nouvelle Annonce",

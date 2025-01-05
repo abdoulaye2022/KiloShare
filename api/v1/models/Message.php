@@ -69,7 +69,9 @@ class Message
         $stmt = $this->_cn->prepare("SELECT messages.id, messages.user_id, messages.message, messages.sending_date, CONCAT(users.firstname, ' ', users.lastname) AS author 
                                 FROM messages
                                 INNER JOIN users ON messages.user_id = users.id
-                                WHERE ad_id = :ad_id AND user_id = :user_id OR to_user_id = :to_user_id");
+                                WHERE messages.ad_id = :ad_id AND messages.user_id = :user_id OR messages.to_user_id = :to_user_id
+                                ORDER BY messages.created_at DESC
+                                LIMIT 5");
         $stmt->bindParam(':ad_id', $ad_id, PDO::PARAM_INT);
         $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
         $stmt->bindParam(':to_user_id', $user_id, PDO::PARAM_INT);
@@ -82,10 +84,56 @@ class Message
         $stmt = $this->_cn->prepare("SELECT messages.id, messages.user_id, messages.message, messages.sending_date, CONCAT(users.firstname, ' ', users.lastname) AS author 
                                 FROM messages
                                 INNER JOIN users ON messages.user_id = users.id
-                                WHERE ad_id = :ad_id");
+                                WHERE messages.ad_id = :ad_id
+                                ORDER BY messages.created_at DESC
+                                LIMIT 5");
         $stmt->bindParam(':ad_id', $ad_id, PDO::PARAM_INT);
         $stmt->execute();
         return $stmt;
+    }
+
+    public function getUserAdMessagePaginate($user_id, $ad_id, $offsetAds, $limitAds) {
+        try {
+
+            $stmt = $this->_cn->prepare("SELECT messages.id, messages.user_id, messages.message, messages.sending_date, CONCAT(users.firstname, ' ', users.lastname) AS author 
+                                FROM messages
+                                INNER JOIN users ON messages.user_id = users.id
+                                WHERE ad_id = :ad_id AND user_id = :user_id OR to_user_id = :to_user_id
+                                LIMIT :limitAds OFFSET :offsetAds");
+            $stmt->bindParam(':ad_id', $ad_id, PDO::PARAM_INT);
+            $stmt->bindParam(':user_id', $user_id, PDO::PARAM_INT);
+            $stmt->bindParam(':to_user_id', $user_id, PDO::PARAM_INT);
+            $stmt->bindParam(':offsetAds', $offsetAds, PDO::PARAM_INT);
+            $stmt->bindParam(':limitAds', $limitAds, PDO::PARAM_INT);
+
+            $stmt->execute();
+
+            return $stmt;
+        } catch (PDOException $e) {
+            error_log("Erreur lors de l'exécution de la requête : " . $e->getMessage());
+            return [];
+        }
+    }
+
+    public function getUsersAdMessagePaginate($ad_id, $offsetAds, $limitAds) {
+        try {
+
+            $stmt = $this->_cn->prepare("SELECT messages.id, messages.user_id, messages.message, messages.sending_date, CONCAT(users.firstname, ' ', users.lastname) AS author 
+                                FROM messages
+                                INNER JOIN users ON messages.user_id = users.id
+                                WHERE ad_id = :ad_id 
+                                LIMIT :limitAds OFFSET :offsetAds");
+            $stmt->bindParam(':ad_id', $ad_id, PDO::PARAM_INT);
+            $stmt->bindParam(':offsetAds', $offsetAds, PDO::PARAM_INT);
+            $stmt->bindParam(':limitAds', $limitAds, PDO::PARAM_INT);
+
+            $stmt->execute();
+
+            return $stmt;
+        } catch (PDOException $e) {
+            error_log("Erreur lors de l'exécution de la requête : " . $e->getMessage());
+            return [];
+        }
     }
 
     public function response($auth_id, $ad_id, $message, $to_user_id, $created_by)
