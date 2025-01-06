@@ -1,46 +1,36 @@
-# Kilo-Share 🚀
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-**Kilo-Share** est une plateforme innovante qui permet aux voyageurs de rentabiliser l'espace disponible dans leurs bagages en transportant des colis pour d'autres utilisateurs. Que vous soyez un voyageur cherchant à gagner un peu d'argent ou un expéditeur à la recherche d'une solution de livraison économique, Kilo-Share est fait pour vous !
+## Getting Started
 
----
+First, run the development server:
 
-## 📌 Fonctionnalités
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
 
-- **Partage d'espace de bagage** : Les voyageurs peuvent proposer l'espace disponible dans leurs bagages pour transporter des colis.
-- **Livraison économique** : Les expéditeurs bénéficient d'un service de livraison rapide et à moindre coût.
-- **Sécurité et confiance** : Profils vérifiés, conseils de sécurité et système de notation pour des échanges en toute confiance.
-- **Simplicité d'utilisation** : Une interface intuitive pour publier des annonces, rechercher des voyageurs et organiser des échanges.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
----
+You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-## 🚀 Objectif
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-L'objectif de Kilo-Share est de créer une communauté solidaire où les voyageurs et les expéditeurs peuvent collaborer pour optimiser les ressources et réduire les coûts de livraison. Nous croyons en une économie collaborative et durable, où chacun peut partager et bénéficier des ressources disponibles.
+## Learn More
 
----
+To learn more about Next.js, take a look at the following resources:
 
-## 🛠 Technologies Utilisées
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-- **Frontend** : React, Ant Design
-- **Backend** : PHP
-- **Base de données** : MongoDB
-- **Authentification** : JWT (JSON Web Tokens)
-- **Internationalisation** : `next-intl`
-- **Déploiement** : Vercel
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
----
+## Deploy on Vercel
 
-## 🚀 Comment Commencer
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-### Prérequis
-
-- Node.js (v14 ou supérieur)
-- npm ou yarn
-- MongoDB (local ou cloud)
-
-### Installation
-
-1. Clonez le dépôt :
-   ```bash
-   git clone https://github.com/abdoulaye2022/kilo-share.git
-   cd kilo-share
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
