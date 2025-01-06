@@ -308,4 +308,119 @@ class Ad
             return false;
         }
     }
+
+    public function filteredAds($departure_date = null, $arrival_date = null, $departure_country = null, $arrival_country = null, $category_id = null, $status_id = null) {
+        $sql = "SELECT 
+                    a.id, a.title, a.description, a.space_available, a.price_kilo, a.departure_country,
+                    a.arrival_country, a.departure_city, a.arrival_city, a.departure_date, a.arrival_date, a.collection_date,
+                    a.user_id, CONCAT(u.firstname, ' ', u.lastname) AS author, u.phone, u.email, a.status_id, s.name AS status_name,
+                    a.category_id, c.name AS category_name, a.photo, a.slug, a.is_deleted, a.created_by, a.created_at, a.updated_by,
+                    a.updated_at, p.email AS p_email, p.newsletter AS p_newsletter, p.fullname AS p_fullname, p.phone AS p_phone
+                FROM 
+                    ads a
+                INNER JOIN 
+                    users u ON u.id = a.user_id 
+                INNER JOIN 
+                    status s ON s.id = a.status_id
+                LEFT JOIN 
+                    preferences p ON p.user_id = u.id
+                INNER JOIN 
+                    categories c ON c.id = a.category_id 
+                WHERE 1=1";
+
+        $params = [];
+
+        if ($departure_date) {
+            $sql .= " AND a.departure_date >= :departure_date";
+            $params[':departure_date'] = $departure_date;
+        }
+        if ($arrival_date) {
+            $sql .= " AND a.arrival_date <= :arrival_date";
+            $params[':arrival_date'] = $arrival_date;
+        }
+        if ($departure_country) {
+            $sql .= " AND a.departure_country = :departure_country";
+            $params[':departure_country'] = $departure_country;
+        }
+        if ($arrival_country) {
+            $sql .= " AND a.arrival_country = :arrival_country";
+            $params[':arrival_country'] = $arrival_country;
+        }
+        if ($category_id) {
+            $sql .= " AND a.category_id = :category_id";
+            $params[':category_id'] = $category_id;
+        }
+        if ($status_id) {
+            $sql .= " AND a.status_id = :status_id";
+            $params[':status_id'] = $status_id;
+        }
+
+        $stmt = $this->_cn->prepare($sql);
+        $stmt->execute($params);
+
+        if ($stmt->execute()) {
+            return $stmt;
+        } else {
+            return [];
+        }
+    }
+
+    public function filteredMyAds($user_id, $departure_date = null, $arrival_date = null, $departure_country = null, $arrival_country = null, $category_id = null, $status_id = null) {
+        $sql = "SELECT 
+                    a.id, a.title, a.description, a.space_available, a.price_kilo, a.departure_country,
+                    a.arrival_country, a.departure_city, a.arrival_city, a.departure_date, a.arrival_date, a.collection_date,
+                    a.user_id, CONCAT(u.firstname, ' ', u.lastname) AS author, u.phone, u.email, a.status_id, s.name AS status_name,
+                    a.category_id, c.name AS category_name, a.photo, a.slug, a.is_deleted, a.created_by, a.created_at, a.updated_by,
+                    a.updated_at, p.email AS p_email, p.newsletter AS p_newsletter, p.fullname AS p_fullname, p.phone AS p_phone
+                FROM 
+                    ads a
+                INNER JOIN 
+                    users u ON u.id = a.user_id 
+                INNER JOIN 
+                    status s ON s.id = a.status_id
+                LEFT JOIN 
+                    preferences p ON p.user_id = u.id
+                INNER JOIN 
+                    categories c ON c.id = a.category_id 
+                WHERE 1=1";
+
+        $params = [];
+
+        $sql .= " AND a.user_id = :user_id";
+            $params[':user_id'] = $user_id;
+
+        if ($departure_date) {
+            $sql .= " AND a.departure_date >= :departure_date";
+            $params[':departure_date'] = $departure_date;
+        }
+        if ($arrival_date) {
+            $sql .= " AND a.arrival_date <= :arrival_date";
+            $params[':arrival_date'] = $arrival_date;
+        }
+        if ($departure_country) {
+            $sql .= " AND a.departure_country = :departure_country";
+            $params[':departure_country'] = $departure_country;
+        }
+        if ($arrival_country) {
+            $sql .= " AND a.arrival_country = :arrival_country";
+            $params[':arrival_country'] = $arrival_country;
+        }
+        if ($category_id) {
+            $sql .= " AND a.category_id = :category_id";
+            $params[':category_id'] = $category_id;
+        }
+        if ($status_id) {
+            $sql .= " AND a.status_id = :status_id";
+            $params[':status_id'] = $status_id;
+        }
+
+        $stmt = $this->_cn->prepare($sql);
+        $stmt->execute($params);
+
+        if ($stmt->execute()) {
+            return $stmt;
+        } else {
+            return [];
+        }
+    }
 }
