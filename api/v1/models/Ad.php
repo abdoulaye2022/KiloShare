@@ -170,7 +170,7 @@ class Ad
         if($fileName) {
             $stmt = $this->_cn->prepare("UPDATE ads SET title = :title, description = :description, space_available = :space_available, price_kilo = :price_kilo, departure_country = :departure_country,
                                     arrival_country = :arrival_country, departure_city = :departure_city, arrival_city = :arrival_city, departure_date = :departure_date, 
-                                    arrival_date = :arrival_date, collection_date = :collection_date, category_id = :category_id, photo = :photo, slug = :slug, updated_at = NOW(), updated_by = :updated_by WHERE id = :id");
+                                    arrival_date = :arrival_date, collection_date = :collection_date, status_id = :status_id, category_id = :category_id, photo = :photo, slug = :slug, updated_at = NOW(), updated_by = :updated_by WHERE id = :id");
 
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->bindParam(':description', $description, PDO::PARAM_STR);
@@ -183,6 +183,8 @@ class Ad
             $stmt->bindParam(':departure_date', $departure_date, PDO::PARAM_STR);
             $stmt->bindParam(':arrival_date', $arrival_date, PDO::PARAM_STR);
             $stmt->bindParam(':collection_date', $collection_date, PDO::PARAM_STR);
+            $status_id = 1;
+            $stmt->bindParam(':status_id', $status_id, PDO::PARAM_INT);
             $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
             $stmt->bindParam(':photo', $fileName, PDO::PARAM_STR);
             $stmt->bindParam(':slug', $slug, PDO::PARAM_STR);
@@ -191,7 +193,7 @@ class Ad
         } else {
             $stmt = $this->_cn->prepare("UPDATE ads SET title = :title, description = :description, space_available = :space_available, price_kilo = :price_kilo, departure_country = :departure_country,
                                     arrival_country = :arrival_country, departure_city = :departure_city, arrival_city = :arrival_city, departure_date = :departure_date, 
-                                    arrival_date = :arrival_date, collection_date = :collection_date, category_id = :category_id, slug = :slug, updated_at = NOW(), updated_by = :updated_by WHERE id = :id");
+                                    arrival_date = :arrival_date, collection_date = :collection_date, status_id = :status_id, category_id = :category_id, slug = :slug, updated_at = NOW(), updated_by = :updated_by WHERE id = :id");
 
             $stmt->bindParam(':title', $title, PDO::PARAM_STR);
             $stmt->bindParam(':description', $description, PDO::PARAM_STR);
@@ -204,6 +206,8 @@ class Ad
             $stmt->bindParam(':departure_date', $departure_date, PDO::PARAM_STR);
             $stmt->bindParam(':arrival_date', $arrival_date, PDO::PARAM_STR);
             $stmt->bindParam(':collection_date', $collection_date, PDO::PARAM_STR);
+            $status_id = 1;
+            $stmt->bindParam(':status_id', $status_id, PDO::PARAM_INT);
             $stmt->bindParam(':category_id', $category_id, PDO::PARAM_INT);
             $stmt->bindParam(':slug', $slug, PDO::PARAM_STR);
             $stmt->bindParam(':updated_by', $updated_by, PDO::PARAM_INT);

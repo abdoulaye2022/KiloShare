@@ -8,7 +8,6 @@ import {
   Col,
   Input,
   Typography,
-  Tag,
   Space,
   Form,
   Spin,
@@ -63,7 +62,6 @@ function AdsDetail({ params, rejected }) {
   } = ad;
 
   const dispatch = useAppDispatch();
-  const router = useRouter();
 
   const [userMessage, setUserMessage] = useState("");
 
@@ -314,7 +312,8 @@ function AdsDetail({ params, rejected }) {
                       </Button>
                     ) : null}
 
-                    {params &&
+                    {status_id === 2 && 
+                    params &&
                     params.id &&
                     user &&
                     authenticated &&
@@ -381,7 +380,8 @@ function AdsDetail({ params, rejected }) {
                   </Row>
                 </>
               )}
-              {params &&
+              {status_id === 2 && 
+              params &&
               params.id &&
               user &&
               authenticated &&

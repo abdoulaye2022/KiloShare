@@ -36,7 +36,7 @@
     "myProfil": "My Profil",
     "myAds": "My Ads",
     "logout": "Logout",
-    "contact":"Contact us"
+    "contact": "Contact us"
   },
   "FilterAdsPage": {
     "title": "Filter Ads",
@@ -53,14 +53,14 @@
     "Clothing and Accessories": "Clothing and Accessories",
     "Documents and Papers": "Documents and Papers",
     "Food": "Food",
-    "Health and Beauty":"Health and Beauty",
-    "Other":"Other",
-    "Pending Approval":"Pending Approval",
-    "Approved":"Approved",
-    "Rejected":"Rejected",
-    "Expired":"Expired",
-    "Closed":"Closed",
-    "Archived":"Archived"
+    "Health and Beauty": "Health and Beauty",
+    "Other": "Other",
+    "Pending Approval": "Pending Approval",
+    "Approved": "Approved",
+    "Rejected": "Rejected",
+    "Expired": "Expired",
+    "Closed": "Closed",
+    "Archived": "Archived"
   },
   "AdCardPage": {
     "viewDetails": "View details",
@@ -92,19 +92,19 @@
     "SendMessageAdvertiser": "Send a Message to the Advertiser",
     "viewMessage": "View message",
     "selectSender": "Select a sender",
-    "Pending Approval":"Pending Approval",
-    "Approved":"Approved",
-    "Rejected":"Rejected",
-    "Expired":"Expired",
-    "Closed":"Closed",
-    "Archived":"Archived",
+    "Pending Approval": "Pending Approval",
+    "Approved": "Approved",
+    "Rejected": "Rejected",
+    "Expired": "Expired",
+    "Closed": "Closed",
+    "Archived": "Archived",
     "Electronics": "Electronics",
     "Clothing and Accessories": "Clothing and Accessories",
     "Documents and Papers": "Documents and Papers",
     "Food": "Food",
-    "Health and Beauty":"Health and Beauty",
-    "Other":"Other",
-    "loadMore":"Load more messages"
+    "Health and Beauty": "Health and Beauty",
+    "Other": "Other",
+    "loadMore": "Load more messages"
   },
   "AdFormPage": {
     "titleForm": "Create New Ad",
@@ -123,6 +123,7 @@
     "upload": "Upload",
     "reset": "Reset",
     "publishAd": "Publish Ad",
+    "updatedAd": "Update the ad",
     "titleRequired": "Please enter a title",
     "titleMax": "Please provide a title that does not exceed the maximum length of 60 characters",
     "descriptionRequired": "Please enter a description",
@@ -165,8 +166,8 @@
     "Clothing and Accessories": "Clothing and Accessories",
     "Documents and Papers": "Documents and Papers",
     "Food": "Food",
-    "Health and Beauty":"Health and Beauty",
-    "Other":"Other"
+    "Health and Beauty": "Health and Beauty",
+    "Other": "Other"
   },
   "SessionExpiredPage": {
     "title": "Session Expired",
@@ -221,5 +222,38 @@
     "adSubmitted": "Ad Submitted",
     "title": "Your ad has been submitted!",
     "description": "It will be published on the site after approval by the team. We will keep you informed about the status of your ad."
+  },
+  "ContactUsPage": {
+    "title": "Contact us",
+    "description": "Do you have any questions, suggestions, or need help? Fill out the form below or use our contact details to get in touch.",
+    "name": "Name",
+    "nameRequired": "Please enter your name",
+    "namePlaceholder": "Ex: Abdoulaye Mohamed",
+    "emailRequired": "Please enter your email",
+    "emailInvalid": "The email address entered is invalid. Please check and try again",
+    "subject": "Subject",
+    "subjectRequired": "Please enter your subject",
+    "messageRequired": "Please enter your message",
+    "sendMessage": "Send",
+    "contactInformation": "Contact information",
+    "availability": "Availability",
+    "ourService": "Our service is available 24/7."
+  },
+  "AboutUsPage": {
+    "title": "About Kilo-Share",
+    "description": "Kilo-Share is an innovative platform dedicated to sharing kilos between travelers. Our mission is to help travelers earn extra space in their luggage while assisting others in sending or receiving packages in an economical and practical way.",
+    "howItWork": "How does it work?",
+    "howItWorkDescription": "Travelers can offer the available space in their luggage to transport packages. In return, they are compensated for each kilo carried. Shippers, on the other hand, benefit from a fast and economical delivery service thanks to our network of travelers.",
+    "whyKiloShare": "Why choose Kilo-Share?",
+    "economical": "Economical",
+    "sendKilo": "Send or receive packages at a lower cost thanks to kilo sharing.",
+    "fast": "Fast",
+    "fastDescription": "Enjoy fast deliveries thanks to our network of travelers.",
+    "secure": "Secure",
+    "secureDescription":"We do everything we can to enable you to exchange safely, thanks to verified profiles and practical advice.",
+    "joinCommunity":"Join our community",
+    "communityDescription":"Whether you're a traveler looking to make the most of your luggage space or a shipper searching for an economical delivery solution, Kilo-Share is for you. Sign up today and start sharing or sending packages with ease!",
+    "contact":"Contact us",
+    "contactDescription":"Do you have any questions or suggestions? Feel free to contact us at the following address:"
   }
 }
