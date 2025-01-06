@@ -272,7 +272,7 @@ function reject(id, reason) {
         if (res.data) {
           dispatch(successReject(res.data));
           dispatch(drawerActions.closeOpenAdsDrawer());
-          message.success("Ad rejected successfully");
+          // message.success("Ad rejected successfully");
         } else {
           throw new Error(JSON.stringify(res));
         }
@@ -282,7 +282,7 @@ function reject(id, reason) {
           if (err) {
             const parsedError = JSON.parse(err.message);
             dispatch(failureReject(parsedError.message));
-            message.error(err.message);
+            // message.error(err.message);
           }
         } catch {
           dispatch(failureReject("An unexpected error occurred."));
@@ -302,7 +302,7 @@ function approve(id) {
         if (res.data) {
           dispatch(successApprove(res.data));
           dispatch(drawerActions.closeOpenAdsDrawer());
-          message.success("Ad approved successfully");
+          // message.success("Ad approved successfully");
         } else {
           throw new Error(JSON.stringify(res));
         }
@@ -312,7 +312,7 @@ function approve(id) {
           if (err) {
             const parsedError = JSON.parse(err.message);
             dispatch(failureApprove(parsedError.message));
-            message.error(err.message);
+            // message.error(err.message);
           }
         } catch {
           dispatch(failureApprove("An unexpected error occurred."));
@@ -359,7 +359,7 @@ function update(id, data, cb) {
         }
         if (res.data) {
           dispatch(successUpdate(res.data));
-          message.success("Ad updated successfully");
+          // message.success("Ad updated successfully");
           cb();
         } else {
           throw new Error(JSON.stringify(res));
@@ -370,7 +370,7 @@ function update(id, data, cb) {
           if (err) {
             const parsedError = JSON.parse(err.message);
             dispatch(failureUpdate(parsedError.message));
-            message.error(err.message);
+            // message.error(err.message);
           }
         } catch {
           dispatch(failureUpdate("An unexpected error occurred."));

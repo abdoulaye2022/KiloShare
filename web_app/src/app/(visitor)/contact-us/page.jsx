@@ -1,42 +1,57 @@
 "use client";
 
 import React from "react";
-import { Form, Input, Button, Typography, Row, Col, Card } from "antd";
+import { Form, Input, Button, Typography, Row, Col, Card, Divider } from "antd";
 import {
   MailOutlined,
   PhoneOutlined,
   EnvironmentOutlined,
 } from "@ant-design/icons";
+import { useTranslations } from "next-intl";
 
 const { Title, Paragraph } = Typography;
 const { TextArea } = Input;
 
 const Contact = () => {
+  const t = useTranslations("ContactUsPage");
   const [form] = Form.useForm();
 
   const onFinish = (values) => {
     // Ici, vous pouvez ajouter la logique pour envoyer le formulaire (par exemple, une requête API)
     // alert("Votre message a été envoyé avec succès !");
+    console.log(values);
     form.resetFields(); // Réinitialiser le formulaire après l'envoi
   };
 
   return (
-    <div style={{ padding: "5px 5px" }}>
+    <div style={{ padding: 10, height: "90vh" }}>
       <Row justify="center">
-        <Col xs={24} sm={22} md={20} lg={18} xl={16}>
+        <Col xs={24} sm={22} md={24} lg={24} xl={24}>
           <Card>
             <Title
               level={2}
-              style={{ textAlign: "center", marginBottom: "24px" }}
+              style={{
+                textAlign: "center",
+                marginBottom: "24px",
+                fontWeight: "bold",
+                textTransform: "uppercase",
+              }}
             >
-              Contactez-nous
+              {t("title")}
             </Title>
 
-            <Paragraph style={{ fontSize: "16px", textAlign: "center" }}>
-              Vous avez des questions, des suggestions ou besoin d'aide ?
-              Remplissez le formulaire ci-dessous ou utilisez nos coordonnées
-              pour nous contacter.
+            <Paragraph
+              style={{
+                fontSize: "16px",
+                textAlign: "justify",
+                lineHeight: "1.8",
+                textAlign: "center",
+              }}
+            >
+              {t("description")}
             </Paragraph>
+
+            <Divider />
 
             <Row gutter={[24, 24]}>
               {/* Formulaire de contact */}
@@ -44,39 +59,35 @@ const Contact = () => {
                 <Form form={form} onFinish={onFinish} layout="vertical">
                   <Form.Item
                     name="name"
-                    label="Nom"
-                    rules={[
-                      { required: true, message: "Veuillez entrer votre nom" },
-                    ]}
+                    label={t("name")}
+                    rules={[{ required: true, message: t("nameRequired") }]}
                   >
-                    <Input placeholder="Votre nom" />
+                    <Input size="large" />
                   </Form.Item>
 
                   <Form.Item
                     name="email"
-                    label="Email"
+                    label="E-mail"
                     rules={[
                       {
                         required: true,
-                        message: "Veuillez entrer votre email",
+                        message: t("emailRequired"),
                       },
                       {
                         type: "email",
-                        message: "Veuillez entrer un email valide",
+                        message: t("emailInvalid"),
                       },
                     ]}
                   >
-                    <Input placeholder="Votre email" />
+                    <Input size="large" />
                   </Form.Item>
 
                   <Form.Item
                     name="subject"
-                    label="Sujet"
-                    rules={[
-                      { required: true, message: "Veuillez entrer un sujet" },
-                    ]}
+                    label={t("subject")}
+                    rules={[{ required: true, message: t("subjectRequired") }]}
                   >
-                    <Input placeholder="Sujet de votre message" />
+                    <Input size="large" />
                   </Form.Item>
 
                   <Form.Item
@@ -85,16 +96,16 @@ const Contact = () => {
                     rules={[
                       {
                         required: true,
-                        message: "Veuillez entrer votre message",
+                        message: t("messageRequired"),
                       },
                     ]}
                   >
-                    <TextArea rows={6} placeholder="Votre message" />
+                    <TextArea rows={6} size="large" />
                   </Form.Item>
 
                   <Form.Item>
-                    <Button type="primary" htmlType="submit" block>
-                      Envoyer
+                    <Button type="primary" htmlType="submit" size="large" block>
+                      {t("sendMessage")}
                     </Button>
                   </Form.Item>
                 </Form>
@@ -102,9 +113,17 @@ const Contact = () => {
 
               {/* Coordonnées de contact */}
               <Col xs={24} md={12}>
-                <Title level={4}>Coordonnées</Title>
+                <Title
+                  level={3}
+                  style={{
+                    marginTop: "24px",
+                    paddingBottom: "8px",
+                  }}
+                >
+                  {t("contactInformation")}
+                </Title>
                 <Paragraph>
-                  <MailOutlined /> Email :{" "}
+                  <MailOutlined /> E-mail :{" "}
                   <a href="mailto:contact@kilo-share.com">
                     contact@kilo-share.com
                   </a>
@@ -115,13 +134,16 @@ const Contact = () => {
                 {/* <Paragraph>
                   <EnvironmentOutlined /> Adresse : 245 Rue Lorette, Dieppe, E1A 8M4 CANADA
                 </Paragraph> */}
-
-                <Title level={4} style={{ marginTop: "24px" }}>
-                  Disponibilité
+                <Title
+                  level={3}
+                  style={{
+                    marginTop: "24px",
+                    paddingBottom: "8px",
+                  }}
+                >
+                  {t("availability")}
                 </Title>
-                <Paragraph>
-                  Notre service est disponible 24h/24, 7j/7.
-                </Paragraph>
+                <Paragraph>{t("ourService")}</Paragraph>
               </Col>
             </Row>
           </Card>

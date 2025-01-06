@@ -36,7 +36,7 @@
     "myProfil": "Mon profil",
     "myAds": "Mes annonces",
     "logout": "Se déconnecter",
-    "contact":"Contactez-nous"
+    "contact": "Contactez-nous"
   },
   "FilterAdsPage": {
     "title": "Filtrer les annonces",
@@ -53,14 +53,14 @@
     "Clothing and Accessories": "Vêtements et accessoires",
     "Documents and Papers": "Documents et papiers",
     "Food": "Alimentation",
-    "Health and Beauty":"Santé et beauté",
-    "Other":"Autre",
-    "Pending Approval":"En attente d'approbation",
-    "Approved":"Approuvée",
-    "Rejected":"Rejetée",
-    "Expired":"Expirée",
-    "Closed":"Fermée",
-    "Archived":"Archivée"
+    "Health and Beauty": "Santé et beauté",
+    "Other": "Autre",
+    "Pending Approval": "En attente d'approbation",
+    "Approved": "Approuvée",
+    "Rejected": "Rejetée",
+    "Expired": "Expirée",
+    "Closed": "Fermée",
+    "Archived": "Archivée"
   },
   "AdCardPage": {
     "viewDetails": "Voir les détails",
@@ -92,19 +92,19 @@
     "SendMessageAdvertiser": "Envoyer un message à l'annonceur",
     "viewMessage": "Voir les messages",
     "selectSender": "Sélectionner un expéditeur",
-    "Pending Approval":"En attente d'approbation",
-    "Approved":"Approuvée",
-    "Rejected":"Rejetée",
-    "Expired":"Expirée",
-    "Closed":"Fermée",
-    "Archived":"Archivée",
+    "Pending Approval": "En attente d'approbation",
+    "Approved": "Approuvée",
+    "Rejected": "Rejetée",
+    "Expired": "Expirée",
+    "Closed": "Fermée",
+    "Archived": "Archivée",
     "Electronics": "Électronique",
     "Clothing and Accessories": "Vêtements et accessoires",
     "Documents and Papers": "Documents et papiers",
     "Food": "Alimentation",
-    "Health and Beauty":"Santé et beauté",
-    "Other":"Autre",
-    "loadMore":"Charger d'autres messages"
+    "Health and Beauty": "Santé et beauté",
+    "Other": "Autre",
+    "loadMore": "Charger d'autres messages"
   },
   "AdFormPage": {
     "titleForm": "Créer une Nouvelle Annonce",
@@ -123,6 +123,7 @@
     "upload": "Téléverser",
     "reset": "Réinitialiser",
     "publishAd": "Publier une Annonce",
+    "updatedAd": "Mettre à jour l'annonce",
     "titleRequired": "Veuillez entrer un titre",
     "titleMax": "Veuillez fournir un titre qui ne dépasse pas la longueur maximale de 60 caractères",
     "descriptionRequired": "Veuillez entrer une description",
@@ -165,8 +166,8 @@
     "Clothing and Accessories": "Vêtements et accessoires",
     "Documents and Papers": "Documents et papiers",
     "Food": "Alimentation",
-    "Health and Beauty":"Santé et beauté",
-    "Other":"Autre"
+    "Health and Beauty": "Santé et beauté",
+    "Other": "Autre"
   },
   "SessionExpiredPage": {
     "title": "Session expirée",
@@ -221,5 +222,38 @@
     "adSubmitted": "Annonce soumise",
     "title": "Votre annonce a été soumise!",
     "description": "Elle sera publiée sur le site après approbation par l'équipe. Nous vous tiendrons informé(e) de l'état de votre annonce."
+  },
+  "ContactUsPage": {
+    "title": "Contactez-nous",
+    "description": "Vous avez des questions, des suggestions ou besoin d'aide ? Remplissez le formulaire ci-dessous ou utilisez nos coordonnées pour nous contacter.",
+    "name": "Name",
+    "nameRequired": "Veuillez entrer votre nom",
+    "namePlaceholder": "Ex: Abdoulaye Mohamed",
+    "emailRequired": "Veuillez saisir votre adresse e-mail",
+    "emailInvalid": "L'adresse e-mail saisie est invalide. Veuillez vérifier et réessayer",
+    "subject": "Sujet",
+    "subjectRequired": "Veuillez indiquer l'objet de votre message",
+    "messageRequired": "Veuillez saisir votre message",
+    "sendMessage": "Envoyer",
+    "contactInformation": "Coordonnées",
+    "availability": "Disponibilité",
+    "ourService": "Notre service est disponible 24h/24, 7j/7."
+  },
+  "AboutUsPage": {
+    "title": "À propos de Kilo-Share",
+    "description": "Kilo-Share est une plateforme innovante dédiée au **partage de kilos entre voyageurs**. Notre mission est de permettre aux voyageurs de gagner de l'espace supplémentaire dans leurs bagages tout en aidant d'autres personnes à envoyer ou recevoir des colis de manière économique et pratique.",
+    "howItWork": "Comment ça marche?",
+    "howItWorkDescription": "Les voyageurs peuvent proposer l'espace disponible dans leurs bagages pour transporter des colis. En échange, ils sont rémunérés pour chaque kilo transporté. Les expéditeurs, quant à eux, bénéficient d'un service de livraison rapide et économique grâce à notre réseau de voyageurs.",
+    "whyKiloShare": "Pourquoi choisir Kilo-Share?",
+    "economical": "Économique",
+    "sendKilo": "Envoyez ou recevez des colis à moindre coût grâce au partage de kilos.",
+    "fast": "Rapide",
+    "fastDescription": "Profitez de livraisons rapides grâce à notre réseau de voyageurs.",
+    "secure": "Sécurisé",
+    "secureDescription":"Nous mettons tout en œuvre pour vous permettre d'échanger en toute sécurité, grâce à des profils vérifiés et des conseils pratiques.",
+    "joinCommunity":"Rejoignez notre communauté",
+    "communityDescription":"Que vous soyez un voyageur cherchant à rentabiliser votre espace de bagage ou un expéditeur à la recherche d'une solution de livraison économique, Kilo-Share est fait pour vous. Inscrivez-vous dès aujourd'hui et commencez à partager ou à envoyer des colis en toute simplicité!",
+    "contact":"Contactez-nous",
+    "contactDescription":"Vous avez des questions ou des suggestions ? N'hésitez pas à nous contacter à l'adresse suivante"
   }
 }

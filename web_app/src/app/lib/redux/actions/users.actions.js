@@ -307,7 +307,7 @@ function updateUserProfil(firstname, lastname, phone) {
         }
         if (res.data) {
           dispatch(successUpdateUserProfil(res.data));
-          message.success("Profile updated successfully");
+          // message.success("Profile updated successfully");
         } else {
           throw new Error(JSON.stringify(res));
         }
@@ -317,7 +317,7 @@ function updateUserProfil(firstname, lastname, phone) {
           if (err) {
             const parsedError = JSON.parse(err.message);
             dispatch(failureUpdateUserProfil(parsedError.message));
-            message.error(parsedError.message);
+            // message.error(parsedError.message);
           }
         } catch {
           dispatch(failureUpdateUserProfil("An unexpected error occurred."));
@@ -486,7 +486,7 @@ function changePassword(oldPassword, newPassword) {
         }
         if (res.success) {
           dispatch(successChangePassword(res.data));
-          message.success("Password updated successfully");
+          // message.success("Password updated successfully");
         } else {
           throw new Error(JSON.stringify(res));
         }
@@ -496,7 +496,7 @@ function changePassword(oldPassword, newPassword) {
           if (err) {
             const parsedError = JSON.parse(err.message);
             dispatch(failureChangePassword(parsedError.message));
-            message.error(parsedError.message);
+            // message.error(parsedError.message);
           }
         } catch {
           dispatch(failureChangePassword("An unexpected error occurred."));
@@ -516,9 +516,9 @@ function requestResetPassword(email) {
         if (res.success) {
           dispatch(successRequestResetPassword(res.data));
           dispatch(modalActions.closeRequestResetPassword());
-          message.success(
-            "A password reset email has been sent to your inbox. Please check your email and follow the instructions to reset your password."
-          );
+          // message.success(
+          //   "A password reset email has been sent to your inbox. Please check your email and follow the instructions to reset your password."
+          // );
         } else {
           throw new Error(JSON.stringify(res));
         }
@@ -550,7 +550,7 @@ function resetPassword(password, token, cb) {
         if (res.data) {
           dispatch(successResetPassword(res.data));
           dispatch(modalActions.closeResetPassword());
-          message.success("Password updated successfully.");
+          // message.success("Password updated successfully.");
           cb();
         } else {
           throw new Error(JSON.stringify(res));
@@ -581,7 +581,7 @@ function verifiedEmail(email) {
         if (res.data) {
           dispatch(successVerifiedEmail(res.data));
           dispatch(modalActions.closeVerifiedEmail());
-          message.success("Link sent successfully.");
+          // message.success("Link sent successfully.");
         } else {
           throw new Error(JSON.stringify(res));
         }
