@@ -80,141 +80,35 @@ export const adSlice = createSlice({
       state.error = action.payload;
     },
     // Filtered Ads
-    filteredAds: (state, action) => {
-      (state.isFiltered = true),
-        (state.filteredItems = [
-          ...state.items
-            .filter((p) => {
-              if (
-                action.payload.departure_date != "" &&
-                action.payload.departure_date != undefined
-              ) {
-                return p.departure_date === action.payload.departure_date;
-              } else {
-                return p;
-              }
-            })
-            .filter((p) => {
-              if (
-                action.payload.arrival_date != "" &&
-                action.payload.arrival_date != undefined
-              ) {
-                return p.arrival_date === action.payload.arrival_date;
-              } else {
-                return p;
-              }
-            })
-            .filter((p) => {
-              if (
-                action.payload.departure_country != "" &&
-                action.payload.departure_country != undefined
-              ) {
-                return p.departure_country === action.payload.departure_country;
-              } else {
-                return p;
-              }
-            })
-            .filter((p) => {
-              if (
-                action.payload.arrival_country != "" &&
-                action.payload.arrival_country != undefined
-              ) {
-                return p.arrival_country === action.payload.arrival_country;
-              } else {
-                return p;
-              }
-            })
-            .filter((p) => {
-              if (
-                action.payload.category_id != "" &&
-                action.payload.category_id != undefined
-              ) {
-                return p.category_id === action.payload.category_id;
-              } else {
-                return p;
-              }
-            })
-            .filter((p) => {
-              if (
-                action.payload.status_id != "" &&
-                action.payload.status_id != undefined
-              ) {
-                return p.status_id === action.payload.status_id;
-              } else {
-                return p;
-              }
-            }),
-        ]);
+    requestFilteredAds: (state) => {
+      state.loading = true;
+    },
+    successFilteredAds: (state, action) => {
+      state.isFiltered = true;
+      state.loading = false;
+      state.filteredItems = action.payload
+    },
+    failureFilteredAds: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     },
     resetFilter: (state) => {
-      (state.isFiltered = false), (state.filteredItems = []);
+      state.loading = false;
+      state.isFiltered = false;
+      state.filteredItems = [];
     },
     // Filter my ads
-    filteredMyAds: (state, action) => {
-      (state.isFiltered = true),
-        (state.filteredItems = [
-          ...state.userAds
-            .filter((p) => {
-              if (
-                action.payload.departure_date != "" &&
-                action.payload.departure_date != undefined
-              ) {
-                return p.departure_date === action.payload.departure_date;
-              } else {
-                return p;
-              }
-            })
-            .filter((p) => {
-              if (
-                action.payload.arrival_date != "" &&
-                action.payload.arrival_date != undefined
-              ) {
-                return p.arrival_date === action.payload.arrival_date;
-              } else {
-                return p;
-              }
-            })
-            .filter((p) => {
-              if (
-                action.payload.departure_country != "" &&
-                action.payload.departure_country != undefined
-              ) {
-                return p.departure_country === action.payload.departure_country;
-              } else {
-                return p;
-              }
-            })
-            .filter((p) => {
-              if (
-                action.payload.arrival_country != "" &&
-                action.payload.arrival_country != undefined
-              ) {
-                return p.arrival_country === action.payload.arrival_country;
-              } else {
-                return p;
-              }
-            })
-            .filter((p) => {
-              if (
-                action.payload.category_id != "" &&
-                action.payload.category_id != undefined
-              ) {
-                return p.category_id === action.payload.category_id;
-              } else {
-                return p;
-              }
-            })
-            .filter((p) => {
-              if (
-                action.payload.status_id != "" &&
-                action.payload.status_id != undefined
-              ) {
-                return p.status_id === action.payload.status_id;
-              } else {
-                return p;
-              }
-            }),
-        ]);
+    requestFilteredMyAds: (state) => {
+      state.loading = true;
+    },
+    successFilteredMyAds: (state, action) => {
+      state.isFiltered = true;
+      state.loading = false;
+      state.filteredItems = action.payload
+    },
+    failureFilteredMyAds: (state, action) => {
+      state.loading = false;
+      state.error = action.payload;
     },
     resetFilterMyAds: (state) => {
       (state.isFiltered = false), (state.filteredItems = []);
@@ -452,6 +346,12 @@ export const {
   requestUserAdMessagePaginate,
   successUserAdMessagePaginate,
   failureUserAdMessagePaginate,
+  requestFilteredAds,
+  successFilteredAds,
+  failureFilteredAds,
+  requestFilteredMyAds,
+  successFilteredMyAds,
+  failureFilteredMyAds
 } = adSlice.actions;
 
 export const adReducer = adSlice.reducer;

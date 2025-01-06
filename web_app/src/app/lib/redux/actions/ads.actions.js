@@ -6,7 +6,6 @@ import {
   requestGetAll,
   successAdd,
   successGetAll,
-  filteredAds,
   resetFilter,
   selectedAd,
   selectedMyAd,
@@ -32,7 +31,6 @@ import {
   requestClosedAd,
   successClosedAd,
   failureClosedAd,
-  filteredMyAds,
   resetFilterMyAds,
   requestGetOne,
   successGetOne,
@@ -48,7 +46,13 @@ import {
   failureGetAllPaginate,
   requestUserAdMessagePaginate,
   successUserAdMessagePaginate,
-  failureUserAdMessagePaginate
+  failureUserAdMessagePaginate,
+  requestFilteredAds,
+  successFilteredAds,
+  failureFilteredAds,
+  requestFilteredMyAds,
+  successFilteredMyAds,
+  failureFilteredMyAds
 } from "../reducers/ads.reducers";
 import { modalActions } from "./modals.actions";
 import { add_ad } from "@/app/actions/ads/add";
@@ -67,6 +71,8 @@ import { getUserAdMessage_ads } from "@/app/actions/message/getUserAdMessage";
 import { responceAdMessage_ad } from "@/app/actions/message/responeAdMessage";
 import { getAllPaginate_ads } from "@/app/actions/ads/getAllPaginate";
 import { getUserAdMessagePaginate_ads } from "@/app/actions/message/getUserAdMessagePaginate";
+import { filteredAds_ads } from "@/app/actions/ads/filteredAds";
+import { filteredMyAds_ads } from "@/app/actions/ads/filteredMyAds";
 
 export const adActions = {
   add,
@@ -91,6 +97,60 @@ export const adActions = {
   getUserAdMessagePaginate,
   responceAdMessage
 };
+
+function filteredAds(departure_date, arrival_date, departure_country, arrival_country, category_id, status_id) {
+  return function (dispatch) {
+    dispatch(requestFilteredAds());
+    filteredAds_ads(departure_date, arrival_date, departure_country, arrival_country, category_id, status_id)
+      .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
+        if (res.data) {
+          dispatch(successFilteredAds(res.data));
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureFilteredAds(parsedError.message));
+          }
+        } catch {
+          dispatch(failureFilteredAds("An unexpected error occurred."));
+        }
+      });
+  };
+}
+
+function filteredMyAds(departure_date, arrival_date, departure_country, arrival_country, category_id, status_id) {
+  return function (dispatch) {
+    dispatch(requestFilteredMyAds());
+    filteredMyAds_ads(departure_date, arrival_date, departure_country, arrival_country, category_id, status_id)
+      .then((res) => {
+        if(res.status === 401) {
+          dispatch(modalActions.openSessionExpired());
+        }
+        if (res.data) {
+          dispatch(successFilteredMyAds(res.data));
+        } else {
+          throw new Error(JSON.stringify(res));
+        }
+      })
+      .catch((err) => {
+        try {
+          if (err) {
+            const parsedError = JSON.parse(err.message);
+            dispatch(failureFilteredMyAds(parsedError.message));
+          }
+        } catch {
+          dispatch(failureFilteredMyAds("An unexpected error occurred."));
+        }
+      });
+  };
+}
 
 function getAll() {
   return function (dispatch) {

@@ -33,6 +33,8 @@ $routes = [
     '/api/v1/ads/userAds/{user_id}' => 'controllers/ad/userAds.php',
     '/api/v1/ads/adminAds' => 'controllers/ad/adminAds.php',
     '/api/v1/ads/closedAd/{id}' => 'controllers/ad/closedAd.php',
+    '/api/v1/ads/filteredAds' => 'controllers/ad/filteredAds.php',
+    '/api/v1/ads/filteredMyAds' => 'controllers/ad/filteredMyAds.php',
 
     // Profiles
     '/api/v1/profiles/getAll' => 'controllers/profile/getAll.php',

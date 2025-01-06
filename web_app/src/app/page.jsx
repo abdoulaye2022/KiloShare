@@ -199,7 +199,7 @@ function Home() {
                 <AdsList />
               )}
             </Row>
-            {hasMore === true && ads.length >= 10 ? (
+            {hasMore === true && isFiltered === false && ads.length >= 10 ? (
               <Row justify="center">
                 <Button
                   style={{ width: "93%", marginBottom: 30 }}

@@ -45,33 +45,33 @@ function FilterAd() {
   const onFinish = (values) => {
     if(pathname === "/my-ads") {
       dispatch(
-        adActions.filteredMyAds({
-          departure_date: values.departure_date
+        adActions.filteredMyAds(
+          values.departure_date
             ? convertToMySQLFormat(values.departure_date)
             : "",
-          arrival_date: values.arrival_date
+          values.arrival_date
             ? convertToMySQLFormat(values.arrival_date)
             : "",
-          departure_country: values.departure_country,
-          arrival_country: values.arrival_country,
-          category_id: values.category_id,
-          status_id: values.status_id ? values.status_id : ""
-        })
+          values.departure_country,
+          values.arrival_country,
+          values.category_id,
+          values.status_id ? values.status_id : ""
+        )
       );
     } else {
       dispatch(
-        adActions.filteredAds({
-          departure_date: values.departure_date
+        adActions.filteredAds(
+          values.departure_date
             ? convertToMySQLFormat(values.departure_date)
             : "",
-          arrival_date: values.arrival_date
+          values.arrival_date
             ? convertToMySQLFormat(values.arrival_date)
             : "",
-          departure_country: values.departure_country,
-          arrival_country: values.arrival_country,
-          category_id: values.category_id,
-          status_id: values.status_id ? values.status_id : ""
-        })
+          values.departure_country,
+          values.arrival_country,
+          values.category_id,
+          values.status_id ? values.status_id : ""
+        )
       );
     }
     dispatch(modalActions.closeMobileFilterAds());
