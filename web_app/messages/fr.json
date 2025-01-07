@@ -9,7 +9,8 @@
     "forgotMyPassword": "Mot de passe oublié?",
     "emailRequired": "Veuillez saisir votre adresse e-mail",
     "emailInvalid": "L'adresse e-mail saisie est invalide. Veuillez vérifier et réessayer",
-    "passwordRequired": "Veuillez saisir votre mot de passe"
+    "passwordRequired": "Veuillez saisir votre mot de passe",
+    "notFound":"Identifiants invalides. Veuillez vérifier votre adresse e-mail ou votre mot de passe."
   },
   "SignInPage": {
     "title": "Portail de connexion",
@@ -209,7 +210,8 @@
     "emailInvalid": "L'adresse e-mail saisie est invalide. Veuillez vérifier et réessayer",
     "sendResetLink": "Envoyer le lien",
     "alreadyHaveAnAccount": "Vous avez déjà un compte?",
-    "login": "Connexion"
+    "login": "Connexion",
+    "NoFoundAddress":"Aucun compte trouvé avec cette adresse e-mail."
   },
   "MessagePage": {
     "noMessages": "Aucune message",
@@ -237,7 +239,8 @@
     "sendMessage": "Envoyer",
     "contactInformation": "Coordonnées",
     "availability": "Disponibilité",
-    "ourService": "Notre service est disponible 24h/24, 7j/7."
+    "ourService": "Notre service est disponible 24h/24, 7j/7.",
+    "messageSent":"Message envoyé avec succès!"
   },
   "AboutUsPage": {
     "title": "À propos de Kilo-Share",

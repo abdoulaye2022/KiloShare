@@ -10,7 +10,7 @@ const About = () => {
   const t = useTranslations("AboutUsPage");
 
   return (
-    <div style={{ padding: "10px", height: "90vh" }}>
+    <div style={{ padding: "10px" }}>
       <Row justify="center" style={{ height: "100%" }}>
         <Col xs={24} sm={22} md={24} lg={24} xl={24}>
           <Card

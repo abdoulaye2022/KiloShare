@@ -11,6 +11,7 @@ import Signin from "@/app/components/Platform/Layouts/Signin";
 import SessionExpired from "../components/Platform/Layouts/SessionExpired";
 import VerifiedEmail from "../components/Platform/Layouts/VerifiedEmail";
 import Head from "next/head";
+import ResetPassword from "../components/Platform/Layouts/RequestResetPassword";
 
 const { Content } = Layout;
 
@@ -18,6 +19,10 @@ function PlatformLayout({ children }) {
   const openLogin = useAppSelector((state) => state.modal.isOpenLoginForm);
   const openSignin = useAppSelector((state) => state.modal.isOpenSigninForm);
   const loadingLogout = useAppSelector((state) => state.user.loadingLogout);
+  const openResetPassword = useAppSelector(
+    (state) => state.modal.isOpenRequestResetPassword
+  );
+
   const openSessionExpired = useAppSelector(
     (state) => state.modal.isOpenSessionExpired
   );
@@ -55,7 +60,7 @@ function PlatformLayout({ children }) {
         </Affix>
 
         <Spin spinning={loadingLogout}>
-          <Content style={{ minHeight: "calc(90vh)" }}>
+          <Content style={{ minHeight: "calc(92vh)" }}>
             <Row>
               {isMobile ? null : <Col md={4} style={{ padding: 10 }}></Col>}
               <Col xs={24} sm={24} md={16} style={{ padding: 10 }}>
@@ -72,7 +77,7 @@ function PlatformLayout({ children }) {
         {openLogin && <Login />}
         {openSignin && <Signin />}
         {openSessionExpired && <SessionExpired />}
-
+        {openResetPassword && <ResetPassword />}
         {openVerifiedEmail && <VerifiedEmail />}
       </Layout>
     </>

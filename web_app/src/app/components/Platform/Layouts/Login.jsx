@@ -88,7 +88,7 @@ const Login = () => {
 
             {error ? (
               <Paragraph style={{ color: "red", marginBottom: 10 }}>
-                {error}
+                {t("notFound")}
               </Paragraph>
             ) : null}
             <Form
