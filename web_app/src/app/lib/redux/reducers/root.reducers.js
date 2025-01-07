@@ -11,6 +11,7 @@ import CryptoJS from "crypto-js";
 import { drawerReducer } from "./drawers.reducers";
 import { statusReducer } from "./status.reducers";
 import { preferenceReducer } from "./preferences.reducers";
+import { contactReducer } from "./contacts.reducers";
 
 const encryptTransform = createTransform(
   (inboundState) => {
@@ -59,7 +60,8 @@ const appReducers = combineReducers({
   ad: adReducer,
   drawer: drawerReducer,
   status: statusReducer,
-  preference: preferenceReducer
+  preference: preferenceReducer,
+  contact: contactReducer
 });
 
 const rootReducer = (state, action) => {

@@ -1,30 +1,67 @@
 "use client";
 
-import React from "react";
-import { Form, Input, Button, Typography, Row, Col, Card, Divider } from "antd";
+import React, { useEffect, useState } from "react";
+import {
+  Form,
+  Input,
+  Button,
+  Typography,
+  Row,
+  Col,
+  Card,
+  Divider,
+  Alert,
+  Spin,
+} from "antd";
 import {
   MailOutlined,
   PhoneOutlined,
   EnvironmentOutlined,
 } from "@ant-design/icons";
 import { useTranslations } from "next-intl";
+import { useAppDispatch, useAppSelector } from "@/app/lib/redux/hooks";
+import { contactActions } from "@/app/lib/redux/actions/contacts.actions";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const { Title, Paragraph } = Typography;
 const { TextArea } = Input;
 
 const Contact = () => {
   const t = useTranslations("ContactUsPage");
+  const dispatch = useAppDispatch();
+  const loading = useAppSelector((state) => state.contact.loading);
+  const success = useAppSelector((state) => state.contact.success);
   const [form] = Form.useForm();
+  const [captchaValue, setCaptchaValue] = useState(null);
 
-  const onFinish = (values) => {
-    // Ici, vous pouvez ajouter la logique pour envoyer le formulaire (par exemple, une requête API)
-    // alert("Votre message a été envoyé avec succès !");
-    console.log(values);
-    form.resetFields(); // Réinitialiser le formulaire après l'envoi
+  const handleCaptchaChange = (value) => {
+    setCaptchaValue(value);
   };
 
+  const onFinish = (values) => {
+    if (!captchaValue) {
+      message.error("Veuillez valider le reCAPTCHA.");
+      return;
+    }
+
+    dispatch(
+      contactActions.sendContact(
+        values.name,
+        values.email,
+        values.subject,
+        values.message,
+        captchaValue
+      )
+    );
+    form.resetFields();
+  };
+
+  useEffect(() => {
+    dispatch(contactActions.resetSuccess());
+  }, []);
+
   return (
-    <div style={{ padding: 10, height: "90vh" }}>
+    <div style={{ padding: 10 }}>
       <Row justify="center">
         <Col xs={24} sm={22} md={24} lg={24} xl={24}>
           <Card>
@@ -55,7 +92,11 @@ const Contact = () => {
 
             <Row gutter={[24, 24]}>
               {/* Formulaire de contact */}
-              <Col xs={24} md={12}>
+              <Col xs={24} md={12} style={{ padding: "0px 20px" }}>
+                {success ? (
+                  <Alert message={t("messageSent")} type="success" />
+                ) : null}
+                <Spin spinning={loading} style={{ width: "100%" }} />
                 <Form form={form} onFinish={onFinish} layout="vertical">
                   <Form.Item
                     name="name"
@@ -104,6 +145,13 @@ const Contact = () => {
                   </Form.Item>
 
                   <Form.Item>
+                  <ReCAPTCHA
+                    sitekey={process.env.NEXT_PUBLIC_RECAPTCHA}
+                    onChange={handleCaptchaChange}
+                  />
+                </Form.Item>
+
+                  <Form.Item>
                     <Button type="primary" htmlType="submit" size="large" block>
                       {t("sendMessage")}
                     </Button>
@@ -111,7 +159,6 @@ const Contact = () => {
                 </Form>
               </Col>
 
-              {/* Coordonnées de contact */}
               <Col xs={24} md={12}>
                 <Title
                   level={3}

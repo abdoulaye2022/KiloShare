@@ -9,7 +9,8 @@
     "forgotMyPassword": "Forgot my password?",
     "emailRequired": "Please enter your email",
     "emailInvalid": "The email address entered is invalid. Please check and try again",
-    "passwordRequired": "Please enter your password"
+    "passwordRequired": "Please enter your password",
+    "notFound":"Invalid credentials. Please check your email or password."
   },
   "SignInPage": {
     "title": "Sign-In Portal",
@@ -207,9 +208,10 @@
     "title": "Password Reset Portal",
     "emailRequired": "Please enter your email",
     "emailInvalid": "The email address entered is invalid. Please check and try again",
-    "sendLink": "Send link",
+    "sendResetLink": "Send link",
     "alreadyHaveAnAccount": "Already have an account?",
-    "login": "Login"
+    "login": "Login",
+    "NoFoundAddress":"No account found with this email address."
   },
   "MessagePage": {
     "noMessages": "No messages",
@@ -237,7 +239,8 @@
     "sendMessage": "Send",
     "contactInformation": "Contact information",
     "availability": "Availability",
-    "ourService": "Our service is available 24/7."
+    "ourService": "Our service is available 24/7.",
+    "messageSent":"Message sent successfully!"
   },
   "AboutUsPage": {
     "title": "About Kilo-Share",

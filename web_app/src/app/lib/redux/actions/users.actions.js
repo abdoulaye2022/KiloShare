@@ -528,7 +528,7 @@ function requestResetPassword(email) {
           if (err) {
             const parsedError = JSON.parse(err.message);
             dispatch(failureRequestResetPassword(parsedError.message));
-            message.error(parsedError.message);
+            // message.error(parsedError.message);
           }
         } catch {
           dispatch(
@@ -561,7 +561,7 @@ function resetPassword(password, token, cb) {
           if (err) {
             const parsedError = JSON.parse(err.message);
             dispatch(failureResetPassword(parsedError.message));
-            message.error(parsedError.message);
+            // message.error(parsedError.message);
           }
         } catch {
           dispatch(failureResetPassword("An unexpected error occurred."));
@@ -591,7 +591,7 @@ function verifiedEmail(email) {
           if (err) {
             const parsedError = JSON.parse(err.message);
             dispatch(failureVerifiedEmail(parsedError.message));
-            message.error(parsedError.message);
+            // message.error(parsedError.message);
           }
         } catch {
           dispatch(failureVerifiedEmail("An unexpected error occurred."));

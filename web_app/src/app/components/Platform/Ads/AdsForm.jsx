@@ -102,16 +102,16 @@ function AdsForm() {
 
     const isImage = info.file.type.startsWith("image/");
     if (!isImage) {
-      message.error(
-        `${info.file.name} is not an image. Please upload an image file.`
-      );
+      // message.error(
+      //   `${info.file.name} is not an image. Please upload an image file.`
+      // );
       return;
     }
 
     if (info.file.size > maxSize) {
-      message.error(
-        `${info.file.name} is too large. Please upload a file smaller than 3 MB.`
-      );
+      // message.error(
+      //   `${info.file.name} is too large. Please upload a file smaller than 3 MB.`
+      // );
       return;
     }
 

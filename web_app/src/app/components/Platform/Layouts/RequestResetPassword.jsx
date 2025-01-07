@@ -88,7 +88,7 @@ const RequestResetPassword = () => {
 
             {error ? (
               <Paragraph style={{ color: "red", marginBottom: 10 }}>
-                {error}
+                {t("NoFoundAddress")}
               </Paragraph>
             ) : null}
             <Form
