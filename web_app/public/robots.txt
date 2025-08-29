@@ -1,9 +1,0 @@
-# *
-User-agent: *
-Allow: /
-
-# Host
-Host: https://www.kilo-share.com
-
-# Sitemaps
-Sitemap: https://www.kilo-share.com/sitemap.xml
